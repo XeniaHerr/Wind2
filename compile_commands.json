@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/kenneth/Projects/Wind2/build/dummy",
+  "command": "/usr/bin/c++  -I/home/kenneth/Projects/Wind2/include  -o CMakeFiles/DUMMY.dir/dummy.cpp.o -c /home/kenneth/Projects/Wind2/dummy/dummy.cpp",
+  "file": "/home/kenneth/Projects/Wind2/dummy/dummy.cpp",
+  "output": "dummy/CMakeFiles/DUMMY.dir/dummy.cpp.o"
+}
+]
