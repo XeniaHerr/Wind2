@@ -103,8 +103,9 @@ namespace Wind {
 
 
     void arrangeAllMonitors() {
-        for (auto& a : monitors)
-            (*a).arrange();
+        for (auto& a : monitors) {
+            a.get().arrange();
+        }
     }
             
         private:

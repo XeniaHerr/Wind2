@@ -19,3 +19,20 @@ TEST(MonitorTest,PositionandDimensionKonstruktorandGetter) {
 
      
 }
+
+
+TEST(MonitorTest, ToggleBar) {
+
+    const Wind::Dimensions d(100, 200);
+    const Wind::Position p(90, 80);
+
+    Wind::Monitor m(d,p, 10);
+
+    EXPECT_NE(m.getPosition(), p);
+    EXPECT_NE(m.getDimensions(), d);
+
+    m.toggleBorder();
+
+    EXPECT_EQ(m.getPosition(), p);
+    EXPECT_EQ(m.getDimensions(), d);
+}

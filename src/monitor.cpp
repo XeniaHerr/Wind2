@@ -24,6 +24,14 @@ Monitor::Monitor(Dimensions d, Position p) :  realDimensions(d), realPosition(p)
     usablePosition.y = realPosition.y + barHeight;
 }
 
+Monitor::Monitor(Dimensions d, Position p, u_int8_t barHeight) :  realDimensions(d), realPosition(p), barHeight(barHeight) {
+
+    usableDimensions.height = realDimensions.height - barHeight;
+    usableDimensions.width = realDimensions.width;
+
+    usablePosition.x = realPosition.x;
+    usablePosition.y = realPosition.y + barHeight;
+}
 auto Monitor::getDimensions() const -> decltype(usableDimensions) {
 
 return this->usableDimensions;
@@ -40,6 +48,17 @@ auto Monitor::getCurrent() -> decltype(current) {
 
 auto Monitor::setCurrent(std::weak_ptr<Topic> topic) -> void {
     this->current = topic;
+}
+
+
+auto Monitor::toggleBorder() -> void {
+    std::swap(this->realPosition, this->usablePosition);
+    std::swap(this->realDimensions, this->usableDimensions);
+}
+
+
+auto Monitor::setBarHeight(u_int8_t h) -> void {
+    this->barHeight = h;
 }
 
 

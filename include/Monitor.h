@@ -18,6 +18,8 @@ namespace Wind {
 
             Monitor(Dimensions d, Position p);
 
+            Monitor(Dimensions d, Position p, u_int8_t barHeight);
+
 
 
              void display(Topic* other);
@@ -32,6 +34,12 @@ namespace Wind {
             std::weak_ptr<Topic> getCurrent();
 
             void setCurrent(std::weak_ptr<Topic> topic);
+
+
+            void toggleBorder();
+
+
+            void setBarHeight(u_int8_t h);
 
         private:
 
@@ -52,7 +60,7 @@ namespace Wind {
             bool is_active;
 
 
-            u_int8_t barHeight = 0; /**TODO: Decide when and how to set*/
+            u_int8_t barHeight = 0; /**TODO: Decide when and how to set, set to 0 for testing*/
 
 
 
