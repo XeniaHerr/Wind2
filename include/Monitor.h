@@ -12,13 +12,8 @@ namespace Wind {
         public:
             Monitor();
 
-            Monitor(u_int32_t x, u_int32_t y) : realDimensions(x,y) {
+            Monitor(u_int32_t x, u_int32_t y);
 
-                usableDimensions.x = x;
-                usableDimensions.y = y; //DO some calculations first;
-                
-                is_active = false;
-            }
 
 
              void display(Topic* other);
@@ -26,7 +21,7 @@ namespace Wind {
 
             void arrange();
 
-            Dimensions getDimensions() const {return usableDimensions;}
+            Dimensions getDimensions() const;
 
             std::shared_ptr<Topic> current;
 

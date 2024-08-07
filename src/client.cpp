@@ -2,6 +2,7 @@
 #include <X11/X.h>
 
 #include <Client.h>
+#include <ios>
 #include <sys/types.h>
 
 
@@ -13,15 +14,15 @@ Client::Client(Window win) : _window(win) {
     this->is_orphan = true;
 
 }
-auto Client::setCurrentDimensions(Dimensions dimensions) -> void {
+auto Client::setDimensions(Dimensions dimensions) -> void {
     this->oldDimension = this->currentDimension;
     this->currentDimension = dimensions;
     
 }
 
-auto Client::setCurrentDimensions(u_int32_t x, u_int32_t y) -> void {
+auto Client::setDimensions(u_int32_t width, u_int32_t height) -> void {
     this->oldDimension = this->currentDimension;
-    this->currentDimension = Dimensions(x,y);
+    this->currentDimension = Dimensions(width,height);
     
 }
 
@@ -53,4 +54,20 @@ auto Client::setOwner(Topic& t) -> void {
 
 auto Client::isOrphan() const -> bool {
     return this->is_orphan;
+}
+
+
+auto Client::getPosition() const -> decltype(currentPosition) {
+    return this->currentPosition;
+}
+
+
+auto Client::setPosition(Position pos) -> void {
+    this->oldPosition = currentPosition;
+    this->currentPosition = pos;
+}
+
+
+auto Client::getOldPosition() const -> decltype(oldPosition) {
+    return this->oldPosition;
 }

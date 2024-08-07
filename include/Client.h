@@ -31,9 +31,9 @@ class Client {
 
         void setFullscreen();
 
-        void setCurrentDimensions(Dimensions dimensions);
+        void setDimensions(Dimensions dimensions);
 
-        void setCurrentDimensions(u_int32_t x, u_int32_t y);
+        void setDimensions(u_int32_t x, u_int32_t y);
 
 
         Topic& getOwner() const; 
@@ -42,6 +42,12 @@ class Client {
         Dimensions getCurrentDimensions() const; 
 
         Dimensions getOldDimensions() const;
+
+        Position getPosition() const;
+
+        Position getOldPosition() const;
+        
+        void setPosition(Position pos);
 
         Window getWindow() const;
 
@@ -60,6 +66,11 @@ class Client {
         Dimensions currentDimension;
 
         Dimensions oldDimension;
+
+
+        Position currentPosition;
+
+        Position oldPosition;
 
 
         bool is_floating, is_visible, is_fullscreen, is_orphan;
