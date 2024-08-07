@@ -47,6 +47,11 @@ namespace Wind {
                 }
 
 
+                T& get() {
+                    return *_object.get();
+                }
+
+
         };
 
 }
