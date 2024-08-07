@@ -3,10 +3,12 @@
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <structs.h>
+#include <sys/types.h>
+
+#include <Topic.h>
 
 
 
-class Topic;
 namespace Wind {
 
 class Client {
@@ -29,21 +31,30 @@ class Client {
 
         void setFullscreen();
 
-        void setCurrentDimensions(Dimensions& dimensions);
+        void setCurrentDimensions(Dimensions dimensions);
+
+        void setCurrentDimensions(u_int32_t x, u_int32_t y);
 
 
-        Topic& getOwner() const { return *owner; }
+        Topic& getOwner() const; 
 
 
-        Dimensions getCurrentDimensions() const { return currentDimension;}
+        Dimensions getCurrentDimensions() const; 
 
-        Window getWindow() const { return window;}
+        Dimensions getOldDimensions() const;
+
+        Window getWindow() const;
+
+        void setOwner(Topic& t) ;
+
+        bool isOrphan() const;
+
 
     private:
 
-        Window window;
+        Window _window;
 
-        Topic* owner;
+        Topic* _owner;
 
 
         Dimensions currentDimension;
@@ -51,7 +62,9 @@ class Client {
         Dimensions oldDimension;
 
 
-        bool is_floating, is_visible, is_fullscreen;
+        bool is_floating, is_visible, is_fullscreen, is_orphan;
+
+
 
 
 

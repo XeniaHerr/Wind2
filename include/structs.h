@@ -15,6 +15,11 @@ namespace Wind {
         Dimensions(u_int32_t _x, u_int32_t _y) : x(_x), y(_y)  {} 
 
         Dimensions() : x(0), y(0) {}
+
+
+        bool operator==(const Dimensions& other)  const {
+            return this->x == other.x && this->y == other.y;
+        }
     };
 }
 

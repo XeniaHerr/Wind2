@@ -1,5 +1,6 @@
+#ifndef TOPIC_H
+#define TOPIC_H
 #include <X11/X.h>
-#include <memory>
 #include <string>
 #include <sys/types.h>
 #include <list>
@@ -18,7 +19,7 @@ struct Dimensions;
 
         public:
 
-            Topic();
+            Topic(std::string name);
 
 
 //            std::shared_ptr<Client> operator[](u_int16_t i) {
@@ -30,32 +31,24 @@ struct Dimensions;
 //            }
 
 
-            std::list<Client*>& get_clients() {
-                return clients;
-            }
+            std::list<Client*>& getClients();
 
 
             void send_to_topic(Topic & t, Client * c);
 
 
-            void adopt( Client& c) {
-                clients.push_front(&c);
-            }
+            void adopt( Client& c);
 
-            const Client& abandon( Client& c) {
-                        clients.remove(&c);
-                        return c;
-            }
+            const Client& abandon( Client& c);
 
 
             void renderclients();
 
-            void setHolder(Monitor* mon) {
-                holder = mon;
-            }
+            void setHolder(Monitor* mon);
 
+            Monitor& getHolder() const; 
 
-            Monitor& getHolder() const { return *holder;}
+            std::string getName() const;
 
         private:
 
@@ -72,9 +65,19 @@ struct Dimensions;
 
             std::list<Client*> clients;
 
+        inline bool containsClient(Client& client) const {
+            for (auto c : clients) {
+                if(c == &client)
+                    return true;
+            }
+            return false;
+        };
 
             
 
 
     };
 }
+
+
+#endif /*TOPIC_H*/
