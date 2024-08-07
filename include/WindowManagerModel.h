@@ -10,6 +10,7 @@
 #include <Topic.h>
 #include <Monitor.h>
 #include <Client.h>
+#include <Holder.h>
 namespace Wind {
 
 
@@ -18,6 +19,12 @@ namespace Wind {
 
     class WindowManagerModel {
 
+//        using ClientHolder = std::shared_ptr<Client>;
+//        using MonitorHolder = std::shared_ptr<Monitor>;
+//        using TopicHolder = std::shared_ptr<Topic>;
+        using ClientHolder = Holder<Client>;
+        using MonitorHolder = Holder<Monitor>;
+        using TopicHolder = Holder<Topic>;
 
         public:
 
@@ -79,16 +86,15 @@ namespace Wind {
 
         }
 
-            monitor.current = std::make_shared<Topic> (topic);
+            monitor.getCurrent() = std::make_shared<Topic> (topic);
 
             topic.setHolder(&monitor);
     }
 
     void manageWindow(Window w) {
 
-        if (!clients.contains(w)) {
-         auto it = clients.insert({w, Client(w)});
-        focusedmon->current->adopt(it.first->second);
+        if (!clients.contains(w)) { auto it = clients.emplace(w, ClientHolder(Client(w)));
+        //focusedmon->current->   adopt(it.first->second);
         }
 
     }
@@ -97,22 +103,21 @@ namespace Wind {
 
 
     void arrangeAllMonitors() {
-        for (auto a : monitors)
-            a.arrange();
+        for (auto& a : monitors)
+            (*a).arrange();
     }
-
-
+            
         private:
 
         WindowManagerModel();
 
 
-            std::map<::Window, Client> clients;
+            std::map<::Window, ClientHolder> clients;
 
 
-            std::vector<Topic> topics;
+            std::vector<TopicHolder> topics;
 
-            std::vector<Monitor> monitors;
+            std::vector<MonitorHolder> monitors;
 
 
 

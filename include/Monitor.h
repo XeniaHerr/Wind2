@@ -1,6 +1,7 @@
 #include "structs.h"
 #include <memory>
 #include <sys/types.h>
+#include <system_error>
 
 namespace Wind {
 
@@ -28,10 +29,13 @@ namespace Wind {
 
             Position getPosition() const;
 
-            std::shared_ptr<Topic> current;
+            std::weak_ptr<Topic> getCurrent();
+
+            void setCurrent(std::weak_ptr<Topic> topic);
 
         private:
 
+            std::weak_ptr<Topic> current;
 
             Dimensions realDimensions;
 
@@ -54,3 +58,8 @@ namespace Wind {
 
     };
 }
+
+
+
+/**
+ * Decicion: Maybe i should create a Factory for Monitor and Builder. Probably not, because monitors are not all that different from each other*/

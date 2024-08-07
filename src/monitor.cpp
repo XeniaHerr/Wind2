@@ -1,6 +1,5 @@
 #include "structs.h"
 #include <Monitor.h>
-#include <memory_resource>
 #include <sys/types.h>
 
 
@@ -32,6 +31,15 @@ return this->usableDimensions;
 
 auto Monitor::getPosition() const -> decltype(usablePosition) {
     return this->usablePosition;
+}
+
+
+auto Monitor::getCurrent() -> decltype(current) {
+    return current;
+}
+
+auto Monitor::setCurrent(std::weak_ptr<Topic> topic) -> void {
+    this->current = topic;
 }
 
 
