@@ -1,8 +1,14 @@
 [
 {
-  "directory": "/home/kenneth/Projects/Wind2/build/dummy",
-  "command": "/usr/bin/c++  -I/home/kenneth/Projects/Wind2/include  -o CMakeFiles/DUMMY.dir/dummy.cpp.o -c /home/kenneth/Projects/Wind2/dummy/dummy.cpp",
-  "file": "/home/kenneth/Projects/Wind2/dummy/dummy.cpp",
+  "directory": "/home/lethurion/Projects/Wind2/build/dummy",
+  "command": "/usr/bin/c++  -I/home/lethurion/Projects/Wind2/include -std=gnu++23 -o CMakeFiles/DUMMY.dir/dummy.cpp.o -c /home/lethurion/Projects/Wind2/dummy/dummy.cpp",
+  "file": "/home/lethurion/Projects/Wind2/dummy/dummy.cpp",
   "output": "dummy/CMakeFiles/DUMMY.dir/dummy.cpp.o"
+},
+{
+  "directory": "/home/lethurion/Projects/Wind2/build/src",
+  "command": "/usr/bin/c++  -I/home/lethurion/Projects/Wind2/include -std=gnu++23 -o CMakeFiles/TEST.dir/test.cpp.o -c /home/lethurion/Projects/Wind2/src/test.cpp",
+  "file": "/home/lethurion/Projects/Wind2/src/test.cpp",
+  "output": "src/CMakeFiles/TEST.dir/test.cpp.o"
 }
 ]

@@ -64,6 +64,9 @@ struct Dimensions;
             Client* focusedclient;
 
             Monitor* holder;
+
+
+            float master_fact;
             
 
 

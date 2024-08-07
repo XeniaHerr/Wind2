@@ -14,7 +14,7 @@ namespace Wind {
 
         Dimensions(u_int32_t _x, u_int32_t _y) : x(_x), y(_y)  {} 
 
-        Dimensions();
+        Dimensions() : x(0), y(0) {}
     };
 }
 

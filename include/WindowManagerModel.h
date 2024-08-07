@@ -96,6 +96,12 @@ namespace Wind {
     void unmanageWindow(Window w);
 
 
+    void arrangeAllMonitors() {
+        for (auto a : monitors)
+            a.arrange();
+    }
+
+
         private:
 
         WindowManagerModel();
