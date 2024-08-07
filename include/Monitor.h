@@ -15,6 +15,9 @@ namespace Wind {
             Monitor(u_int32_t x, u_int32_t y);
 
 
+            Monitor(Dimensions d, Position p);
+
+
 
              void display(Topic* other);
 
@@ -22,6 +25,8 @@ namespace Wind {
             void arrange();
 
             Dimensions getDimensions() const;
+
+            Position getPosition() const;
 
             std::shared_ptr<Topic> current;
 
@@ -34,11 +39,16 @@ namespace Wind {
             Dimensions usableDimensions;
 
 
+            Position realPosition;
+
+            Position usablePosition;
+
+
 
             bool is_active;
 
 
-            u_int8_t barHeight;
+            u_int8_t barHeight = 0; /**TODO: Decide when and how to set*/
 
 
 
