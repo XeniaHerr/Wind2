@@ -93,3 +93,24 @@ TEST_F(Client_Topic_Integration, getClientBehaviouronMultipleTopics) {
 
     EXPECT_EQ(t2.getClients().size(), 0);
 }
+
+
+
+TEST_F(Client_Topic_Integration, GetandSetFocused) {
+
+
+    t.takeOwnership(c);
+    t.setFocus(&c);
+
+
+    EXPECT_EQ(t.getFocused(),&c);
+}
+
+TEST_F(Client_Topic_Integration, GetandSetFocusedonClientnotOwned) {
+
+
+    t.setFocus(&c);
+
+
+    EXPECT_NE(t.getFocused(),&c);
+}

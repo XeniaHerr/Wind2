@@ -3,9 +3,7 @@
 #define WINDOWMANAGERMODEL_H
 
 #include <X11/X.h>
-#include <cstddef>
 #include <map>
-#include <memory>
 #include <sys/types.h>
 #include <vector>
 #include <Topic.h>
@@ -44,6 +42,7 @@ namespace Wind {
         /**Systemfunctions*/
 
         void moveClienttoTopic(Window w, u_int topicnumber);
+        void moveClienttoTopic(Window w, Topic& t);
 
 
         void moveTopictoMonitor(Topic& topic, Monitor& monitor);
@@ -57,11 +56,18 @@ namespace Wind {
 
         void unmanageWindow(Window w);
 
-        void registerTopics(std::vector<Topic&&> topics);
+        void registerTopics(std::vector<Topic>&& topics);
 
-        void registerMonitors(std::vector<Monitor&&> monitors);
+        void registerMonitors(std::vector<Monitor>&& monitors);
 
         void focusClient(Window w);
+
+
+
+        Topic* getTopic(u_int topicnumber) const;
+
+
+        Monitor* getMonitor(u_int monitornumber) const;
 
         void arrangeAllMonitors() {
             for (auto& a : monitors) {
@@ -71,6 +77,9 @@ namespace Wind {
 
         /**Helperfunctions*/
         u_int getClientCount();
+
+
+        Client* getClient(Window w) const ;
 
 
         template<typename P> requires std::predicate<P>

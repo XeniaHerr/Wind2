@@ -51,7 +51,7 @@ namespace Wind {
 
 
 
-                T& get() {
+                T& get() const {
                     return *_object.get();
                 }
 

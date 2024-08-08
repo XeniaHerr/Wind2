@@ -75,8 +75,38 @@ TEST_F(WindowManagerModelTest, testManageWindowAgain) {
     WMM.manageWindow(100);
 
     EXPECT_EQ(WMM.getClientCount(), 1);
+}
 
 
+TEST_F(WindowManagerModelTest, testGetClient) {
 
+    WMM.manageWindow(100);
+
+    Wind::Client * c = WMM.getClient(100);
+
+
+    EXPECT_NE(c, nullptr);
+}
+
+TEST_F(WindowManagerModelTest, testGetClientOnClientNotExisting) {
+
+    WMM.manageWindow(100);
+
+    Wind::Client * c = WMM.getClient(200);
+
+
+    EXPECT_EQ(c, nullptr);
+}
+
+TEST_F(WindowManagerModelTest, testmoveClientToTopic) {
+
+
+    WMM.manageWindow(100);
+
+
+    t.takeOwnership(*WMM.getClient(100));
+
+
+    //WMM.moveClienttoTopic(100, t2);
 
 }

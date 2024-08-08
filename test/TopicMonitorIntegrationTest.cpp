@@ -46,10 +46,10 @@ TEST_F(TopicMon, getandsetCurrent) {
 
     auto pt = std::make_shared<Wind::Topic>(t);
 
-    w.setCurrent(pt);
+    w.setCurrent(&t);
 
     auto res = w.getCurrent();
-    EXPECT_EQ((res.get()), (pt.get()));
+    EXPECT_EQ(res, &t);
 
 
 }

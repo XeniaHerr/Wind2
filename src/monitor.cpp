@@ -1,3 +1,4 @@
+#include "Topic.h"
 #include "structs.h"
 #include <Monitor.h>
 #include <sys/types.h>
@@ -46,7 +47,7 @@ auto Monitor::getCurrent() -> decltype(current) {
     return current;
 }
 
-auto Monitor::setCurrent(std::shared_ptr<Topic> topic) -> void {
+auto Monitor::setCurrent(Topic* topic) -> void {
     this->current = topic;
 }
 
@@ -60,5 +61,6 @@ auto Monitor::toggleBar() -> void {
 auto Monitor::setBarHeight(u_int8_t h) -> void {
     this->barHeight = h;
 }
+
 
 

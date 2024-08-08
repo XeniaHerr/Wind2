@@ -1,6 +1,7 @@
 #ifndef TOPIC_H
 #define TOPIC_H
 #include <X11/X.h>
+#include <memory>
 #include <string>
 #include <sys/types.h>
 #include <list>
@@ -50,12 +51,18 @@ struct Dimensions;
 
             std::string getName() const;
 
+            void setFocus(Client *client);
+            void setFocus(Client &client);
 
 
 
             bool operator==(const Topic& other) const {
                 return this->name == other.name;
             }
+
+
+            Client* getFocused() const ;
+
 
         private:
 

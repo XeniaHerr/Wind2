@@ -1,12 +1,11 @@
 #include "structs.h"
-#include <memory>
 #include <sys/types.h>
-#include <system_error>
 
 namespace Wind {
 
 
     class Topic;
+    class Client;
 
 
     class Monitor {
@@ -31,9 +30,9 @@ namespace Wind {
 
             Position getPosition() const;
 
-            std::shared_ptr<Wind::Topic> getCurrent();
+            Topic* getCurrent();
 
-            void setCurrent(std::shared_ptr<Topic> topic);
+            void setCurrent(Topic *topic);
 
 
             void toggleBar();
@@ -41,9 +40,12 @@ namespace Wind {
 
             void setBarHeight(u_int8_t h);
 
+
+
+
         private:
 
-            std::shared_ptr<Topic> current;
+            Topic* current;
 
             Dimensions realDimensions;
 
@@ -61,6 +63,8 @@ namespace Wind {
 
 
             u_int8_t barHeight = 0; /**TODO: Decide when and how to set, set to 0 for testing*/
+
+
 
 
 
