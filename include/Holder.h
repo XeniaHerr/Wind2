@@ -23,7 +23,7 @@ namespace Wind {
                 Holder() : _object(nullptr) {}
 
 
-                Holder(Holder&& other) : _object(std::make_unique<T>(std::move(other._object))) {
+                Holder(Holder&& other) : _object(std::move(other._object)) {
                 other._object = nullptr;
                 }
 

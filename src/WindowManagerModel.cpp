@@ -48,7 +48,12 @@ auto moveTopictoMonitor(Topic& topic, Monitor& monitor) -> void {
 
     auto WindowManagerModel::manageWindow(Window w) -> void {
 
-//        if (!clients.contains(w)) {clients.emplace(w, ClientHolder(Client(w)));
-//        }
+        if (!clients.contains(w)) {clients.emplace(w, ClientHolder(Client(w)));
+        }
 
     }
+
+
+auto WindowManagerModel::getClientCount()  -> u_int {
+    return clients.size();
+}

@@ -3,6 +3,7 @@
 #define WINDOWMANAGERMODEL_H
 
 #include <X11/X.h>
+#include <cstddef>
 #include <map>
 #include <memory>
 #include <sys/types.h>
@@ -39,16 +40,8 @@ namespace Wind {
         WindowManagerModel& operator=(const WindowManagerModel& other) = delete;
         WindowManagerModel& operator=(const WindowManagerModel&& other) = delete;
 
-        template<typename P> requires std::predicate<P>
-            std::vector<Client*> filterClients(P&& predicate) {
-                std::vector<Client*> ret;
-                for ( auto &a : clients) {
-                    if (predicate(a))
-                        ret.push_back(&a.second.get());
-                }
-                return ret;
-            }
 
+        /**Systemfunctions*/
 
         void moveClienttoTopic(Window w, u_int topicnumber);
 
@@ -64,12 +57,31 @@ namespace Wind {
 
         void unmanageWindow(Window w);
 
+        void registerTopics(std::vector<Topic&&> topics);
+
+        void registerMonitors(std::vector<Monitor&&> monitors);
+
+        void focusClient(Window w);
 
         void arrangeAllMonitors() {
             for (auto& a : monitors) {
                 a.get().arrange();
             }
         }
+
+        /**Helperfunctions*/
+        u_int getClientCount();
+
+
+        template<typename P> requires std::predicate<P>
+            std::vector<Client*> filterClients(P&& predicate) {
+                std::vector<Client*> ret;
+                for ( auto &a : clients) {
+                    if (predicate(a))
+                        ret.push_back(&a.second.get());
+                }
+                return ret;
+            }
 
         private:
 
