@@ -46,12 +46,12 @@ auto Monitor::getCurrent() -> decltype(current) {
     return current;
 }
 
-auto Monitor::setCurrent(std::weak_ptr<Topic> topic) -> void {
+auto Monitor::setCurrent(std::shared_ptr<Topic> topic) -> void {
     this->current = topic;
 }
 
 
-auto Monitor::toggleBorder() -> void {
+auto Monitor::toggleBar() -> void {
     std::swap(this->realPosition, this->usablePosition);
     std::swap(this->realDimensions, this->usableDimensions);
 }

@@ -18,6 +18,8 @@ class Client {
 
         Client(Window win);
 
+        Client(const Client&& other);
+
         ~Client() {
             //Kill window
         }
@@ -54,6 +56,12 @@ class Client {
         void setOwner(Topic& t) ;
 
         bool isOrphan() const;
+
+        bool isFloating() const;
+
+        void toggleFloating();
+
+        bool isVisible() const;
 
 
     private:

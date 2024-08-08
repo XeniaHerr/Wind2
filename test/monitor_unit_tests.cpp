@@ -31,8 +31,13 @@ TEST(MonitorTest, ToggleBar) {
     EXPECT_NE(m.getPosition(), p);
     EXPECT_NE(m.getDimensions(), d);
 
-    m.toggleBorder();
+    m.toggleBar();
 
     EXPECT_EQ(m.getPosition(), p);
     EXPECT_EQ(m.getDimensions(), d);
+
+    m.toggleBar();
+
+    EXPECT_NE(m.getPosition(), p);
+    EXPECT_NE(m.getDimensions(), d);
 }

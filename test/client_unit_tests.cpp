@@ -62,3 +62,15 @@ TEST(ClientTest, getandSetPositionwithold) {
 }
 
 
+TEST(ClientTest, testFloating) {
+    Wind::Client c(100);
+    EXPECT_EQ(c.isFloating(), false);
+
+
+    c.toggleFloating();
+
+    EXPECT_EQ(c.isFloating(), true);
+
+}
+
+

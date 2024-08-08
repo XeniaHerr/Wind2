@@ -2,7 +2,7 @@
 #include <X11/X.h>
 
 #include <Client.h>
-#include <ios>
+#include <csignal>
 #include <sys/types.h>
 
 
@@ -12,7 +12,20 @@ using namespace Wind;
 Client::Client(Window win) : _window(win) {
 
     this->is_orphan = true;
+    this->is_floating = false;
 
+}
+
+
+Client::Client(const Client&& other) {
+    this->_window = other._window;
+    this->oldDimension = other.oldDimension;
+    this->currentDimension = other.currentDimension;
+    this->oldPosition = other.oldPosition;
+    this->is_floating = other.is_floating;
+    this->is_fullscreen = other.is_fullscreen;
+    this->is_visible = other.is_visible;
+    this->is_orphan = other.is_orphan;
 }
 auto Client::setDimensions(Dimensions dimensions) -> void {
     this->oldDimension = this->currentDimension;
@@ -48,6 +61,9 @@ auto Client::getWindow() const -> decltype(_window) {
 auto Client::setOwner(Topic& t) -> void {
     this->_owner = &t;
 
+    if(isOrphan()) 
+        this->is_orphan = false;
+
 
 }
 
@@ -70,4 +86,24 @@ auto Client::setPosition(Position pos) -> void {
 
 auto Client::getOldPosition() const -> decltype(oldPosition) {
     return this->oldPosition;
+}
+
+
+auto Client::isFloating() const -> bool {
+    return this->is_floating;
+}
+
+
+auto Client::isVisible() const -> bool {
+    return this->is_visible;
+}
+
+
+
+
+auto Client::toggleFloating() -> void {
+    if (isFloating()) {
+        this->is_floating = false;
+    } else
+        this->is_floating = true;
 }

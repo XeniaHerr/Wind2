@@ -19,9 +19,6 @@ namespace Wind {
 
     class WindowManagerModel {
 
-//        using ClientHolder = std::shared_ptr<Client>;
-//        using MonitorHolder = std::shared_ptr<Monitor>;
-//        using TopicHolder = std::shared_ptr<Topic>;
         using ClientHolder = Holder<Client>;
         using MonitorHolder = Holder<Monitor>;
         using TopicHolder = Holder<Topic>;
@@ -29,100 +26,66 @@ namespace Wind {
         public:
 
 
-    static WindowManagerModel& getInstance() {
+        static WindowManagerModel& getInstance() {
 
-        static WindowManagerModel s;
-        return s;
-
-        }
-
-    WindowManagerModel(const WindowManagerModel& other) = delete;
-    WindowManagerModel(const WindowManagerModel&& other) = delete;
-
-    WindowManagerModel& operator=(const WindowManagerModel& other) = delete;
-    WindowManagerModel& operator=(const WindowManagerModel&& other) = delete;
-
-    template<typename P> requires std::predicate<P>
-    std::vector<Topic*> filterTopics(P&& predicate) {
-        std::vector<Topic*> ret;
-        for ( auto &a : topics) {
-            if (predicate(a))
-                ret.push_back(&a);
-        }
-        return ret;
-    }
-
-
-    void moveClienttoTopic(Window w, u_int topicnumber) {
-
-        if (!clients.contains(w))
-            return;
-        if (&topics[topicnumber] == &clients[w].getOwner())
-            return;
-
-        clients[w].getOwner().abandon(clients[w]);
-        topics[topicnumber].adopt(clients[w]);
-    }
-
-
-    void moveTopictoMonitor(Topic& topic, Monitor& monitor) {
-
-
-
-
-        if (&topic.getHolder() == &monitor) return;
-
-        if (monitor.current != nullptr) {
-
-            Monitor* orig = &topic.getHolder();
-
-            auto old = monitor.current;
-
-            old->setHolder(orig);
-
-            orig->current = old;
-
-            
+            static WindowManagerModel s;
+            return s;
 
         }
 
-            monitor.getCurrent() = std::make_shared<Topic> (topic);
+        WindowManagerModel(const WindowManagerModel& other) = delete;
+        WindowManagerModel(const WindowManagerModel&& other) = delete;
 
-            topic.setHolder(&monitor);
-    }
+        WindowManagerModel& operator=(const WindowManagerModel& other) = delete;
+        WindowManagerModel& operator=(const WindowManagerModel&& other) = delete;
 
-    void manageWindow(Window w) {
+        template<typename P> requires std::predicate<P>
+            std::vector<Client*> filterClients(P&& predicate) {
+                std::vector<Client*> ret;
+                for ( auto &a : clients) {
+                    if (predicate(a))
+                        ret.push_back(&a.second.get());
+                }
+                return ret;
+            }
 
-        if (!clients.contains(w)) { auto it = clients.emplace(w, ClientHolder(Client(w)));
-        //focusedmon->current->   adopt(it.first->second);
+
+        void moveClienttoTopic(Window w, u_int topicnumber);
+
+
+        void moveTopictoMonitor(Topic& topic, Monitor& monitor);
+
+
+
+
+
+        void manageWindow(Window w);
+
+
+        void unmanageWindow(Window w);
+
+
+        void arrangeAllMonitors() {
+            for (auto& a : monitors) {
+                a.get().arrange();
+            }
         }
 
-    }
-
-    void unmanageWindow(Window w);
-
-
-    void arrangeAllMonitors() {
-        for (auto& a : monitors) {
-            a.get().arrange();
-        }
-    }
-            
         private:
 
-        WindowManagerModel();
+        WindowManagerModel() {}
 
 
-            std::map<::Window, ClientHolder> clients;
+        std::map<Window, ClientHolder> clients;
 
 
-            std::vector<TopicHolder> topics;
+        std::vector<TopicHolder> topics;
 
-            std::vector<MonitorHolder> monitors;
+        std::vector<MonitorHolder> monitors;
 
 
 
-            Monitor* focusedmon;
+        Monitor* focusedmon;
 
 
 

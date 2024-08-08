@@ -22,7 +22,7 @@ namespace Wind {
 
 
 
-             void display(Topic* other);
+             void display(Topic* other); //What should this function do ??
 
 
             void arrange();
@@ -31,19 +31,19 @@ namespace Wind {
 
             Position getPosition() const;
 
-            std::weak_ptr<Topic> getCurrent();
+            std::shared_ptr<Wind::Topic> getCurrent();
 
-            void setCurrent(std::weak_ptr<Topic> topic);
+            void setCurrent(std::shared_ptr<Topic> topic);
 
 
-            void toggleBorder();
+            void toggleBar();
 
 
             void setBarHeight(u_int8_t h);
 
         private:
 
-            std::weak_ptr<Topic> current;
+            std::shared_ptr<Topic> current;
 
             Dimensions realDimensions;
 
@@ -57,7 +57,7 @@ namespace Wind {
 
 
 
-            bool is_active;
+            bool is_active; //Where do i want to use this variable?
 
 
             u_int8_t barHeight = 0; /**TODO: Decide when and how to set, set to 0 for testing*/

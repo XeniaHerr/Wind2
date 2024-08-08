@@ -37,9 +37,9 @@ struct Dimensions;
             void send_to_topic(Topic & t, Client * c);
 
 
-            void adopt( Client& c);
+            void takeOwnership( Client& c); //DESIGN CHOICE: Client must always beong to a monitor. The only exception to that is at the beginning of its lifecycle. I hav therefore removed the function abandon, because it violates this principle. But i still have to give the method releaseOwnership, because i need to remove the client from the clientlist.
 
-            const Client& abandon( Client& c);
+            const Client& releaseOwnership( Client& c);
 
 
             void renderclients();
@@ -49,6 +49,13 @@ struct Dimensions;
             Monitor& getHolder() const; 
 
             std::string getName() const;
+
+
+
+
+            bool operator==(const Topic& other) const {
+                return this->name == other.name;
+            }
 
         private:
 
@@ -60,6 +67,7 @@ struct Dimensions;
 
 
             float master_fact;
+
             
 
 
