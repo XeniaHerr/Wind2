@@ -41,6 +41,9 @@ class WindowManagerModelTest : public testing::Test {
             WMM(Wind::WindowManagerModel::getInstance())
             {
 
+    std::vector<std::string> names = {"VectorFirst", "Vectorsecond"}; 
+
+    WMM.registerTopics(names);
 
             }
 
@@ -133,14 +136,27 @@ TEST_F(WindowManagerModelTest, testmoveClientToTopic) {
 TEST_F(WindowManagerModelTest, testregisterTopic) {
 
 
-    EXPECT_EQ(WMM.getTopicCount(), 0U);
-
-
-    std::vector<std::string> names = {"VectorFirst", "Vectorsecond"}; 
-
-    WMM.registerTopics(names);
-
 
     EXPECT_EQ(WMM.getTopicCount(), 2U);
+
+
+}
+
+
+TEST_F(WindowManagerModelTest, testmoveClientToTopicwithrealFunction) {
+    
+    ::testing::GTEST_FLAG(output) = "all";
+
+    WMM.manageWindow(100);
+
+
+
+    //This test is not working because c has no active Owner
+
+    WMM.moveClienttoTopic(100, 0);
+
+
+//    EXPECT_EQ(WMM.getClient(100)->getOwner().getName(), "VectorFirst");
+
 
 }

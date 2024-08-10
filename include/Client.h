@@ -11,6 +11,15 @@
 
 namespace Wind {
 
+/**
+ * @class 
+ * @brief Modeling of a single window.
+ *
+ * A Window is a rectangle that belongs to an Application and can be managed more or less independently from other windows.
+ * They are here called Clients. In a client the Window Id is stored alongside other metainformation about the window like
+ * size and Positon.
+ *
+ * The main goal of this Class is to hold and manage these Metadata*/
 class Client {
 
     public:
@@ -66,22 +75,25 @@ class Client {
 
     private:
 
-        Window _window;
+        Window _window; /**< X11 Window ID */
 
-        Topic* _owner;
-
-
-        Dimensions currentDimension;
-
-        Dimensions oldDimension;
+        Topic* _owner; /**< Currrent Topic*/
 
 
-        Position currentPosition;
+        Dimensions currentDimension; /**< Current Dimensions(width, height)*/
 
-        Position oldPosition;
+        Dimensions oldDimension; /**< Last Dimensions(width, height)*/
 
 
-        bool is_floating, is_visible, is_fullscreen, is_orphan;
+        Position currentPosition; /**< Current Position(x,y)*/
+
+        Position oldPosition; /**< Last Position(x,y)*/
+
+
+        bool is_floating, /**< Floating Status*/ 
+             is_visible,  /**< Visibility status*/
+             is_fullscreen,  /**Fullscreen Status*/
+             is_orphan; /**< Has Owner?*/
 
 
 

@@ -1,19 +1,25 @@
 
 #include <WindowManagerModel.h>
 #include <X11/X.h>
+#include <iostream>
 
 
 using namespace Wind;
 
 auto WindowManagerModel::moveClienttoTopic(Window w, u_int topicnumber) -> void {
 
-        if (!clients.contains(w))
+        if (!clients.contains(w) || topicnumber > getTopicCount())
             return;
-        if (topics[topicnumber].get() == clients[w].get().getOwner())
+        std::cerr << "Cleared first guard\n";
+        if (&topics[topicnumber].get() == &clients[w].get().getOwner())
             return;
 
-        clients[w].get().getOwner().releaseOwnership(clients[w].get());
+        std::cerr << "Cleared second guard\n";
+        if (!clients[w].get().isOrphan())
+            clients[w].get().getOwner().releaseOwnership(clients[w].get());
+        std::cerr << "Released by prevoius owner\n";
         topics[topicnumber].get().takeOwnership(clients[w].get());
+        std::cerr << "Adopted by new owner\n";
     }
 
 
