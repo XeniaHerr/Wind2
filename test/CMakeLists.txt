@@ -64,8 +64,8 @@ GTest::gtest_main)
 
 
 target_link_libraries(WindowManagerModelTest
-    WIND2_LIB
-GTest::gtest_main)
+       WIND2_LIB
+    GTest::gtest_main)
 include(GoogleTest)
 
 gtest_discover_tests(Client_test)

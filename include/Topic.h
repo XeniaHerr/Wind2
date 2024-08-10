@@ -1,7 +1,6 @@
 #ifndef TOPIC_H
 #define TOPIC_H
 #include <X11/X.h>
-#include <memory>
 #include <string>
 #include <sys/types.h>
 #include <list>
@@ -30,6 +29,9 @@ struct Dimensions;
 //
 //                return nullptr;
 //            }
+//
+            Topic(Topic&& other);
+//            Topic(Topic& other);
 
 
             std::list<Client*>& getClients();

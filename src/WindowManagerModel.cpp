@@ -1,7 +1,6 @@
 
 #include <WindowManagerModel.h>
 #include <X11/X.h>
-#include <system_error>
 
 
 using namespace Wind;
@@ -18,8 +17,19 @@ auto WindowManagerModel::moveClienttoTopic(Window w, u_int topicnumber) -> void 
     }
 
 
-
+//This is just a dummy implementation until the management of Topics is finalized.
 auto WindowManagerModel::moveClienttoTopic(Window w, Topic& t) -> void {
+
+    if (!clients.contains(w))
+        return;
+
+    if (&t == &clients[w].get().getOwner())
+        return;
+
+
+    clients[w].get().getOwner().releaseOwnership(clients[w].get());
+
+    t.takeOwnership(clients[w].get());
 
 
 }
@@ -95,5 +105,17 @@ auto WindowManagerModel::getClient(Window w) const -> Client* {
     return it == clients.end() ? nullptr : &it->second.get();
 }
 
+auto WindowManagerModel::registerTopics(std::vector<std::string> parameters) -> void {
+
+    for (auto name : parameters) {
+        topics.emplace_back(TopicHolder(std::move(Topic(name))));
+    }
+
+}
+
+
+auto WindowManagerModel::getTopicCount() -> decltype(topics.size()) {
+    return topics.size();
+}
 
 

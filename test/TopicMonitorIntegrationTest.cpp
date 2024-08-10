@@ -44,7 +44,6 @@ TEST_F(TopicMon, getandsetCurrent) {
 
     t.setHolder(&w);
 
-    auto pt = std::make_shared<Wind::Topic>(t);
 
     w.setCurrent(&t);
 

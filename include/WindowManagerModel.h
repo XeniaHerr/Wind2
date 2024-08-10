@@ -2,7 +2,9 @@
 #ifndef WINDOWMANAGERMODEL_H
 #define WINDOWMANAGERMODEL_H
 
+#include "structs.h"
 #include <X11/X.h>
+#include <cstddef>
 #include <map>
 #include <sys/types.h>
 #include <vector>
@@ -48,6 +50,14 @@ namespace Wind {
         void moveTopictoMonitor(Topic& topic, Monitor& monitor);
 
 
+        void resizeClient(Window w, Dimensions d);
+
+        void moveClient(Window w, Position p);
+
+        void terminateClient(Window w);
+
+
+
 
 
 
@@ -56,7 +66,7 @@ namespace Wind {
 
         void unmanageWindow(Window w);
 
-        void registerTopics(std::vector<Topic>&& topics);
+        void registerTopics(std::vector<std::string> parameters);
 
         void registerMonitors(std::vector<Monitor>&& monitors);
 
@@ -77,6 +87,8 @@ namespace Wind {
 
         /**Helperfunctions*/
         u_int getClientCount();
+
+        size_t getTopicCount();
 
 
         Client* getClient(Window w) const ;

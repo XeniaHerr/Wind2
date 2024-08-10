@@ -1,5 +1,7 @@
-#include "structs.h"
 #include <gtest/gtest.h>
+
+#include "Topic.h"
+#include "structs.h"
 #include <WindowManagerModel.h>
 
 
@@ -30,10 +32,6 @@ class WindowManagerModelTest : public testing::Test {
 
         Wind::Monitor m, m2;
 
-
-
-
-
         WindowManagerModelTest() :
 
             c(1), c1(2), c2(2),
@@ -41,7 +39,10 @@ class WindowManagerModelTest : public testing::Test {
             m(Wind::Dimensions(1920, 1080), Wind::Position(1920, 0), 10),
             m2(Wind::Dimensions(1920, 1080), Wind::Position(1920, 0), 10),
             WMM(Wind::WindowManagerModel::getInstance())
-            { }
+            {
+
+
+            }
 
 };
 
@@ -58,6 +59,19 @@ TEST_F(WindowManagerModelTest, testManageWindow) {
     EXPECT_EQ(WMM.getClientCount(), 1);
 
 
+
+
+}
+
+
+TEST_F(WindowManagerModelTest, testtakeOwnershipRecordedinWMM) {
+
+    WMM.manageWindow(100);
+
+
+    t.takeOwnership(*WMM.getClient(100));
+
+    EXPECT_EQ(&WMM.getClient(100)->getOwner(), &t);
 
 
 }
@@ -106,7 +120,27 @@ TEST_F(WindowManagerModelTest, testmoveClientToTopic) {
 
     t.takeOwnership(*WMM.getClient(100));
 
+    EXPECT_EQ(&WMM.getClient(100)->getOwner(), &t);
 
-    //WMM.moveClienttoTopic(100, t2);
+    WMM.moveClienttoTopic(100, t2);
+
+    EXPECT_EQ(&WMM.getClient(100)->getOwner(), &t2);
+
+}
+
+
+
+TEST_F(WindowManagerModelTest, testregisterTopic) {
+
+
+    EXPECT_EQ(WMM.getTopicCount(), 0U);
+
+
+    std::vector<std::string> names = {"VectorFirst", "Vectorsecond"}; 
+
+    WMM.registerTopics(names);
+
+
+    EXPECT_EQ(WMM.getTopicCount(), 2U);
 
 }
