@@ -66,6 +66,9 @@ namespace Wind {
 
 
 
+            void adjustforBarHeight();
+
+
 
 
     };
