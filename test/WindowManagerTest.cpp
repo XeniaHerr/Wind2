@@ -150,6 +150,18 @@ TEST_F(WindowManagerModelTest, testmoveClientToTopicwithrealFunction) {
     WMM.manageWindow(100);
 
 
+    auto c = WMM.getClient(100);
+
+
+    c->setOwner(t);
+
+
+    WMM.moveClienttoTopic(100, 0);
+
+
+    EXPECT_EQ(&WMM.getClient(100)->getOwner(), WMM.getTopic(0));
+
+
 
     //This test is not working because c has no active Owner
 
@@ -158,5 +170,11 @@ TEST_F(WindowManagerModelTest, testmoveClientToTopicwithrealFunction) {
 
 //    EXPECT_EQ(WMM.getClient(100)->getOwner().getName(), "VectorFirst");
 
+
+}
+
+
+
+TEST_F(WindowManagerModelTest, testfocusClient) {
 
 }

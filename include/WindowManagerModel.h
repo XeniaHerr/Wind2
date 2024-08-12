@@ -86,9 +86,9 @@ namespace Wind {
         }
 
         /**Helperfunctions*/
-        u_int getClientCount();
+        u_int getClientCount() const;
 
-        size_t getTopicCount();
+        size_t getTopicCount() const;
 
 
         Client* getClient(Window w) const ;

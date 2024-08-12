@@ -76,7 +76,7 @@ auto WindowManagerModel::manageWindow(Window w) -> void {
 }
 
 
-auto WindowManagerModel::getClientCount()  -> u_int {
+auto WindowManagerModel::getClientCount() const  -> u_int {
     return clients.size();
 }
 
@@ -120,8 +120,19 @@ auto WindowManagerModel::registerTopics(std::vector<std::string> parameters) -> 
 }
 
 
-auto WindowManagerModel::getTopicCount() -> decltype(topics.size()) {
+auto WindowManagerModel::getTopicCount() const -> decltype(topics.size()) {
     return topics.size();
 }
 
 
+auto WindowManagerModel::getTopic(u_int topicnumber) const -> Topic* {
+
+
+    if (topicnumber > this->getTopicCount())
+        return nullptr;
+
+    else
+        return &this->topics[topicnumber].get();
+
+
+}
