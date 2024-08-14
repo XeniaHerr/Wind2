@@ -2,6 +2,7 @@
 #define ABSTRACTARRANGER_H
 #include "structs.h"
 #include <sys/types.h>
+#include <vector>
 
 /**
  * @file Interface for Monitor arrangers*/
@@ -21,6 +22,8 @@ namespace Wind {
 
             virtual Position getPosition(Monitor& m, u_int16_t position, u_int16_t max) = 0;
 
+            virtual ~AbstractArranger() = default;
+
 
 
 
@@ -28,8 +31,12 @@ namespace Wind {
     };
 
 
+
+
+
+
+
+
+
 }
-
-
-
 #endif /*ABSTRACTARRANGER_H*/
