@@ -9,15 +9,16 @@ using namespace Wind;
 Topic::Topic(std::string name) : name(name),
     holder(nullptr), focusedclient(nullptr){ }
 
-Topic::Topic(Topic&& other) : name(std::move(other.name)) {
+Topic::Topic(Topic&& other) : name(std::move(other.name)), holder(other.holder), focusedclient(other.focusedclient) {
 
 }
 
 
 //Topic::Topic(Topic& other) : name(other.name) {}
 
-auto Topic::getHolder() const -> decltype(*holder)& {
-    return *this->holder;
+//This method was of type Monitor&, which is stupid, because not every topic is on a monitor. This may very likley be a nullptr
+auto Topic::getHolder() const -> decltype(holder) {
+    return this->holder;
 }
 
 

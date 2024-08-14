@@ -23,14 +23,14 @@ namespace Wind {
                 Holder() : _object(nullptr) {}
 
 
+                Holder(std::unique_ptr<T> source) : _object(std::move(source)) {}
+
+
                 Holder(Holder&& other) : _object(std::move(other._object)) {
                 other._object = nullptr;
                 }
 
 //
-//                Holder(T& obj) : _object(obj){}
-
-                //Holder (T obj) : _object(obj){}
 
 
                 Holder& operator=(const Holder& other) = delete;
@@ -53,6 +53,10 @@ namespace Wind {
 
                 T& get() const {
                     return *_object.get();
+                }
+
+                T* getPointer() const {
+                    return _object.get();
                 }
 
 

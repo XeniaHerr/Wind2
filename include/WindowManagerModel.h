@@ -93,6 +93,8 @@ namespace Wind {
 
         Client* getClient(Window w) const ;
 
+        Monitor* getFocusedMon() const;
+
 
         template<typename P> requires std::predicate<P>
             std::vector<Client*> filterClients(P&& predicate) {
@@ -106,7 +108,7 @@ namespace Wind {
 
         private:
 
-        WindowManagerModel() {}
+        WindowManagerModel();
 
 
         std::map<Window, ClientHolder> clients;

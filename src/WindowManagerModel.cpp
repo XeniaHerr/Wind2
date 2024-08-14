@@ -6,6 +6,15 @@
 
 using namespace Wind;
 
+
+ WindowManagerModel::WindowManagerModel() {
+
+
+     this->focusedmon = nullptr;
+
+
+}
+
 auto WindowManagerModel::moveClienttoTopic(Window w, u_int topicnumber) -> void {
 
         if (!clients.contains(w) || topicnumber > getTopicCount())
@@ -45,11 +54,11 @@ auto WindowManagerModel::moveClienttoTopic(Window w, Topic& t) -> void {
 auto moveTopictoMonitor(Topic& topic, Monitor& monitor) -> void {
 
 
-        if (&topic.getHolder() == &monitor) return;
+        if (topic.getHolder() == &monitor) return;
 
         if (monitor.getCurrent() != nullptr) {
 
-            Monitor* orig = &topic.getHolder();
+            Monitor* orig = topic.getHolder();
 
             auto old = monitor.getCurrent();
 
@@ -94,7 +103,7 @@ auto WindowManagerModel::focusClient(Window w) -> void {
 
     Topic& t = c.getOwner();
 
-    Monitor* m = &t.getHolder();
+    Monitor* m = t.getHolder();
 
 
     if (m != this->focusedmon)
@@ -135,4 +144,9 @@ auto WindowManagerModel::getTopic(u_int topicnumber) const -> Topic* {
         return &this->topics[topicnumber].get();
 
 
+}
+
+
+auto WindowManagerModel::getFocusedMon() const -> decltype(focusedmon) {
+    return focusedmon;
 }

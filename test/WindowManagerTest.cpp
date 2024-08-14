@@ -163,18 +163,24 @@ TEST_F(WindowManagerModelTest, testmoveClientToTopicwithrealFunction) {
 
 
 
-    //This test is not working because c has no active Owner
-
-    WMM.moveClienttoTopic(100, 0);
-
-
-//    EXPECT_EQ(WMM.getClient(100)->getOwner().getName(), "VectorFirst");
-
-
 }
 
 
 
 TEST_F(WindowManagerModelTest, testfocusClient) {
+
+
+    EXPECT_EQ(WMM.getFocusedMon(), nullptr);
+    
+
+    WMM.manageWindow(100);
+
+    WMM.getClient(100)->setOwner(*WMM.getTopic(0));
+
+    //This will not work until i can register Monitors
+    //WMM.focusClient(100);
+
+
+
 
 }

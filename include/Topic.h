@@ -49,7 +49,7 @@ struct Dimensions;
 
             void setHolder(Monitor* mon);
 
-            Monitor& getHolder() const; 
+            Monitor* getHolder() const; 
 
             std::string getName() const;
 

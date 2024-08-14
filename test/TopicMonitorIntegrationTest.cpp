@@ -36,7 +36,7 @@ TEST_F(TopicMon, getandsetHolder) {
     t.setHolder(&w);
 
 
-    EXPECT_EQ(&t.getHolder(), &w);
+    EXPECT_EQ(t.getHolder(), &w);
 }
 
 
