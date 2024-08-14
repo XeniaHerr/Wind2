@@ -3,6 +3,8 @@
 #include "Topic.h"
 #include "structs.h"
 #include <WindowManagerModel.h>
+#include <tuple>
+#include <utility>
 
 
 
@@ -78,6 +80,9 @@ TEST_F(WindowManagerModelTest, testtakeOwnershipRecordedinWMM) {
 
 
 }
+
+
+
 
 TEST_F(WindowManagerModelTest, testManageWindowAgain) {
 
@@ -167,8 +172,24 @@ TEST_F(WindowManagerModelTest, testmoveClientToTopicwithrealFunction) {
 
 
 
+TEST_F(WindowManagerModelTest, testRegisterMonitors) {
+
+    std::vector<std::tuple<Wind::Dimensions, Wind::Position, u_int>> monargs = { std::make_tuple(Wind::Dimensions(1920,1080), Wind::Position(0,0),10 ), 
+                                                                                std::make_tuple(Wind::Dimensions(1920,1080), Wind::Position(1920,0), 10)};
+
+    EXPECT_EQ(WMM.getMonitorCount(), 0);
+
+    WMM.registerMonitors(monargs);
+
+
+    EXPECT_EQ(WMM.getMonitorCount(), 2);
+
+}
+
 TEST_F(WindowManagerModelTest, testfocusClient) {
 
+    std::vector<std::tuple<Wind::Dimensions, Wind::Position, u_int>> monargs = { std::make_tuple(Wind::Dimensions(1920,1080), Wind::Position(0,0),10 ), 
+                                                                                std::make_tuple(Wind::Dimensions(1920,1080), Wind::Position(1920,0), 10)};
 
     EXPECT_EQ(WMM.getFocusedMon(), nullptr);
     
@@ -177,10 +198,114 @@ TEST_F(WindowManagerModelTest, testfocusClient) {
 
     WMM.getClient(100)->setOwner(*WMM.getTopic(0));
 
+
+    WMM.registerMonitors(monargs);
+
+    auto t = WMM.getTopic(0);
+
+    t->takeOwnership(*WMM.getClient(100));
+
+    auto m = WMM.getMonitor(0);
+
+    m->setCurrent(t);
+
+    t->setHolder(m);
+
+
+
     //This will not work until i can register Monitors
-    //WMM.focusClient(100);
+    WMM.focusClient(100);
+
+
+    EXPECT_EQ(WMM.getClient(100)->getOwner().getFocused(), WMM.getClient(100));
+
+    EXPECT_EQ(WMM.getFocusedMon(), m);
 
 
 
 
 }
+
+TEST_F(WindowManagerModelTest, testSwitchFocusClient) {
+
+    std::vector<std::tuple<Wind::Dimensions, Wind::Position, u_int>> monargs = { std::make_tuple(Wind::Dimensions(1920,1080), Wind::Position(0,0),10 ), 
+                                                                                std::make_tuple(Wind::Dimensions(1920,1080), Wind::Position(1920,0), 10)};
+
+    EXPECT_EQ(WMM.getFocusedMon(), nullptr);
+    
+
+    WMM.manageWindow(100);
+
+    WMM.getClient(100)->setOwner(*WMM.getTopic(0));
+
+
+    WMM.registerMonitors(monargs);
+
+    auto t = WMM.getTopic(0);
+
+    t->takeOwnership(*WMM.getClient(100));
+
+    auto m = WMM.getMonitor(0);
+
+    m->setCurrent(t);
+
+    t->setHolder(m);
+
+
+
+    WMM.manageWindow(200);
+
+
+     auto c1 = WMM.getClient(200);
+
+
+     auto t2 = WMM.getTopic(1);
+
+     auto m2 = WMM.getMonitor(1);
+
+     t2->takeOwnership(*c1);
+
+     m2->setCurrent(t2);
+
+     t2->setHolder(m2);
+
+
+
+    //This will not work until i can register Monitors
+    WMM.focusClient(100);
+
+
+    EXPECT_EQ(WMM.getClient(100)->getOwner().getFocused(), WMM.getClient(100));
+
+    EXPECT_EQ(WMM.getFocusedMon(), m);
+
+
+
+    WMM.focusClient(200);
+
+
+    EXPECT_EQ(WMM.getClient(200)->getOwner().getFocused(), WMM.getClient(200));
+
+    EXPECT_EQ(WMM.getFocusedMon(), m2);
+
+
+
+
+}
+
+
+
+TEST_F(WindowManagerModelTest, testunmanageClient) {
+
+    WMM.manageWindow(100);
+
+    EXPECT_NE(WMM.getClient(100), nullptr);
+
+
+    WMM.unmanageWindow(100);
+    EXPECT_EQ(WMM.getClient(100), nullptr);
+}
+
+
+
+

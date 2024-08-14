@@ -20,6 +20,9 @@ namespace Wind {
             Monitor(Dimensions d, Position p, u_int8_t barHeight);
 
 
+            Monitor(Monitor&& other);
+
+
 
              void display(Topic* other); //What should this function do ??
 

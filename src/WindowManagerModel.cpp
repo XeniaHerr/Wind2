@@ -1,7 +1,9 @@
-
 #include <WindowManagerModel.h>
 #include <X11/X.h>
+#include <X11/Xlib.h>
 #include <iostream>
+#include <sys/types.h>
+#include <utility>
 
 
 using namespace Wind;
@@ -137,11 +139,11 @@ auto WindowManagerModel::getTopicCount() const -> decltype(topics.size()) {
 auto WindowManagerModel::getTopic(u_int topicnumber) const -> Topic* {
 
 
-    if (topicnumber > this->getTopicCount())
-        return nullptr;
+    if (topicnumber >= this->getTopicCount())
+        return this->topics[0].getPointer();
 
     else
-        return &this->topics[topicnumber].get();
+        return this->topics[topicnumber].getPointer();
 
 
 }
@@ -149,4 +151,50 @@ auto WindowManagerModel::getTopic(u_int topicnumber) const -> Topic* {
 
 auto WindowManagerModel::getFocusedMon() const -> decltype(focusedmon) {
     return focusedmon;
+}
+
+
+
+
+auto WindowManagerModel::registerMonitors(std::vector<std::tuple<Dimensions, Position, u_int>> monitors) -> void {
+
+    for( auto& a : monitors) {
+        this->monitors.emplace_back(MonitorHolder(std::move(Monitor(std::get<0>(a), std::get<1>(a), std::get<2>(a)))));
+    }
+
+
+}
+
+
+auto WindowManagerModel::getMonitor(u_int Monitornumber) const -> Monitor* {
+
+    if (Monitornumber >= monitors.size())
+        return monitors[0].getPointer();
+    else 
+        return monitors[Monitornumber].getPointer();
+
+
+}
+
+
+auto WindowManagerModel::getMonitorCount() const -> decltype(monitors.size()) {
+    return monitors.size();
+}
+
+
+
+
+auto WindowManagerModel::unmanageWindow(Window w) -> void {
+
+    auto it = clients.find(w);
+
+
+    if (it == clients.end() ) {
+        return;
+    }
+
+    else
+        clients.erase(it);
+
+
 }

@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <map>
 #include <sys/types.h>
+#include <utility>
 #include <vector>
 #include <Topic.h>
 #include <Monitor.h>
@@ -68,7 +69,7 @@ namespace Wind {
 
         void registerTopics(std::vector<std::string> parameters);
 
-        void registerMonitors(std::vector<Monitor>&& monitors);
+        void registerMonitors(std::vector<std::tuple<Dimensions, Position, u_int>> monitors);
 
         void focusClient(Window w);
 
@@ -89,6 +90,8 @@ namespace Wind {
         u_int getClientCount() const;
 
         size_t getTopicCount() const;
+
+        size_t getMonitorCount() const;
 
 
         Client* getClient(Window w) const ;

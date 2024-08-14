@@ -1,5 +1,6 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
+#include <random>
 #include <sys/types.h>
 
 /**
@@ -35,6 +36,8 @@ namespace Wind {
         bool operator==(const Dimensions& other)  const {
             return this->width == other.width && this->height == other.height;
         }
+
+
     };
 
     /**
@@ -63,6 +66,7 @@ namespace Wind {
         bool operator==(const Position& other) const {
             return this->x == other.x && this->y == other.y;
         }
+
     };
 }
 

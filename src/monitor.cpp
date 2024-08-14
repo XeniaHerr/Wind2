@@ -30,6 +30,16 @@ Monitor::Monitor(Dimensions d, Position p, u_int8_t barHeight) :  realDimensions
     usablePosition.x = realPosition.x;
     usablePosition.y = realPosition.y + barHeight;
 }
+
+
+
+Monitor::Monitor(Monitor&& other) {
+    usableDimensions = other.usableDimensions;
+    realDimensions = other.realDimensions;
+
+    usablePosition = other.usablePosition;
+
+}
 auto Monitor::getDimensions() const -> decltype(usableDimensions) {
 
     return this->usableDimensions;
