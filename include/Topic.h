@@ -1,5 +1,6 @@
 #ifndef TOPIC_H
 #define TOPIC_H
+#include "AbstractArranger.h"
 #include <X11/X.h>
 #include <string>
 #include <sys/types.h>
@@ -64,6 +65,9 @@ struct Dimensions;
 
 
             Client* getFocused() const ;
+
+
+
 
 
         private:

@@ -1,3 +1,7 @@
+#ifndef MONITOR_H
+#define MONITOR_H
+
+
 #include "structs.h"
 #include <sys/types.h>
 
@@ -6,6 +10,7 @@ namespace Wind {
 
     class Topic;
     class Client;
+    class AbstractArranger;
 
 
     class Monitor {
@@ -43,6 +48,7 @@ namespace Wind {
 
             void setBarHeight(u_int8_t h);
 
+            void setArranger(AbstractArranger* a);
 
 
 
@@ -68,6 +74,9 @@ namespace Wind {
             u_int8_t barHeight = 0; /**TODO: Decide when and how to set, set to 0 for testing*/
 
 
+            AbstractArranger* currentArranger;
+
+
 
             void adjustforBarHeight();
 
@@ -78,6 +87,7 @@ namespace Wind {
 }
 
 
+#endif /*MONITOR_H*/
 
 /**
  * Decicion: Maybe i should create a Factory for Monitor and Builder. Probably not, because monitors are not all that different from each other*/

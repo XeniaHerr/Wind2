@@ -66,7 +66,9 @@ namespace Wind {
             void setDimensions(u_int32_t x, u_int32_t y);
 
 
+            void setTargetDimensions(Dimensions d);
 
+            void setTargetPositions(Position p);
 
             /**
              * @brief set New position
@@ -76,6 +78,9 @@ namespace Wind {
 
 
             void setOwner(Topic& t) ;
+
+
+            void setVisible(bool t);
 
 
 
@@ -92,7 +97,7 @@ namespace Wind {
              * @returns currentPosition*/
             Position getPosition() const;
 
-            
+
             /**
              * @brief get the oldPosition
              * @returns oldPosition*/
@@ -114,6 +119,11 @@ namespace Wind {
              * @returns oldDimension*/
             Dimensions getOldDimensions() const;
 
+
+            Dimensions getTargetDimension() const;
+
+            Position getTargetPosition() const;
+
             Window getWindow() const;
 
             bool isOrphan() const;
@@ -130,14 +140,14 @@ namespace Wind {
             Topic* _owner; /**< Currrent Topic*/
 
 
-            Dimensions currentDimension; /**< Current Dimensions(width, height)*/
+            Dimensions currentDimension, /**< Current Dimensions(width, height)*/
+                       oldDimension, /**< Last Dimensions(width, height)*/
+                       targetDimension; /**< Dimensions Window should be resized to */
 
-            Dimensions oldDimension; /**< Last Dimensions(width, height)*/
 
-
-            Position currentPosition; /**< Current Position(x,y)*/
-
-            Position oldPosition; /**< Last Position(x,y)*/
+            Position currentPosition, /**< Current Position(x,y)*/
+                     oldPosition, /**< Last Position(x,y)*/
+                     targetPosition; /**< Position the Window should be moved to*/
 
 
             bool is_floating, /**< Floating Status*/ 

@@ -107,3 +107,31 @@ auto Client::toggleFloating() -> void {
     } else
         this->is_floating = true;
 }
+
+
+
+auto Client::setTargetPositions(Position p) -> void {
+    this->targetPosition = p;
+}
+
+
+auto Client::setTargetDimensions(Dimensions d) -> void {
+
+    this->targetDimension = d;
+}
+
+
+auto Client::getTargetDimension() const -> decltype(targetDimension) {
+
+    return this->targetDimension;
+}
+
+
+auto Client::getTargetPosition() const -> decltype(targetPosition) {
+    return this->targetPosition;
+}
+
+
+auto Client::setVisible(bool t) -> void {
+    this->is_visible = t;
+}
