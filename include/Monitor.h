@@ -4,13 +4,13 @@
 
 #include "structs.h"
 #include <sys/types.h>
+#include <ArrangerSelector.h>
 
 namespace Wind {
 
 
     class Topic;
     class Client;
-    class AbstractArranger;
 
 
     class Monitor {
@@ -74,7 +74,9 @@ namespace Wind {
             u_int8_t barHeight = 0; /**TODO: Decide when and how to set, set to 0 for testing*/
 
 
-            AbstractArranger* currentArranger;
+
+
+            ArrangerSelector layouts;
 
 
 

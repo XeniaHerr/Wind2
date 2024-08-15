@@ -1,3 +1,6 @@
+#ifndef CONCRETEARRANGER_H
+#define CONCRETEARRANGER_H
+
 #include <AbstractArranger.h>
 
 
@@ -14,7 +17,7 @@ namespace Wind {
 
         Position getPosition(Monitor& m, u_int16_t position, u_int16_t max) override;
 
-        ~Monocle() = default;
+        ~Monocle() override = default;
 
     };
 
@@ -27,9 +30,12 @@ namespace Wind {
 
         Position getPosition(Monitor& m, u_int16_t position, u_int16_t max) override;
 
-        ~MasterTile() = default;
+        ~MasterTile() override = default;
 
     };
 
 
 }
+
+
+#endif /*CONCRETEARRANGER_H*/

@@ -24,7 +24,7 @@ Monitor::Monitor(u_int32_t x, u_int32_t y) : realDimensions(x,y) {
     is_active = false;
 
 
-    currentArranger = &m;
+    //currentArranger = &m;
 }
 
 
@@ -45,7 +45,7 @@ Monitor::Monitor(Dimensions d, Position p, u_int8_t barHeight) :  realDimensions
 
 
 
-Monitor::Monitor(Monitor&& other) : currentArranger(other.currentArranger){
+Monitor::Monitor(Monitor&& other)  {
     usableDimensions = other.usableDimensions;
     realDimensions = other.realDimensions;
 
@@ -102,15 +102,18 @@ auto Monitor::adjustforBarHeight() -> void {
 
 
 auto Monitor::setArranger(AbstractArranger* a) -> void {
-    this->currentArranger = a;
+    //this->currentArranger = a;
 }
 
 
 auto Monitor::arrange() -> void {
 
 
-    assert(this->currentArranger != nullptr);
+    AbstractArranger& currentArranger = layouts.getArranger();
+    //assert(this->currentArranger != nullptr);
     std::cerr << "Inside arrange\n";
+
+
     auto clients = this->current->getClients();
 
     std::vector<Client*> new_clients;
@@ -132,8 +135,8 @@ auto Monitor::arrange() -> void {
 
     for(u_int i = 0; i < size; i++ ) {
         std::cerr << "Test\n";
-         Dimensions d = currentArranger->getDimensions(*this,i, size );
-         Position p = currentArranger->getPosition(*this, i , size);
+         Dimensions d = currentArranger.getDimensions(*this,i, size );
+         Position p = currentArranger.getPosition(*this, i , size);
          std::cerr << "Calculated new values \n";
          new_clients[i]->setTargetPositions(p);
          new_clients[i]->setTargetDimensions(d);

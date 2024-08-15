@@ -1,4 +1,5 @@
-
+#ifndef ARRANGERSELECTOR_H
+#define ARRANGERSELECTOR_H
 #include "AbstractArranger.h"
 #include <ConcreteArranger.h>
 
@@ -9,13 +10,17 @@ class ArrangerSelector {
 
     public:
 
-        AbstractArranger* getArranger() const;
+        AbstractArranger& getArranger();
 
-        AbstractArranger* next();
-        AbstractArranger* previous();
+        AbstractArranger& next();
+        AbstractArranger& previous();
 
         ArrangerSelector();
         ~ArrangerSelector();
+
+        AbstractArranger& operator++();
+
+        AbstractArranger& operator--();
 
 
 
@@ -31,3 +36,4 @@ class ArrangerSelector {
 
 }
 
+#endif /*ARRANGERSELECTOR_H*/
