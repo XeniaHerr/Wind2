@@ -1,9 +1,11 @@
+#include "structs.h"
 #include <WindowManagerModel.h>
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <iostream>
 #include <sys/types.h>
 #include <utility>
+#include <Rules.h>
 
 
 using namespace Wind;
@@ -198,3 +200,26 @@ auto WindowManagerModel::unmanageWindow(Window w) -> void {
 
 
 }
+
+auto WindowManagerModel::attachRule(Client& c) -> void {
+
+    int it = -1;
+
+
+    auto pred = [&](Rule& r) {
+        int prio = r.isApplicable("Name", "Class", Windowtype::ANYTYPE) ;
+        if (prio >= 0)
+            it = std::max(it, prio );
+
+    };
+
+
+    for (auto& a : rules)
+        pred(a.get());
+
+//TODO: Think about how clients with no rule applicalble should be handled.
+
+
+}
+
+

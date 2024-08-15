@@ -1,5 +1,6 @@
 #ifndef CLIENT_H
 #define CLIENT_H
+#include "Rules.h"
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <structs.h>
@@ -40,6 +41,7 @@ namespace Wind {
 
             ~Client() {
                 //Kill window
+                //Killing the window is not the responsibillity of the client. It should be done by in the unmanage function of the Run class
             }
 
             void sendevent();
@@ -52,7 +54,7 @@ namespace Wind {
             void setFullscreen();
 
             /**
-             * @breif Set New Dimensions
+             * @brief Set New Dimensions
              * @param dimensions new Dimensions*/
             void setDimensions(Dimensions dimensions);
 
@@ -123,6 +125,9 @@ namespace Wind {
             bool isVisible() const;
 
 
+            void applyRule();
+
+
         private:
 
             Window _window; /**< X11 Window ID */
@@ -144,6 +149,8 @@ namespace Wind {
                  is_visible,  /**< Visibility status*/
                  is_fullscreen,  /**Fullscreen Status*/
                  is_orphan; /**< Has Owner?*/
+
+            Rule::RuleContent rules;
 
 
 
