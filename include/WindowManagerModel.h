@@ -72,6 +72,8 @@ namespace Wind {
 
         void registerMonitors(std::vector<std::tuple<Dimensions, Position, u_int>> monitors);
 
+        void registerRules(std::vector<Rule> rules_vec);
+
         void focusClient(Window w);
 
 
@@ -131,6 +133,7 @@ namespace Wind {
 
 
         void attachRule(Client& c);
+
 
 
 

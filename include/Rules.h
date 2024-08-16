@@ -13,11 +13,14 @@ using std::string;
 
 namespace Wind {
 
+    class RuleBuilder;
+
     class Rule {
 
-        Rule(string _name, string _class, Windowtype _type);
 
+        Rule();
         public:
+
 
             struct RuleContent {
 
@@ -36,10 +39,13 @@ namespace Wind {
 
             };
 
+            RuleContent content;
 
-            int isApplicable(string name, string windowclass, Windowtype windowtype );
+
+            int isApplicable(string name, string windowclass, Windowtype windowtype ) { return -1;}
 
 
+            friend class RuleBuilder;
 
 
         private:

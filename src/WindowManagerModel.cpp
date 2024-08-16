@@ -223,3 +223,15 @@ auto WindowManagerModel::attachRule(Client& c) -> void {
 }
 
 
+auto WindowManagerModel::registerRules(std::vector<Rule> r) -> void {
+
+    //Create Default rule that applies to all clients
+    
+    //rules.emplace_back(RuleHolder(Rule()))
+
+
+    for(auto& rule : r)
+        rules.emplace_back(RuleHolder(std::move(rule)));
+}
+
+
