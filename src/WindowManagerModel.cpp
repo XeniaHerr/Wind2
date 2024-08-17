@@ -91,7 +91,6 @@ auto WindowManagerModel::manageWindow(Window w) -> void {
 
     if (!clients.contains(w)) {
         auto it = clients.emplace(w, ClientHolder(Client(w)));
-        attachRule(it.first->second.get());
     }
 
 }
@@ -209,26 +208,6 @@ auto WindowManagerModel::unmanageWindow(Window w) -> void {
 
 }
 
-auto WindowManagerModel::attachRule(Client& c) -> void {
-
-
-    int level = 0, value = 0;
-    Rule* r = rules[0].getPointer();
-
-
-    for (auto & a : rules)
-        if ((value = a.get().isApplicable("Name", "Class", Windowtype::ANYTYPE)) > level) {
-            level = value;
-            r = a.getPointer();
-    }
-
-    c.setRule(r->content);
-    
-
-
-
-}
-
 
 auto WindowManagerModel::registerRules(std::vector<Rule> r) -> void {
 
@@ -239,3 +218,6 @@ auto WindowManagerModel::registerRules(std::vector<Rule> r) -> void {
 }
 
 
+auto WindowManagerModel::getRules() -> decltype(rules)& {
+    return rules;
+}

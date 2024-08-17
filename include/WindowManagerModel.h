@@ -97,6 +97,10 @@ namespace Wind {
         size_t getMonitorCount() const;
 
 
+
+        std::vector<RuleHolder>& getRules();
+
+
         Client* getClient(Window w) const ;
 
         Monitor* getFocusedMon() const;
@@ -132,7 +136,6 @@ namespace Wind {
         Monitor* focusedmon;
 
 
-        void attachRule(Client& c);
 
 
 

@@ -1,10 +1,14 @@
+#include "WindowManagerModel.h"
 #include "structs.h"
 #include <X11/X.h>
 
 #include <Client.h>
 #include <sys/types.h>
+#include <vector>
+#include <RuleBuilder.h>
 
 
+constexpr bool EnableRules = true;
 
 using namespace Wind;
 
@@ -12,6 +16,10 @@ Client::Client(Window win) : _window(win) {
 
     this->is_orphan = true;
     this->is_floating = false;
+
+
+    if constexpr (EnableRules)
+        this->attachRule();
 
 }
 
@@ -144,4 +152,23 @@ auto Client::getRule() const -> const decltype(rules) {
 
     return this->rules;
 
+}
+
+
+auto Client::attachRule() -> void {
+
+
+    auto& all_rules = WindowManagerModel::getInstance().getRules();
+
+    int level = 0, value = 0;
+    Rule* r = all_rules[0].getPointer();
+
+
+    for (auto & a : all_rules)
+        if ((value = a.get().isApplicable("Name", "Class", Windowtype::ANYTYPE)) > level) {
+            level = value;
+            r = a.getPointer();
+    }
+
+    this->setRule(r->content);
 }

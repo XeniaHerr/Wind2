@@ -167,6 +167,9 @@ namespace Wind {
             Rule::RuleContent rules;
 
 
+            void attachRule();
+
+
 
 
 

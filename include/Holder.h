@@ -51,11 +51,11 @@ namespace Wind {
 
 
 
-                T& get() const {
+                inline constexpr T& get() const {
                     return *_object.get();
                 }
 
-                T* getPointer() const {
+                inline constexpr T* getPointer() const {
                     return _object.get();
                 }
 
