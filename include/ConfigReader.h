@@ -1,4 +1,5 @@
 #include "Rules.h"
+#include "structs.h"
 #include <string>
 #include <sys/types.h>
 #include <vector>
@@ -27,6 +28,11 @@ namespace Wind {
 
 
                 std::vector<Rule> rules;
+
+
+                Dimensions testdim;
+
+                Windowtype testtype;
             };
             static ConfigReader& getInstance() {
 
@@ -58,7 +64,22 @@ namespace Wind {
 
             ConfigReader();
 
-            YAML::Parser _parser;
+            YAML::Node document;
+
+
+
+            void readTopicNames();
+
+            void readVariables();
+
+            void readRules();
+
+            Windowtype readTypefromNode( YAML::Node n);
+
+
+            Dimensions readDimensionsfromNode( YAML::Node n);
+
+            Position readPositionfromNode( YAML::Node n);
     };
 
 } /*namespace Wind*/

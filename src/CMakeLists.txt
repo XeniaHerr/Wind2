@@ -13,3 +13,9 @@ add_library(WIND2_LIB STATIC client.cpp
                             RuleBuilder.cpp
                             Rule.cpp
                             ConfigReader.cpp)
+
+
+target_link_libraries(WIND2_LIB
+    PUBLIC
+    yaml-cpp::yaml-cpp
+    )

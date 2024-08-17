@@ -59,11 +59,11 @@ TEST(RuleTest, ApplicableTest) {
     Wind::Rule r = Wind::RuleBuilder().finish();
 
 
-    u_int first = r.isApplicable("", "", Windowtype::ANYTYPE);
-    u_int second = r.isApplicable("", "", Windowtype::DOCK);
-    u_int third = r.isApplicable("", "wrong", Windowtype::WIDGET);
-    u_int fourth = r.isApplicable("wrong2", "wrong", Windowtype::SPLASH);
-    u_int fith = r.isApplicable("wrong", "", Windowtype::BAR);
+    u_int first = r.isApplicable("", "", Wind::Windowtype::ANYTYPE);
+    u_int second = r.isApplicable("", "", Wind::Windowtype::DOCK);
+    u_int third = r.isApplicable("", "wrong", Wind::Windowtype::WIDGET);
+    u_int fourth = r.isApplicable("wrong2", "wrong", Wind::Windowtype::SPLASH);
+    u_int fith = r.isApplicable("wrong", "", Wind::Windowtype::BAR);
 
 
     EXPECT_EQ(first, 3U);

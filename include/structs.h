@@ -68,10 +68,6 @@ namespace Wind {
         }
 
     };
-}
-
-
-
 
 enum Windowtype {
     ANYTYPE,
@@ -81,6 +77,11 @@ enum Windowtype {
     WIDGET,
     SPLASH
 };
+}
+
+
+
+
 
 
 
