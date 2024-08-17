@@ -1,10 +1,11 @@
 #include <gtest/gtest.h>
 
+#include "Rules.h"
 #include "Topic.h"
 #include "structs.h"
 #include <WindowManagerModel.h>
 #include <tuple>
-#include <utility>
+#include <RuleBuilder.h>
 
 
 
@@ -309,3 +310,115 @@ TEST_F(WindowManagerModelTest, testunmanageClient) {
 
 
 
+TEST_F(WindowManagerModelTest, testdefaultRuleAttatchment) {
+
+    WMM.manageWindow(100);
+
+
+    auto r = WMM.getClient(100)->getRule();
+
+
+    EXPECT_EQ(r.forceFloat, false);
+}
+
+
+TEST_F(WindowManagerModelTest, testCustomRuleAttatchment) {
+
+    //I cant test this functionality right now, because i have no system to set names or Windowtypes for the client.
+}
+
+
+TEST_F(WindowManagerModelTest, testTopicMove) {
+
+    std::vector<std::tuple<Wind::Dimensions, Wind::Position, u_int>> monargs = { std::make_tuple(Wind::Dimensions(1920,1080), Wind::Position(0,0),10 ), 
+                                                                                std::make_tuple(Wind::Dimensions(1920,1080), Wind::Position(1920,0), 10)};
+
+    WMM.registerMonitors(monargs);
+
+
+    auto m = WMM.getMonitor(0);
+
+    auto t = WMM.getTopic(0);
+
+    m->setCurrent(WMM.getTopic(1));
+
+
+    WMM.getTopic(1)->setHolder(m);
+
+
+
+
+
+
+    WMM.moveTopictoMonitor(*WMM.getTopic(0), *WMM.getMonitor(0));
+
+
+    EXPECT_EQ(t->getHolder(), m);
+
+
+    EXPECT_NE(WMM.getTopic(1)->getHolder(),m );
+
+}
+
+
+
+TEST_F(WindowManagerModelTest, testTopicMoveTopicnotcurrentlyShown) {
+
+    std::vector<std::tuple<Wind::Dimensions, Wind::Position, u_int>> monargs = { std::make_tuple(Wind::Dimensions(1920,1080), Wind::Position(0,0),10 ), 
+                                                                                std::make_tuple(Wind::Dimensions(1920,1080), Wind::Position(1920,0), 10)};
+
+    WMM.registerMonitors(monargs);
+
+
+    auto m = WMM.getMonitor(0);
+
+    auto t = WMM.getTopic(0);
+    m->setCurrent(WMM.getTopic(1));
+
+    WMM.getTopic(1)->setHolder(m);
+
+
+    WMM.moveTopictoMonitor(*WMM.getTopic(0), *WMM.getMonitor(0));
+
+
+    EXPECT_EQ(t->getHolder(), m);
+
+    EXPECT_EQ(WMM.getTopic(1)->getHolder(), nullptr);
+
+    EXPECT_EQ(m->getCurrent(), t);
+
+}
+
+
+TEST_F(WindowManagerModelTest, testTopicMoveTopicCurrentlyShown) {
+
+    std::vector<std::tuple<Wind::Dimensions, Wind::Position, u_int>> monargs = { std::make_tuple(Wind::Dimensions(1920,1080), Wind::Position(0,0),10 ), 
+                                                                                std::make_tuple(Wind::Dimensions(1920,1080), Wind::Position(1920,0), 10)};
+
+    WMM.registerMonitors(monargs);
+
+
+    auto m = WMM.getMonitor(0);
+
+    auto t = WMM.getTopic(0);
+    m->setCurrent(WMM.getTopic(1));
+
+    WMM.getTopic(1)->setHolder(m);
+
+
+    WMM.getMonitor(1)->setCurrent(t);
+
+    t->setHolder(WMM.getMonitor(1));
+
+    WMM.moveTopictoMonitor(*WMM.getTopic(0), *WMM.getMonitor(0));
+
+
+    EXPECT_EQ(t->getHolder(), m);
+
+    EXPECT_EQ(WMM.getTopic(1)->getHolder(), WMM.getMonitor(1));
+
+    EXPECT_EQ(m->getCurrent(), t);
+
+    EXPECT_EQ(WMM.getMonitor(1)->getCurrent(), WMM.getTopic(1));
+
+}

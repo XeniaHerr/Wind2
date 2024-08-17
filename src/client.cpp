@@ -2,7 +2,6 @@
 #include <X11/X.h>
 
 #include <Client.h>
-#include <csignal>
 #include <sys/types.h>
 
 
@@ -106,4 +105,15 @@ auto Client::toggleFloating() -> void {
         this->is_floating = false;
     } else
         this->is_floating = true;
+}
+
+auto Client::setRule(Rule::RuleContent r) -> void {
+
+    this->rules = r;
+}
+
+
+auto Client::getRule() const -> const decltype(rules) {
+
+    return this->rules;
 }

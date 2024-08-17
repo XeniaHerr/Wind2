@@ -127,6 +127,10 @@ namespace Wind {
 
             void applyRule();
 
+            void setRule(Rule::RuleContent r);
+
+            const Rule::RuleContent getRule() const;
+
 
         private:
 

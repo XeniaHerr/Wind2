@@ -59,7 +59,7 @@ auto WindowManagerModel::moveClienttoTopic(Window w, Topic& t) -> void {
 
 
 
-auto moveTopictoMonitor(Topic& topic, Monitor& monitor) -> void {
+auto WindowManagerModel::moveTopictoMonitor(Topic& topic, Monitor& monitor) -> void {
 
 
         if (topic.getHolder() == &monitor) return;
@@ -72,7 +72,9 @@ auto moveTopictoMonitor(Topic& topic, Monitor& monitor) -> void {
 
             old->setHolder(orig);
 
-            orig->setCurrent(old);
+
+            if(orig != nullptr)
+                orig->setCurrent(old);
 
             
 
@@ -89,6 +91,7 @@ auto WindowManagerModel::manageWindow(Window w) -> void {
 
     if (!clients.contains(w)) {
         auto it = clients.emplace(w, ClientHolder(Client(w)));
+        attachRule(it.first->second.get());
     }
 
 }
@@ -213,13 +216,15 @@ auto WindowManagerModel::attachRule(Client& c) -> void {
     Rule* r = rules[0].getPointer();
 
 
-    for (auto & a : rules) {
-        if ((value = a.get().isApplicable("Name", "Class", Windowtype::ANYTYPE)) > level)
+    for (auto & a : rules)
+        if ((value = a.get().isApplicable("Name", "Class", Windowtype::ANYTYPE)) > level) {
             level = value;
-        r = a.getPointer();
+            r = a.getPointer();
     }
 
-//TODO: Think about how clients with no rule applicalble should be handled.
+    c.setRule(r->content);
+    
+
 
 
 }
