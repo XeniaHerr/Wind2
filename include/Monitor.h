@@ -51,6 +51,11 @@ namespace Wind {
             void setArranger(AbstractArranger* a);
 
 
+            void setLayout(u_int16_t index);
+
+            void nextLayout();
+
+            void prevLayout();
 
         private:
 
@@ -91,5 +96,3 @@ namespace Wind {
 
 #endif /*MONITOR_H*/
 
-/**
- * Decicion: Maybe i should create a Factory for Monitor and Builder. Probably not, because monitors are not all that different from each other*/

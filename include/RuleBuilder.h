@@ -25,7 +25,11 @@ namespace Wind {
 
             RuleBuilder& setAspectratio(double_t ratio);
 
+            RuleBuilder& lockAspectratio();
+
             RuleBuilder& setMinimalDimensions(Dimensions _min);
+
+            RuleBuilder& setMaximalDimensions(Dimensions _max);
 
             RuleBuilder& setNonfocusable();
 

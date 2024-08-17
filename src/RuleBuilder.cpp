@@ -12,12 +12,15 @@ using namespace Wind;
 RuleBuilder::RuleBuilder() : _object() {
 
     _object.content.minSize = Dimensions(0,0);
+    _object.content.maxSize = Dimensions(1 << 31, 1 << 31);
     _object.content.neverFocus = false;
     _object.content.forceFloat = false;
+    _object.content.keepAspectratio = false;
     _object.content.targetTopic = "";
     _object.windowname = "";
     _object.windowclass = "";
     _object.type = Windowtype::ANYTYPE;
+
 
 }
 
@@ -49,6 +52,13 @@ auto RuleBuilder::setAspectratio(double_t d) -> decltype(*this) {
     return *this;
 }
 
+
+auto RuleBuilder::lockAspectratio() -> decltype(*this) {
+    _object.content.keepAspectratio = true;
+
+    return *this;
+}
+
 auto RuleBuilder::setWindowName(string name) -> decltype(*this) {
     _object.windowname = name;
 
@@ -63,6 +73,12 @@ auto RuleBuilder::setWindowClass(string wclass) -> decltype(*this) {
 auto RuleBuilder::setMinimalDimensions(Dimensions m) -> decltype(*this) {
     _object.content.minSize = m;
 
+    return *this;
+}
+
+
+auto RuleBuilder::setMaximalDimensions(Dimensions m) -> decltype(*this) {
+    _object.content.maxSize = m;
     return *this;
 }
 

@@ -2,6 +2,7 @@
 #define TOPIC_H
 #include "AbstractArranger.h"
 #include <X11/X.h>
+#include <concepts>
 #include <string>
 #include <sys/types.h>
 #include <list>
@@ -57,6 +58,9 @@ struct Dimensions;
             void setFocus(Client *client);
             void setFocus(Client &client);
 
+            void setMasterfact(float f);
+
+            float getMasterfact() const;
 
 
             bool operator==(const Topic& other) const {
@@ -65,6 +69,8 @@ struct Dimensions;
 
 
             Client* getFocused() const ;
+
+
 
 
 

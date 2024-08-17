@@ -33,8 +33,13 @@ namespace Wind {
 
             Dimensions minSize;
 
+            Dimensions maxSize;
+
 
             double_t relation;
+
+
+            bool keepAspectratio;
 
 
             };

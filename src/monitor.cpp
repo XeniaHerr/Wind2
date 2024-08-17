@@ -4,13 +4,12 @@
 #include <Monitor.h>
 #include <Client.h>
 #include <algorithm>
-#include <cassert>
-#include <cstdio>
 #include <iostream>
 #include <iterator>
 #include <sys/types.h>
 #include <vector>
 
+constexpr bool AutoArrange = false;
 
 using namespace Wind;
 
@@ -135,12 +134,12 @@ auto Monitor::arrange() -> void {
 
     for(u_int i = 0; i < size; i++ ) {
         std::cerr << "Test\n";
-         Dimensions d = currentArranger.getDimensions(*this,i, size );
-         Position p = currentArranger.getPosition(*this, i , size);
+         Dimensions d = currentArranger.getDimensions(*this,i+1, size );
+         Position p = currentArranger.getPosition(*this, i+1 , size);
          std::cerr << "Calculated new values \n";
          new_clients[i]->setTargetPositions(p);
          new_clients[i]->setTargetDimensions(d);
-         std::cerr << "Finished with client\n";
+         std::cerr << "Finished with client " << i  << ": " << d.width << "," << d.height << " : " << p.x << "," << p.y << std::endl  ;
     }
 
 
@@ -148,5 +147,20 @@ auto Monitor::arrange() -> void {
 
 }
 
+
+auto Monitor::nextLayout() -> void {
+    layouts.next();
+
+    if constexpr (AutoArrange)
+    arrange();
+}
+
+
+auto Monitor::prevLayout() -> void {
+    layouts.previous();
+
+    if constexpr (AutoArrange)
+        arrange();
+}
 
 

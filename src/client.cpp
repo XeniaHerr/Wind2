@@ -3,6 +3,7 @@
 #include <X11/X.h>
 
 #include <Client.h>
+#include <cmath>
 #include <sys/types.h>
 #include <vector>
 #include <RuleBuilder.h>
@@ -24,7 +25,7 @@ Client::Client(Window win) : _window(win) {
 }
 
 
-Client::Client(const Client&& other) {
+Client::Client(const Client&& other) : name(std::move(other.name)), windowclass(std::move(other.windowclass)) {
     this->_window = other._window;
     this->oldDimension = other.oldDimension;
     this->currentDimension = other.currentDimension;
@@ -33,6 +34,7 @@ Client::Client(const Client&& other) {
     this->is_fullscreen = other.is_fullscreen;
     this->is_visible = other.is_visible;
     this->is_orphan = other.is_orphan;
+    this->type = other.type;
 }
 auto Client::setDimensions(Dimensions dimensions) -> void {
     this->oldDimension = this->currentDimension;
@@ -171,4 +173,59 @@ auto Client::attachRule() -> void {
     }
 
     this->setRule(r->content);
+}
+
+auto Client::setName(std::string name) -> void {
+    this->name = name;
+}
+
+auto Client::setClass(std::string s) -> void {
+    this->windowclass = s;
+}
+
+auto Client::setType(Windowtype t) -> void {
+    this->type = t;
+}
+
+auto Client::getName() const -> decltype(name) {
+    return name;
+}
+
+auto Client::getClass() const -> decltype(windowclass) {
+    return windowclass;
+}
+
+
+auto Client::getType() const -> decltype(type) {
+    return this->type;
+}
+
+
+auto Client::applyRule() -> void {
+
+
+    targetDimension.width = std::max(targetDimension.width, rules.minSize.width);
+    targetDimension.height = std::max(targetDimension.height, rules.minSize.height);
+
+
+    targetDimension.width = std::min(targetDimension.width, rules.maxSize.width);
+    targetDimension.height = std::min(targetDimension.height, rules.maxSize.height);
+
+
+    if (rules.keepAspectratio) {
+
+        if (targetDimension.height != currentDimension.height) {
+
+        double_t ratio = static_cast<double_t>(currentDimension.width) / currentDimension.height;
+
+        targetDimension.width = ratio * targetDimension.height;
+
+        } else if (targetDimension.width != currentDimension.width) {
+
+            double_t ratio = static_cast<double_t>(currentDimension.height) / currentDimension.width;
+
+            targetDimension.height = ratio * currentDimension.width;
+        }
+    }
+
 }

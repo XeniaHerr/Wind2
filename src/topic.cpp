@@ -1,5 +1,6 @@
 #include <Client.h>
 #include <Topic.h>
+#include <mutex>
 
 
 
@@ -70,4 +71,14 @@ auto Topic::getFocused() const -> decltype(focusedclient) {
     return this->focusedclient;
 }
 
+
+
+auto Topic::getMasterfact() const -> decltype(master_fact) {
+    return this->master_fact;
+}
+
+
+auto Topic::setMasterfact(float t) -> void {
+    this->master_fact = t;
+}
 

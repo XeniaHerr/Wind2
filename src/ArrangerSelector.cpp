@@ -1,4 +1,5 @@
 #include "AbstractArranger.h"
+#include "ConcreteArranger.h"
 #include <ArrangerSelector.h>
 
 
@@ -7,6 +8,7 @@ using namespace Wind;
 
 ArrangerSelector::ArrangerSelector() : _index(0) {
     _arrangers.push_back(  new Monocle());
+    _arrangers.push_back( new MasterTile());
 }
 
 ArrangerSelector::~ArrangerSelector() {

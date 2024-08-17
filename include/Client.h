@@ -84,6 +84,12 @@ namespace Wind {
 
             void setVisible(bool t);
 
+            void setName(std::string name);
+
+            void setClass(std::string wclass);
+
+            void setType(Windowtype t);
+
 
 
             /**
@@ -128,6 +134,13 @@ namespace Wind {
 
             Window getWindow() const;
 
+
+            std::string getName() const;
+
+            std::string getClass() const;
+
+            Windowtype getType() const;
+
             bool isOrphan() const;
 
             bool isFloating() const;
@@ -165,6 +178,13 @@ namespace Wind {
                  is_orphan; /**< Has Owner?*/
 
             Rule::RuleContent rules;
+
+
+            std::string name;
+
+            std::string windowclass;
+
+            Windowtype type;
 
 
             void attachRule();
