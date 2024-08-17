@@ -11,4 +11,5 @@ add_library(WIND2_LIB STATIC client.cpp
                             ConcreteArranger.cpp
                             ArrangerSelector.cpp
                             RuleBuilder.cpp
-                            Rule.cpp)
+                            Rule.cpp
+                            ConfigReader.cpp)
