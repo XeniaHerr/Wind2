@@ -73,5 +73,15 @@ namespace Wind {
 
 
 
+enum Windowtype {
+    ANYTYPE,
+    BAR,
+    DOCK,
+    DIALOG,
+    WIDGET,
+    SPLASH
+};
+
+
 
 #endif /*STRUCTS_H*/

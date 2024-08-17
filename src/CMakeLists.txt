@@ -9,4 +9,6 @@ add_library(WIND2_LIB STATIC client.cpp
                             monitor.cpp
                             WindowManagerModel.cpp
                             ConcreteArranger.cpp
-                            ArrangerSelector.cpp)
+                            ArrangerSelector.cpp
+                            RuleBuilder.cpp
+                            Rule.cpp)

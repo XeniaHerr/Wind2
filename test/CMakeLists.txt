@@ -41,6 +41,11 @@ add_executable(
     ArrangeTest.cpp
 )
 
+add_executable(
+    RuleTest
+    RuleandRuleBuilderTest.cpp
+    )
+
 target_link_libraries(Client_test
 
     WIND2_LIB
@@ -78,6 +83,10 @@ target_link_libraries(WindowManagerModelTest
 target_link_libraries(ArrangeTest
     WIND2_LIB
 GTest::gtest_main)
+target_link_libraries(RuleTest
+    WIND2_LIB
+
+    GTest::gtest_main)
 include(GoogleTest)
 
 gtest_discover_tests(Client_test)
@@ -87,4 +96,5 @@ gtest_discover_tests(Client_Topic_Integration)
 gtest_discover_tests(Topic_Mon_Integration)
 gtest_discover_tests(WindowManagerModelTest)
 gtest_discover_tests(ArrangeTest)
+gtest_discover_tests(RuleTest)
 

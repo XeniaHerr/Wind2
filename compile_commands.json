@@ -1,14 +1,98 @@
 [
 {
-  "directory": "/home/lethurion/Projects/Wind2/build/dummy",
-  "command": "/usr/bin/c++  -I/home/lethurion/Projects/Wind2/include -std=gnu++23 -o CMakeFiles/DUMMY.dir/dummy.cpp.o -c /home/lethurion/Projects/Wind2/dummy/dummy.cpp",
-  "file": "/home/lethurion/Projects/Wind2/dummy/dummy.cpp",
+  "directory": "/home/xenia/Projects/Wind2/build/_deps/googletest-build/googlemock",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -I/home/xenia/Projects/Wind2/build/_deps/googletest-src/googlemock/include -I/home/xenia/Projects/Wind2/build/_deps/googletest-src/googlemock -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest -std=c++23 -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /home/xenia/Projects/Wind2/build/_deps/googletest-src/googlemock/src/gmock-all.cc",
+  "file": "/home/xenia/Projects/Wind2/build/_deps/googletest-src/googlemock/src/gmock-all.cc",
+  "output": "_deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/_deps/googletest-build/googlemock",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googlemock/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googlemock -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest -std=c++23 -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /home/xenia/Projects/Wind2/build/_deps/googletest-src/googlemock/src/gmock_main.cc",
+  "file": "/home/xenia/Projects/Wind2/build/_deps/googletest-src/googlemock/src/gmock_main.cc",
+  "output": "_deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/_deps/googletest-build/googletest",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -I/home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/include -I/home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest -std=c++23 -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/src/gtest-all.cc",
+  "file": "/home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/src/gtest-all.cc",
+  "output": "_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/_deps/googletest-build/googletest",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest -std=c++23 -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/src/gtest_main.cc",
+  "file": "/home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/src/gtest_main.cc",
+  "output": "_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/src",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -std=gnu++23 -o CMakeFiles/TEST.dir/test.cpp.o -c /home/xenia/Projects/Wind2/src/test.cpp",
+  "file": "/home/xenia/Projects/Wind2/src/test.cpp",
+  "output": "src/CMakeFiles/TEST.dir/test.cpp.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/src",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -std=gnu++23 -o CMakeFiles/WIND2_LIB.dir/client.cpp.o -c /home/xenia/Projects/Wind2/src/client.cpp",
+  "file": "/home/xenia/Projects/Wind2/src/client.cpp",
+  "output": "src/CMakeFiles/WIND2_LIB.dir/client.cpp.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/src",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -std=gnu++23 -o CMakeFiles/WIND2_LIB.dir/topic.cpp.o -c /home/xenia/Projects/Wind2/src/topic.cpp",
+  "file": "/home/xenia/Projects/Wind2/src/topic.cpp",
+  "output": "src/CMakeFiles/WIND2_LIB.dir/topic.cpp.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/src",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -std=gnu++23 -o CMakeFiles/WIND2_LIB.dir/monitor.cpp.o -c /home/xenia/Projects/Wind2/src/monitor.cpp",
+  "file": "/home/xenia/Projects/Wind2/src/monitor.cpp",
+  "output": "src/CMakeFiles/WIND2_LIB.dir/monitor.cpp.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/src",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -std=gnu++23 -o CMakeFiles/WIND2_LIB.dir/WindowManagerModel.cpp.o -c /home/xenia/Projects/Wind2/src/WindowManagerModel.cpp",
+  "file": "/home/xenia/Projects/Wind2/src/WindowManagerModel.cpp",
+  "output": "src/CMakeFiles/WIND2_LIB.dir/WindowManagerModel.cpp.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/dummy",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -std=gnu++23 -o CMakeFiles/DUMMY.dir/dummy.cpp.o -c /home/xenia/Projects/Wind2/dummy/dummy.cpp",
+  "file": "/home/xenia/Projects/Wind2/dummy/dummy.cpp",
   "output": "dummy/CMakeFiles/DUMMY.dir/dummy.cpp.o"
 },
 {
-  "directory": "/home/lethurion/Projects/Wind2/build/src",
-  "command": "/usr/bin/c++  -I/home/lethurion/Projects/Wind2/include -std=gnu++23 -o CMakeFiles/TEST.dir/test.cpp.o -c /home/lethurion/Projects/Wind2/src/test.cpp",
-  "file": "/home/lethurion/Projects/Wind2/src/test.cpp",
-  "output": "src/CMakeFiles/TEST.dir/test.cpp.o"
+  "directory": "/home/xenia/Projects/Wind2/build/test",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest -std=gnu++23 -o CMakeFiles/Client_test.dir/client_unit_tests.cpp.o -c /home/xenia/Projects/Wind2/test/client_unit_tests.cpp",
+  "file": "/home/xenia/Projects/Wind2/test/client_unit_tests.cpp",
+  "output": "test/CMakeFiles/Client_test.dir/client_unit_tests.cpp.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/test",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest -std=gnu++23 -o CMakeFiles/Topic_test.dir/topic_unit_tests.cpp.o -c /home/xenia/Projects/Wind2/test/topic_unit_tests.cpp",
+  "file": "/home/xenia/Projects/Wind2/test/topic_unit_tests.cpp",
+  "output": "test/CMakeFiles/Topic_test.dir/topic_unit_tests.cpp.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/test",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest -std=gnu++23 -o CMakeFiles/Monitor_test.dir/monitor_unit_tests.cpp.o -c /home/xenia/Projects/Wind2/test/monitor_unit_tests.cpp",
+  "file": "/home/xenia/Projects/Wind2/test/monitor_unit_tests.cpp",
+  "output": "test/CMakeFiles/Monitor_test.dir/monitor_unit_tests.cpp.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/test",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest -std=gnu++23 -o CMakeFiles/Client_Topic_Integration.dir/ClientTopicIntegrationTest.cpp.o -c /home/xenia/Projects/Wind2/test/ClientTopicIntegrationTest.cpp",
+  "file": "/home/xenia/Projects/Wind2/test/ClientTopicIntegrationTest.cpp",
+  "output": "test/CMakeFiles/Client_Topic_Integration.dir/ClientTopicIntegrationTest.cpp.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/test",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest -std=gnu++23 -o CMakeFiles/Topic_Mon_Integration.dir/TopicMonitorIntegrationTest.cpp.o -c /home/xenia/Projects/Wind2/test/TopicMonitorIntegrationTest.cpp",
+  "file": "/home/xenia/Projects/Wind2/test/TopicMonitorIntegrationTest.cpp",
+  "output": "test/CMakeFiles/Topic_Mon_Integration.dir/TopicMonitorIntegrationTest.cpp.o"
+},
+{
+  "directory": "/home/xenia/Projects/Wind2/build/test",
+  "command": "/usr/bin/c++  -I/home/xenia/Projects/Wind2/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest/include -isystem /home/xenia/Projects/Wind2/build/_deps/googletest-src/googletest -std=gnu++23 -o CMakeFiles/WindowManagerModelTest.dir/WindowManagerTest.cpp.o -c /home/xenia/Projects/Wind2/test/WindowManagerTest.cpp",
+  "file": "/home/xenia/Projects/Wind2/test/WindowManagerTest.cpp",
+  "output": "test/CMakeFiles/WindowManagerModelTest.dir/WindowManagerTest.cpp.o"
 }
 ]

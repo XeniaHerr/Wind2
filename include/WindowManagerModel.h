@@ -24,6 +24,7 @@ namespace Wind {
         using ClientHolder = Holder<Client>;
         using MonitorHolder = Holder<Monitor>;
         using TopicHolder = Holder<Topic>;
+        using RuleHolder = Holder<Rule>;
 
         public:
 
@@ -70,6 +71,8 @@ namespace Wind {
         void registerTopics(std::vector<std::string> parameters);
 
         void registerMonitors(std::vector<std::tuple<Dimensions, Position, u_int>> monitors);
+
+        void registerRules(std::vector<Rule> rules_vec);
 
         void focusClient(Window w);
 
@@ -122,8 +125,15 @@ namespace Wind {
         std::vector<MonitorHolder> monitors;
 
 
+        std::vector<RuleHolder> rules;
+
+
 
         Monitor* focusedmon;
+
+
+        void attachRule(Client& c);
+
 
 
 

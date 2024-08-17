@@ -2,7 +2,6 @@
 #include <X11/X.h>
 
 #include <Client.h>
-#include <csignal>
 #include <sys/types.h>
 
 
@@ -134,4 +133,15 @@ auto Client::getTargetPosition() const -> decltype(targetPosition) {
 
 auto Client::setVisible(bool t) -> void {
     this->is_visible = t;
+}
+auto Client::setRule(Rule::RuleContent r) -> void {
+
+    this->rules = r;
+}
+
+
+auto Client::getRule() const -> const decltype(rules) {
+
+    return this->rules;
+
 }
