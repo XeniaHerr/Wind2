@@ -4,6 +4,7 @@
 #include "Rules.h"
 #include "structs.h"
 #include <RuleBuilder.h>
+#include <unistd.h>
 
 
 
@@ -50,4 +51,32 @@ TEST(RuleTest, AspectratioGuards) {
     r = Wind::RuleBuilder().setAspectratio(0.81).finish();
 
     EXPECT_EQ(r.content.relation, 0.8);
+}
+
+
+TEST(RuleTest, ApplicableTest) {
+
+    Wind::Rule r = Wind::RuleBuilder().finish();
+
+
+    u_int first = r.isApplicable("", "", Windowtype::ANYTYPE);
+    u_int second = r.isApplicable("", "", Windowtype::DOCK);
+    u_int third = r.isApplicable("", "wrong", Windowtype::WIDGET);
+    u_int fourth = r.isApplicable("wrong2", "wrong", Windowtype::SPLASH);
+    u_int fith = r.isApplicable("wrong", "", Windowtype::BAR);
+
+
+    EXPECT_EQ(first, 3U);
+
+    EXPECT_EQ(second, 3U);
+
+
+    EXPECT_EQ(third, 3U);
+
+    EXPECT_EQ(fourth, 0U);
+
+
+    EXPECT_EQ(fith, 2U);
+
+
 }

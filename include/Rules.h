@@ -42,7 +42,7 @@ namespace Wind {
             RuleContent content;
 
 
-            int isApplicable(string name, string windowclass, Windowtype windowtype ) { return -1;}
+            u_int isApplicable(string name, string windowclass, Windowtype windowtype );
 
 
             friend class RuleBuilder;

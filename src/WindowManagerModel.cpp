@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <utility>
 #include <Rules.h>
+#include <RuleBuilder.h>
 
 
 using namespace Wind;
@@ -16,6 +17,9 @@ using namespace Wind;
 
      this->focusedmon = nullptr;
 
+    //Create Default rule that applies to all clients
+    
+    rules.emplace_back(RuleHolder(RuleBuilder().finish()));
 
 }
 
@@ -83,7 +87,8 @@ auto moveTopictoMonitor(Topic& topic, Monitor& monitor) -> void {
 
 auto WindowManagerModel::manageWindow(Window w) -> void {
 
-    if (!clients.contains(w)) {clients.emplace(w, ClientHolder(Client(w)));
+    if (!clients.contains(w)) {
+        auto it = clients.emplace(w, ClientHolder(Client(w)));
     }
 
 }
@@ -203,19 +208,16 @@ auto WindowManagerModel::unmanageWindow(Window w) -> void {
 
 auto WindowManagerModel::attachRule(Client& c) -> void {
 
-    int it = -1;
+
+    int level = 0, value = 0;
+    Rule* r = rules[0].getPointer();
 
 
-    auto pred = [&](Rule& r) {
-        int prio = r.isApplicable("Name", "Class", Windowtype::ANYTYPE) ;
-        if (prio >= 0)
-            it = std::max(it, prio );
-
-    };
-
-
-    for (auto& a : rules)
-        pred(a.get());
+    for (auto & a : rules) {
+        if ((value = a.get().isApplicable("Name", "Class", Windowtype::ANYTYPE)) > level)
+            level = value;
+        r = a.getPointer();
+    }
 
 //TODO: Think about how clients with no rule applicalble should be handled.
 
@@ -225,9 +227,6 @@ auto WindowManagerModel::attachRule(Client& c) -> void {
 
 auto WindowManagerModel::registerRules(std::vector<Rule> r) -> void {
 
-    //Create Default rule that applies to all clients
-    
-    //rules.emplace_back(RuleHolder(Rule()))
 
 
     for(auto& rule : r)
