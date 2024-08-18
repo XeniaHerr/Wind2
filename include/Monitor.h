@@ -87,6 +87,8 @@ namespace Wind {
 
             void adjustforBarHeight();
 
+            void adjustforGaps( Dimensions& d, Position& p);
+
 
 
 

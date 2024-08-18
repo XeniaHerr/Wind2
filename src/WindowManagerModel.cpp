@@ -17,6 +17,8 @@ using namespace Wind;
 
      this->focusedmon = nullptr;
 
+     this->windowgaps = 0;
+
     //Create Default rule that applies to all clients
     
     rules.emplace_back(RuleHolder(RuleBuilder().finish()));
@@ -220,4 +222,8 @@ auto WindowManagerModel::registerRules(std::vector<Rule> r) -> void {
 
 auto WindowManagerModel::getRules() -> decltype(rules)& {
     return rules;
+}
+
+auto WindowManagerModel::getGap() const -> decltype(windowgaps) {
+    return windowgaps;
 }

@@ -1,5 +1,5 @@
 #include "Topic.h"
-#include "ConcreteArranger.h"
+#include "WindowManagerModel.h"
 #include "structs.h"
 #include <Monitor.h>
 #include <Client.h>
@@ -10,10 +10,10 @@
 #include <vector>
 
 constexpr bool AutoArrange = false;
+constexpr bool Gaps = false;
 
 using namespace Wind;
 
-Monocle m;
 
 Monitor::Monitor(u_int32_t x, u_int32_t y) : realDimensions(x,y) {
 
@@ -136,6 +136,9 @@ auto Monitor::arrange() -> void {
         std::cerr << "Test\n";
          Dimensions d = currentArranger.getDimensions(*this,i+1, size );
          Position p = currentArranger.getPosition(*this, i+1 , size);
+
+         if constexpr(Gaps)
+             adjustforGaps(d,p);
          std::cerr << "Calculated new values \n";
          new_clients[i]->setTargetPositions(p);
          new_clients[i]->setTargetDimensions(d);
@@ -163,4 +166,20 @@ auto Monitor::prevLayout() -> void {
         arrange();
 }
 
+
+
+auto Monitor::adjustforGaps(Dimensions& d, Position& p) -> void {
+
+
+    u_int16_t gaps = WindowManagerModel::getInstance().getGap();
+
+
+    d.width -= gaps;
+    d.height -= gaps;
+
+    p.x += gaps/2;
+    p.y += gaps/2;
+
+
+}
 

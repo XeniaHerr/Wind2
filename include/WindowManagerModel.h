@@ -95,6 +95,10 @@ namespace Wind {
         size_t getTopicCount() const;
 
         size_t getMonitorCount() const;
+        u_int16_t getGap() const;
+
+
+    
 
 
 
@@ -135,6 +139,7 @@ namespace Wind {
 
         Monitor* focusedmon;
 
+        u_int16_t windowgaps;
 
 
 
