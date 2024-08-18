@@ -1,5 +1,6 @@
 #include<gtest/gtest.h>
 
+#include "Client.h"
 #include "Topic.h"
 
 
@@ -19,3 +20,5 @@ TEST(TopicTest, TopictestdefaultHolder) {
 
     EXPECT_EQ(t.getHolder(), nullptr);
 }
+
+

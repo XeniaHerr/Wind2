@@ -217,10 +217,6 @@ TEST(Arrange, testMasterFactsingleClient) {
     Wind::Position pc3(1920/2, 1080/2);
 
     std::cerr << m.getDimensions().width << "," << m.getDimensions().height << std::endl;
-//    EXPECT_EQ(tc, c.getTargetDimension());
-//    EXPECT_EQ(m.getPosition(), c.getTargetPosition());
-//    EXPECT_EQ(pc2, c2.getTargetPosition());
-//    EXPECT_EQ(tc2, c2.getTargetDimension());
     EXPECT_EQ(pc1, c3.getTargetPosition());
     EXPECT_EQ(tc, c3.getTargetDimension());
 
@@ -228,3 +224,7 @@ TEST(Arrange, testMasterFactsingleClient) {
 
 
 }
+
+
+
+
