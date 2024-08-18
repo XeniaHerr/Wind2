@@ -154,6 +154,7 @@ namespace Wind {
 
             const Rule::RuleContent getRule() const;
 
+            void attachRule();
 
         private:
 
@@ -187,7 +188,6 @@ namespace Wind {
             Windowtype type;
 
 
-            void attachRule();
 
 
 

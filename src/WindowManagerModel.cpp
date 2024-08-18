@@ -284,16 +284,13 @@ auto WindowManagerModel::reloadConfig() -> void {
 
     std::cerr << "Rules updated\n";
 
-    for (auto& c: clients) {
-        Client& cl = c.second.get();
-        //TODO: receck for Rules
-    }
+    for (auto& c: clients) 
+        c.second.get().attachRule();
 
     std::vector<TopicHolder> localtopics;
 
-    for ( auto name : C.topicnames) {
+    for ( auto name : C.topicnames)
         localtopics.emplace_back(TopicHolder(std::move(Topic(name))));
-    }
 
 
     std::cerr << "New topics created\n";
@@ -332,7 +329,8 @@ auto WindowManagerModel::reloadConfig() -> void {
 
         }
     }
-
+    
+    topics.clear();
     topics = std::move(localtopics);
 
     std::cerr << "Done\n";
