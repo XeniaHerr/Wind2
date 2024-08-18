@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <yaml-cpp/node/parse.h>
 #include <RuleBuilder.h>
+#include <Logger.h>
 
 
 using namespace Wind;
@@ -178,6 +179,7 @@ auto ConfigReader::readRules() -> void {
                     contains = true;
             if(!contains) {
                 //TODO: Handle warning emmittion
+                Logger::GetInstance().Warn("{} is not a valid topic, skipping rule", tn);
                 continue;
             }
             r.setDefaultTopic(tn);

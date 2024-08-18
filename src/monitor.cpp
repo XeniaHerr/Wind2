@@ -8,6 +8,7 @@
 #include <iterator>
 #include <sys/types.h>
 #include <vector>
+#include <Logger.h>
 
 constexpr bool AutoArrange = false;
 constexpr bool Gaps = true;
@@ -107,10 +108,11 @@ auto Monitor::setArranger(AbstractArranger* a) -> void {
 
 auto Monitor::arrange() -> void {
 
+    auto& Log = Logger::GetInstance();
 
     AbstractArranger& currentArranger = layouts.getArranger();
     //assert(this->currentArranger != nullptr);
-    std::cerr << "Inside arrange\n";
+    Log.Info("Inside {}", __func__);
 
 
     auto clients = this->current->getClients();
@@ -118,31 +120,25 @@ auto Monitor::arrange() -> void {
     std::vector<Client*> new_clients;
 
 
-    std::cerr << "Prepare to filter\n";
+    Log.Info("Prepare to filter");
 
 
-//    for (auto a : clients) {
-//        if ( a == nullptr)
-//            std::cerr << "Found nullptr\n";
-//    }
     auto new_end = std::copy_if(clients.begin(), clients.end(), std::back_inserter(new_clients), [&](Client* c) { return  c->isVisible() == true;});
 
     u_int size = new_clients.size();
 
-    std::cerr << "Number of clients to arrange: " << size << std::endl;
+    Log.Info("Arranging {} Clients with Arranger {}", size, currentArranger.name());
     
 
     for(u_int i = 0; i < size; i++ ) {
-        std::cerr << "Test\n";
          Dimensions d = currentArranger.getDimensions(*this,i+1, size );
          Position p = currentArranger.getPosition(*this, i+1 , size);
 
          if constexpr(Gaps)
              adjustforGaps(d,p);
-         std::cerr << "Calculated new values \n";
          new_clients[i]->setTargetPositions(p);
          new_clients[i]->setTargetDimensions(d);
-         std::cerr << "Finished with client " << i  << ": " << d.width << "," << d.height << " : " << p.x << "," << p.y << std::endl  ;
+         Log.Info("Finished with client {}, New values are : Dim({},{}), Pos({},{})",i, d.width, d.height, p.x, p.y);
     }
 
 

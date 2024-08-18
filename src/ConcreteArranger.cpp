@@ -27,6 +27,11 @@ auto Monocle::getPosition(Monitor& m, u_int16_t position, u_int16_t max) -> Posi
 }
 
 
+auto Monocle::name() -> std::string {
+    return "Monocle";
+}
+
+
 auto MasterTile::getDimensions(Monitor& m, u_int16_t position, u_int16_t max) -> Dimensions {
 
     if (max == 1) 
@@ -69,6 +74,9 @@ auto MasterTile::getPosition(Monitor& m, u_int16_t position, u_int16_t max) -> P
 
 
 
+auto MasterTile::name() -> std::string {
+    return "MasterTile";
+}
 
 
 

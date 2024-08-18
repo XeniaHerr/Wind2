@@ -24,6 +24,8 @@ namespace Wind {
 
             virtual ~AbstractArranger() {}
 
+            virtual std::string name() = 0;
+
 
             AbstractArranger() : master_count(1), mfact(0.5) {}
 

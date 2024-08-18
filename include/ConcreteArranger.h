@@ -17,6 +17,8 @@ namespace Wind {
 
         Position getPosition(Monitor& m, u_int16_t position, u_int16_t max) override;
 
+        std::string name() override;
+
         ~Monocle() override = default;
 
     };
@@ -29,6 +31,8 @@ namespace Wind {
         Dimensions getDimensions(Monitor& m, u_int16_t position, u_int16_t max) override;
 
         Position getPosition(Monitor& m, u_int16_t position, u_int16_t max) override;
+
+        std::string name() override;
 
         ~MasterTile() override = default;
 

@@ -8,6 +8,8 @@
 #include <Rules.h>
 #include <RuleBuilder.h>
 #include <ConfigReader.h>
+#include <Logger.h>
+
 
 
 using namespace Wind;
@@ -28,18 +30,20 @@ using namespace Wind;
 
 auto WindowManagerModel::moveClienttoTopic(Window w, u_int topicnumber) -> void {
 
+    auto& Log = Logger::GetInstance();
+
         if (!clients.contains(w) || topicnumber > getTopicCount())
             return;
-        std::cerr << "Cleared first guard\n";
+        Log.Info("Cleared first guard");
         if (&topics[topicnumber].get() == &clients[w].get().getOwner())
             return;
 
-        std::cerr << "Cleared second guard\n";
+        Log.Info("Cleared second guard");
         if (!clients[w].get().isOrphan())
             clients[w].get().getOwner().releaseOwnership(clients[w].get());
-        std::cerr << "Released by prevoius owner\n";
+        Log.Info("Released by previous owner\n");
         topics[topicnumber].get().takeOwnership(clients[w].get());
-        std::cerr << "Adopted by new owner\n";
+        Log.Info("Adopted by new owner");
     }
 
 
@@ -252,6 +256,7 @@ auto WindowManagerModel::loadConfig() -> void {
 
     if (getMonitorCount() > getTopicCount()) {
         //TODO: Errorhandling when not enough topics
+        Logger::GetInstance().Error("Not enough Topics. Need at least {} Topics!", getMonitorCount());
     }
 
     int i = 0;
@@ -265,7 +270,9 @@ auto WindowManagerModel::loadConfig() -> void {
 
 auto WindowManagerModel::reloadConfig() -> void {
 
-    std::cerr << "Inside reloadConfig\n";
+    auto& Log = Logger::GetInstance();
+
+    Log.Info("Inside reloadConfig");
 
 
     auto& R = ConfigReader::getInstance();
@@ -282,7 +289,7 @@ auto WindowManagerModel::reloadConfig() -> void {
     registerRules(C.rules);
 
 
-    std::cerr << "Rules updated\n";
+    Log.Info("Rules updated");
 
     for (auto& c: clients) 
         c.second.get().attachRule();
@@ -293,12 +300,12 @@ auto WindowManagerModel::reloadConfig() -> void {
         localtopics.emplace_back(TopicHolder(std::move(Topic(name))));
 
 
-    std::cerr << "New topics created\n";
+    Log.Info("New topics created");
 
     auto contains = [&](std::vector<TopicHolder>& vec, std::string name) {
         for (auto& a : vec)
             if (a.get().getName() == name) {
-                std::cerr << "Found topic " << name << " again\n";
+                Log.Info("Found topic {} again", name);
                 return a.getPointer();
             }
         return static_cast<Topic*>(nullptr);
@@ -307,20 +314,13 @@ auto WindowManagerModel::reloadConfig() -> void {
     for (auto& t : topics) {
         Topic* newt;
         if ( (newt = contains(localtopics, t.get().getName()))) {
-            std::cerr << "Have to move " << t.get().getClients().size() << " clients\n";
-            //for (Client* c : t.get().getClients() ) {
+            Log.Info("Have to move {} clients", t.get().getClients().size());
             while (!t.get().getClients().empty()) {
                 Client *c = t.get().getClients().front();
-                if (c == nullptr) {
-                    std::cerr << "Something is wrong\n";
-                }
                 moveClienttoTopic(c->getWindow(),*newt);
-                std::cerr << "Moved client " << c->getWindow() << std::endl;
             }
-            std::cerr << " Finished topic\n";
         }
         else {
-            std::cerr <<"Topic got deleted, moving all clients to new first topic\n";
                 while(!t.get().getClients().empty()) {
                     Client *c = t.get().getClients().front();
 
@@ -333,7 +333,6 @@ auto WindowManagerModel::reloadConfig() -> void {
     topics.clear();
     topics = std::move(localtopics);
 
-    std::cerr << "Done\n";
 
 
 }
