@@ -56,7 +56,12 @@ namespace Wind {
 
         void moveClient(Window w, Position p);
 
-        void terminateClient(Window w);
+        //void terminateClient(Window w);
+
+
+        void loadConfig();
+
+        void reloadConfig();
 
 
 

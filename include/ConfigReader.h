@@ -42,6 +42,8 @@ namespace Wind {
 
             Config _configs;
 
+            bool empty;
+
             ConfigReader(ConfigReader& other) = delete;
             ConfigReader(ConfigReader&& other) = delete;
 

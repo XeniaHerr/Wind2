@@ -7,6 +7,7 @@
 #include <utility>
 #include <Rules.h>
 #include <RuleBuilder.h>
+#include <ConfigReader.h>
 
 
 using namespace Wind;
@@ -226,4 +227,40 @@ auto WindowManagerModel::getRules() -> decltype(rules)& {
 
 auto WindowManagerModel::getGap() const -> decltype(windowgaps) {
     return windowgaps;
+}
+
+
+
+auto WindowManagerModel::loadConfig() -> void {
+
+    auto& R = ConfigReader::getInstance();
+
+    if (R.empty) {
+        //TODO: Handle Config not read
+    }
+
+
+    auto& C = R._configs;
+
+    this->windowgaps = C.windowgap;
+
+
+    registerTopics(C.topicnames);
+
+    registerRules(C.rules);
+
+
+    if (getMonitorCount() > getTopicCount()) {
+        //TODO: Errorhandling when not enough topics
+    }
+
+    int i = 0;
+    for(auto& t : topics) {
+        t.get().setHolder(monitors[i].getPointer());
+        monitors[i].get().setCurrent(t.getPointer());
+        i++;
+    }
+
+
+
 }

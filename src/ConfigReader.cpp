@@ -13,7 +13,7 @@ using namespace Wind;
 
 using namespace YAML;
 
-ConfigReader::ConfigReader(){}
+ConfigReader::ConfigReader() : empty(true){}
 
 
 auto ConfigReader::read(std::string filepath) -> bool {
@@ -45,6 +45,7 @@ auto ConfigReader::read(std::string filepath) -> bool {
     if (document["testtype"].IsDefined())
         this->_configs.testtype = readTypefromNode(document["testtype"]);
 
+    this->empty = false;
     return true;
 }
 
