@@ -47,7 +47,7 @@ class Logger {
 
 
                 buffer << std::setw(15) << time_elapsed;
-                buffer << std::setw(22) << "\033[32m Warning: \033[0m"<< formated << std::endl;
+                buffer << std::setw(22) << "\033[33m Warning: \033[0m"<< formated << std::endl;
 
                 buffer.flush();
 
