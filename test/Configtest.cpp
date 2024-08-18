@@ -58,3 +58,22 @@ TEST(ConfigReader, testTypeReader) {
     EXPECT_EQ(Wind::ConfigReader::getInstance()._configs.testtype, Wind::Windowtype::DOCK);
 
 }
+
+
+TEST(ConfigReader, testRuleReader) {
+
+    auto & R = Wind::ConfigReader::getInstance();
+    R.read("/home/xenia/Projects/Wind2/test/Wind.yaml");
+
+
+    EXPECT_EQ(R._configs.rules.size(), 2);
+
+
+    EXPECT_EQ(R._configs.rules[0].content.targetTopic, "Second");
+
+
+    EXPECT_EQ(R._configs.rules[1].content.minSize, Wind::Dimensions(90,100));
+
+    EXPECT_EQ(R._configs.rules[0].content.forceFloat, true);
+
+}
