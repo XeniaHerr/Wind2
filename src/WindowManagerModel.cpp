@@ -260,7 +260,82 @@ auto WindowManagerModel::loadConfig() -> void {
         monitors[i].get().setCurrent(t.getPointer());
         i++;
     }
+}
 
+
+auto WindowManagerModel::reloadConfig() -> void {
+
+    std::cerr << "Inside reloadConfig\n";
+
+
+    auto& R = ConfigReader::getInstance();
+
+    auto& C = R._configs;
+
+
+    this->windowgaps = C.windowgap;
+
+
+    while(!this->rules.empty())
+        this->rules.pop_back();
+
+    registerRules(C.rules);
+
+
+    std::cerr << "Rules updated\n";
+
+    for (auto& c: clients) {
+        Client& cl = c.second.get();
+        //TODO: receck for Rules
+    }
+
+    std::vector<TopicHolder> localtopics;
+
+    for ( auto name : C.topicnames) {
+        localtopics.emplace_back(TopicHolder(std::move(Topic(name))));
+    }
+
+
+    std::cerr << "New topics created\n";
+
+    auto contains = [&](std::vector<TopicHolder>& vec, std::string name) {
+        for (auto& a : vec)
+            if (a.get().getName() == name) {
+                std::cerr << "Found topic " << name << " again\n";
+                return a.getPointer();
+            }
+        return static_cast<Topic*>(nullptr);
+    };
+
+    for (auto& t : topics) {
+        Topic* newt;
+        if ( (newt = contains(localtopics, t.get().getName()))) {
+            std::cerr << "Have to move " << t.get().getClients().size() << " clients\n";
+            //for (Client* c : t.get().getClients() ) {
+            while (!t.get().getClients().empty()) {
+                Client *c = t.get().getClients().front();
+                if (c == nullptr) {
+                    std::cerr << "Something is wrong\n";
+                }
+                moveClienttoTopic(c->getWindow(),*newt);
+                std::cerr << "Moved client " << c->getWindow() << std::endl;
+            }
+            std::cerr << " Finished topic\n";
+        }
+        else {
+            std::cerr <<"Topic got deleted, moving all clients to new first topic\n";
+                while(!t.get().getClients().empty()) {
+                    Client *c = t.get().getClients().front();
+
+                moveClienttoTopic(c->getWindow(),localtopics[0].get());
+                }
+
+        }
+    }
+
+    topics = std::move(localtopics);
+
+    std::cerr << "Done\n";
 
 
 }

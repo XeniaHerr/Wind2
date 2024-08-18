@@ -34,6 +34,13 @@ auto ConfigReader::read(std::string filepath) -> bool {
     if (document.IsNull())
         return false;
 
+
+    _configs.topicnames.clear();
+    _configs.rules.clear();
+    _configs.borderwidth = _configs.windowgap = 0;
+    _configs.testdim = Dimensions();
+    _configs.testtype = Windowtype::ANYTYPE;
+
     readTopicNames();
     readVariables();
     readRules();
