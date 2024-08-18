@@ -1,0 +1,27 @@
+borderwidth: 10
+
+topicnames:
+  - Second
+  - Third
+
+Rules:
+  - Rule:
+    Windowname: Gnome Calculator
+    Windowclass: something
+    Windowtype: BAR
+    Forcefloat: true
+    DefaultTopic: Second
+  - Rule:
+    Windowname: Test
+    MinDimension: [90, 100]
+  - Rule:
+    Windowclass: ANYWINDOW
+    DefaultTopic: Wrong
+
+
+
+
+test: [10, 20]
+
+testtype: dock
+

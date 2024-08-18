@@ -128,32 +128,68 @@ namespace Wind {
             Dimensions getOldDimensions() const;
 
 
+            /**
+             * @brief get the next Dimenstion
+             * @returns targetDimension*/
             Dimensions getTargetDimension() const;
 
+            /**
+             * @brief get the next Position
+             * @returns targetPosition*/
             Position getTargetPosition() const;
 
+            /**
+             * @brief get the X11 WindowID
+             * @returns window*/
             Window getWindow() const;
 
 
+            /**
+             * @brief get the WindowName
+             * @returns Name*/
             std::string getName() const;
 
+            /**
+             * @brief get the Windowclass
+             * @returns windowclass*/
             std::string getClass() const;
 
+            /**
+             * @brief get the Windowtype
+             * @returns type*/
             Windowtype getType() const;
 
+            /**
+             * @brief Checks wether the Window has a Owner*/
             bool isOrphan() const;
 
+            /**
+             * @brief check if the Window is floating*/
             bool isFloating() const;
 
+            /**
+             * @brief check if the Window is visible*/
             bool isVisible() const;
 
 
+            /**
+             * @brief apply the rule
+             *
+             * Adjust local Settings according to the rules it follows*/
             void applyRule();
 
+            /**
+             * @brief Set current rule*/
             void setRule(Rule::RuleContent r);
 
+            /**
+             * @brief get current rule
+             * @reurns rules*/
             const Rule::RuleContent getRule() const;
 
+            /**
+             * @brief Search for eligble rule
+             * Search all ruls and find the rule that fits the best. Defaults to the dummyrule*/
             void attachRule();
 
         private:
@@ -181,11 +217,11 @@ namespace Wind {
             Rule::RuleContent rules;
 
 
-            std::string name;
+            std::string name; /**< Name of the Window*/
 
-            std::string windowclass;
+            std::string windowclass; /**< Class the Window belongs to*/
 
-            Windowtype type;
+            Windowtype type; /**< Type of the Window @see Windowtype*/
 
 
 

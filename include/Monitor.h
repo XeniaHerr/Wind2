@@ -13,6 +13,13 @@ namespace Wind {
     class Client;
 
 
+    /**
+     * @class Monitor
+     *
+     * @brief Representation of a physical Display
+     *
+     * Each active Display has an instance of this Class belongin to it. Every Monitor must display a Topic at all times. 
+     * All X11 functions are acceccing Topics via the monitor they are beloning to.*/
     class Monitor {
         public:
             Monitor();
@@ -32,6 +39,13 @@ namespace Wind {
              void display(Topic* other); //What should this function do ??
 
 
+             /*
+              * @brief arrange the current Topic
+              *
+              * Gets an Instance of a ConcreteArranger and uses it to calculate
+              * targetPositions and TargetDimensions. Calls @see adjustforGaps.
+              * Doesn't render Clients
+              * */
             void arrange();
 
             Dimensions getDimensions() const;
@@ -43,6 +57,10 @@ namespace Wind {
             void setCurrent(Topic *topic);
 
 
+            /**
+             * @brief toggles the Bar visibillity
+             *
+             * Swaps real and usableDimensions. May be prone to errors by vertivally stacked displays*/
             void toggleBar();
 
 
@@ -59,34 +77,39 @@ namespace Wind {
 
         private:
 
-            Topic* current;
+            Topic* current;  /**< Currently displayed topic, may not be null*/
 
-            Dimensions realDimensions;
-
-
-            Dimensions usableDimensions;
+            Dimensions realDimensions; /**< Pixelcount of the Physical Display*/
 
 
-            Position realPosition;
+            Dimensions usableDimensions; /**< Area usable for Clients*/
 
-            Position usablePosition;
+
+            Position realPosition; /**< Coordinate of the top left pixel in relation to the origin*/
+
+            Position usablePosition; /**< Coordinate of the top left pixel in regards to usable area*/
 
 
 
             bool is_active; //Where do i want to use this variable?
 
 
-            u_int8_t barHeight = 0; /**TODO: Decide when and how to set, set to 0 for testing*/
+            u_int8_t barHeight = 0; /**< Barheight TODO: SHould this belong to config?*/
 
 
 
 
-            ArrangerSelector layouts;
+            ArrangerSelector layouts; /**< Layout Manager*/
 
 
 
             void adjustforBarHeight();
 
+            /**
+             * @brief recalcualtes Position and Dimensions accoring to windowgaps
+             *
+             * The Arranger returns the Dimensions and Positions of the frame the window can 
+             * occupy. the gaps are also part of this frame, which means the real Values must be smaller*/
             void adjustforGaps( Dimensions& d, Position& p);
 
 
