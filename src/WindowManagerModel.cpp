@@ -224,11 +224,6 @@ auto WindowManagerModel::registerRules(std::vector<Rule> r) -> void {
 auto WindowManagerModel::getRules() -> decltype(rules)& {
     return rules;
 }
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
 
 auto WindowManagerModel::getGap() const -> decltype(windowgaps) {
     return windowgaps;
@@ -269,7 +264,3 @@ auto WindowManagerModel::loadConfig() -> void {
 
 
 }
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
