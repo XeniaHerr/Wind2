@@ -10,7 +10,7 @@
 #include <vector>
 
 constexpr bool AutoArrange = false;
-constexpr bool Gaps = false;
+constexpr bool Gaps = true;
 
 using namespace Wind;
 
