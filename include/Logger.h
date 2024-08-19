@@ -1,7 +1,11 @@
+#ifndef LOGGER_H
+#define LOGGER_H
+
 #include <concepts>
 #include <filesystem>
 #include <format>
 #include <fstream>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <chrono>
@@ -163,6 +167,12 @@ class Logger {
         }
 
 
+        u_int setLogLevel(u_int l) {
+            u_int sl = _level;
+            _level = l;
+                return sl;
+
+        }
 
 
     private:
@@ -190,9 +200,31 @@ class Logger {
 
         }
 
+        u_int _level = 3;
 
         static constexpr bool flushonError = false;
 
 
 };
 
+
+class _Log_level_guard {
+    public:
+        _Log_level_guard(std::function<void()> f) {
+            f_ = f;
+        }
+        ~_Log_level_guard() {
+            f_();
+        }
+
+    private:
+        std::function<void()> f_;
+
+};
+
+
+#define LOGLEVEL(level) auto _set_log_level = []() {\
+    auto l = Logger::GetInstance().setLogLevel(level);\
+        return _Log_level_guard([](){Logger::GetInstance().setLogLevel(l);};)}();
+
+#endif /*LOGGER_H*/
