@@ -5,7 +5,6 @@
 using namespace Wind;
 
 
-
 auto KeyBuilder::finish() -> Key {
     return this->k;
 }

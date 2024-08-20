@@ -12,6 +12,7 @@
 #include <ostream>
 #include <string>
 #include <sys/types.h>
+#include <type_traits>
 
 
 
@@ -38,10 +39,34 @@ class Logger {
                 flush();
         }
 
-        template<typename... Args>
-            void Warn(std::string str, Args... args) {
 
-                std::string formated = std::vformat(str, std::make_format_args(std::forward<Args>(args)...)); 
+        template<typename... Args>
+            void Warn(std::string&& str, Args&&... args) {
+
+                std::string formated = std::vformat(str, std::make_format_args(args)...); 
+
+                const auto now =  std::chrono::steady_clock::now();
+
+                const std::chrono::duration<double> time_elapsed = now - _time_origin;
+
+                buffer << std::fixed << std::setprecision(8) << std::left;
+
+
+                buffer << std::setw(15) << time_elapsed;
+                buffer << std::setw(22) << "\033[33m Warning: \033[0m"<< formated << std::endl;
+
+                buffer.flush();
+
+                buffercount++;
+
+                if(buffercount > buffer_line_size)
+                    flush();
+
+
+            }
+
+            void Warn(std::string formated) {
+
 
                 const auto now =  std::chrono::steady_clock::now();
 
@@ -64,8 +89,8 @@ class Logger {
             }
 
         template<typename... Args>
-            void Info(std::string str, Args... args) {
-                std::string formated = std::vformat(str, std::make_format_args(std::forward<Args>(args)...)); 
+            void Info(std::string str, Args&&... args) {
+                std::string formated = std::vformat(str, std::make_format_args(args...)); 
 
                 const auto now =  std::chrono::steady_clock::now();
 
@@ -86,10 +111,30 @@ class Logger {
 
 
             }
-        template<typename...Args>
-            void Error(std::string str, Args... args) {
 
-                std::string formated = std::vformat(str, std::make_format_args(std::forward<Args>(args)...)); 
+            void Info(std::string formated) {
+
+                const auto now =  std::chrono::steady_clock::now();
+
+                const std::chrono::duration<double> time_elapsed = now - _time_origin;
+
+                buffer << std::fixed << std::setprecision(8) << std::left;
+
+
+                buffer << std::setw(15) << time_elapsed;
+                buffer  << std::setw(13) << " Info: "<< formated << std::endl;
+
+                buffer.flush();
+
+
+                buffercount++;
+                if(buffercount > buffer_line_size)
+                    flush();
+
+
+            }
+            void Error(std::string formated) {
+
 
                 const auto now =  std::chrono::steady_clock::now();
 
@@ -115,6 +160,35 @@ class Logger {
 
             } 
 
+            template<typename...Args>
+            void Error(std::string str, Args&&... args) {
+
+
+                std::string formated = std::vformat(str, std::make_format_args(args...)); 
+
+                const auto now =  std::chrono::steady_clock::now();
+
+                const std::chrono::duration<double> time_elapsed = now - _time_origin;
+
+                buffer << std::fixed << std::setprecision(8) << std::left;
+
+
+                buffer << std::setw(15) << time_elapsed;
+                buffer << std::setw(22) << "\033[31m Error: \033[0m"<< formated << std::endl;
+
+                buffer.flush();
+
+                if constexpr (flushonError) {
+                    flush();
+                } else {
+                    buffercount++;
+
+                    if(buffercount > buffer_line_size)
+                        flush();
+
+                }
+
+            } 
         void flush() {
 
             if (outputpath.empty()) {

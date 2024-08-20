@@ -17,7 +17,7 @@ class InputManager {
             return m;
         }
 
-        void addKey(Key k, Action&& a);
+        void addKey(Key k, Action a);
 
         void addButton(Button b, Action&& a);
 

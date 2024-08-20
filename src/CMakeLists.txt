@@ -12,7 +12,9 @@ add_library(WIND2_LIB STATIC client.cpp
                             ArrangerSelector.cpp
                             RuleBuilder.cpp
                             Rule.cpp
-                            ConfigReader.cpp)
+                            ConfigReader.cpp
+                            KeyBuilder.cpp
+                            InputManager.cpp)
 
 
 target_link_libraries(WIND2_LIB

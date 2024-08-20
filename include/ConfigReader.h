@@ -76,6 +76,9 @@ namespace Wind {
 
             void readRules();
 
+
+            void readKeys();
+
             Windowtype readTypefromNode( YAML::Node n);
 
 

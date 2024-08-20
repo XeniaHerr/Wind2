@@ -56,6 +56,12 @@ add_executable(
     WindowManagerModelConfigReaderIntegration.cpp
     )
 
+
+add_executable(
+    InputManager
+    InputManagertest.cpp
+    )
+
 target_link_libraries(Client_test
 
     WIND2_LIB
@@ -107,6 +113,11 @@ target_link_libraries(ConfigTest
 target_link_libraries(ApplyConfig
     WIND2_LIB
     GTest::gtest_main)
+
+target_link_libraries(InputManager
+    WIND2_LIB
+    GTest::gtest_main)
+
 include(GoogleTest)
 
 gtest_discover_tests(Client_test)
@@ -119,4 +130,5 @@ gtest_discover_tests(ArrangeTest)
 gtest_discover_tests(RuleTest)
 gtest_discover_tests(ConfigTest)
 gtest_discover_tests(ApplyConfig)
+gtest_discover_tests(InputManager)
 

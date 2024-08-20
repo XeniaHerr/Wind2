@@ -8,12 +8,12 @@
 
 
 
+extern unsigned long _internal_choosen_modifier;
 
 
 namespace Wind {
 
 
-    unsigned long _internal_choosen_modifier;
 
 
 class KeyBuilder {
@@ -26,12 +26,6 @@ class KeyBuilder {
 
         KeyBuilder& setKeySym(KeySym k);
 
-        template<typename Func, typename...Args>
-        KeyBuilder& setAction( Func&& f, Args...args) {
-            k.registerFunc(f, args...);
-
-            return *this;
-        }
 
     private:
 
