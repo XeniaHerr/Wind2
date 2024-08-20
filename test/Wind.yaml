@@ -39,4 +39,7 @@ Keys:
     Action: quit
     Arg: "Somearg"
     Modifiers: [Shift, Mod]
-
+  - Key: t
+    Action: quit
+    Arg: "Somearg"
+    Modifiers: [ Mod]

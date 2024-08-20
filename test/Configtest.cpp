@@ -101,7 +101,7 @@ TEST(ConfigReader, testKeyReader) {
 
 
     Wind::Key k;
-    k.keysym = 0;
+    k.keysym = 113;
     k.modifier = ShiftMask|Mod4Mask;
 
     EXPECT_EQ(R.localkeys.contains(k), true);

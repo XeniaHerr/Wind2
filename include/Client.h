@@ -101,7 +101,7 @@ namespace Wind {
             /* Getter Function*/
 
             /**
-             * @breif get the currentPosition
+             * @brief get the currentPosition
              * @returns currentPosition*/
             Position getPosition() const;
 
@@ -184,7 +184,7 @@ namespace Wind {
 
             /**
              * @brief get current rule
-             * @reurns rules*/
+             * @returns rules*/
             const Rule::RuleContent getRule() const;
 
             /**

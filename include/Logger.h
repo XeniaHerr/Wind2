@@ -223,6 +223,11 @@ class Logger {
 
         void setOutputfile(std::string filepath) {
 
+
+            if(!outputpath.empty() && buffercount) {
+                flush();
+            }
+
             outputpath = filepath;
 
             if (outputpath.is_relative()) {

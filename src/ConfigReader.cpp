@@ -27,6 +27,8 @@ ConfigReader::ConfigReader() : empty(true){}
 
 unsigned long _internal_choosen_modifier = Mod4Mask;
 
+bool quit_defined = false;
+
 
 static unsigned int StringtoModifier(std::string s) {
 
@@ -65,8 +67,11 @@ static Action StringtoFunction(std::string s) {
     };
 
     for (int i = 0; i < ARL(functions); i++) {
-        if (s == functions[i].str)
+        if (s == functions[i].str) {
+            Logger::GetInstance().Info("Binding Action {}", functions[i].str);
+            if (i == 0) quit_defined = true; // Saveguard to make shure Wind is quittable
             return functions[i].val;
+        }
     }
 
 
@@ -294,6 +299,7 @@ auto ConfigReader::readKeys() -> void {
     if (!keynode.IsDefined() || !keynode.IsSequence()) {
         Log.Error("No keybindings specified. Will set Mod4 + q to exit Wind");
         IM.addKey(KeyBuilder().setModMask().setKeySym(100).finish(), Action([](auto a){}, 0, false)); //TODO: Find Key of q and implement exit func;
+        return;
 
     }
 
@@ -383,10 +389,14 @@ done:
 
 
 
-        //IM.addKey(key.finish(), std::move(a));
         localkeys.insert(std::make_pair(key.finish(), a));
+        IM.addKey(key.finish(), std::move(a));
     }
 
+
+    if (!quit_defined) {
+        Log.Error("No key defined to quit Wind. This is not advised!!!");
+    }
 
 
 
