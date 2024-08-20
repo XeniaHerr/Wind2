@@ -5,6 +5,13 @@
 using namespace Wind;
 
 
+
+KeyBuilder::KeyBuilder() {
+
+    k.keysym  = 0;
+    k.modifier = 0;
+}
+
 auto KeyBuilder::finish() -> Key {
     return this->k;
 }

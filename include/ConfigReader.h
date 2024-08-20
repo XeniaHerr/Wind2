@@ -5,6 +5,8 @@
 #include <vector>
 #include <yaml-cpp/parser.h>
 #include <yaml-cpp/yaml.h>
+#include <Action.h>
+#include <Inputstructs.h>
 
 
 
@@ -61,6 +63,9 @@ namespace Wind {
             u_int16_t getBorderWidth() const;
 
 
+            std::map<Key, Action> localkeys;
+
+
 
         private:
 
@@ -88,3 +93,25 @@ namespace Wind {
     };
 
 } /*namespace Wind*/
+
+
+
+
+//namespace YAML {
+//
+//    template<>
+//        struct convert<Wind::Action::Argument> {
+//
+//
+//            static Node encode(const Wind::Action::Argument& rhs) {
+//                Node node;
+//
+//                switch (rhs.index()) {
+//                    case 1:
+//                        std::string s = rhs;
+//                        node.push_back(static_cast<unsinged long>(rhs));
+//                }
+//            }
+//
+//        };
+//}

@@ -27,6 +27,8 @@ class KeyBuilder {
         KeyBuilder& setKeySym(KeySym k);
 
 
+        KeyBuilder();
+
     private:
 
         Key k;

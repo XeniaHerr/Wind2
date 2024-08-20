@@ -20,9 +20,9 @@ TEST(InputManager, simpletest) {
     auto& IM = Wind::InputManager::GetInstance();
 
 
-    Action a([&](){
+    Wind::Action a([&]( auto r){
             buf <<" Action a\n";
-            });
+            }, 0, false);
 
 
     Wind::Key k;

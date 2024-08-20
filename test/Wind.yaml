@@ -27,12 +27,16 @@ test: [10, 20]
 testtype: dock
 
 
-ModMask: 1 # Set Mod Mask 
+ModMask: Mod4 # Set Mod Mask 
 
 
 Keys:
-  - Key:
-    Action: 0 # set Action
-    Arg: 0 # Set Argument for the function in Action;
-    Modifiers: [0,0] # Set Modifiers for the action
+  #  - Key:
+  #  Action: 0 # set Action
+  #  Arg: 0 # Set Argument for the function in Action;
+  #  Modifiers: [0,0] # Set Modifiers for the action
+  - Key: q
+    Action: quit
+    Arg: "Somearg"
+    Modifiers: [Shift, Mod]
 

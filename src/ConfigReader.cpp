@@ -1,8 +1,10 @@
 #include "structs.h"
 #include <ConfigReader.h>
 #include <X11/X.h>
+#include <X11/Xlib.h>
 #include <algorithm>
 #include <cctype>
+#include <concepts>
 #include <filesystem>
 #include <functional>
 #include <string>
@@ -18,6 +20,8 @@
 using namespace Wind;
 
 using namespace YAML;
+
+
 
 ConfigReader::ConfigReader() : empty(true){}
 
@@ -35,7 +39,8 @@ static unsigned int StringtoModifier(std::string s) {
         {"Mod5", Mod5Mask},
         {"Shift", ShiftMask},
         {"Control", ControlMask},
-        {"Capslock", LockMask}
+        {"Capslock", LockMask},
+        {"Mod", _internal_choosen_modifier}
     };
 
 
@@ -50,17 +55,24 @@ static unsigned int StringtoModifier(std::string s) {
 
 
 
-static std::function<void()> StringtoFunction(std::string s) {
+static Action StringtoFunction(std::string s) {
+
+    Action a;
 
 
-    static const struct {std::string str; std::function<void()> val;} functions[] = {
-        {"quit", [](){}}
+    static const struct {std::string str; Action val;} functions[] = {
+        {"quit", Action([](auto a){ /*do some stuff*/}, 0, false)}
     };
 
+    for (int i = 0; i < ARL(functions); i++) {
+        if (s == functions[i].str)
+            return functions[i].val;
+    }
 
 
 
-    return []() {;};
+
+    return a;
 }
 
 
@@ -99,6 +111,7 @@ auto ConfigReader::read(std::string filepath) -> bool {
     readTopicNames();
     readVariables();
     readRules();
+    readKeys();
 
     if (document["test"].IsDefined())
 
@@ -280,7 +293,7 @@ auto ConfigReader::readKeys() -> void {
 
     if (!keynode.IsDefined() || !keynode.IsSequence()) {
         Log.Error("No keybindings specified. Will set Mod4 + q to exit Wind");
-        IM.addKey(KeyBuilder().setModMask().setKeySym(100).finish(), Action([](){ return 0;})); //TODO: Find Key of q and implement exit func;
+        IM.addKey(KeyBuilder().setModMask().setKeySym(100).finish(), Action([](auto a){}, 0, false)); //TODO: Find Key of q and implement exit func;
 
     }
 
@@ -290,6 +303,7 @@ auto ConfigReader::readKeys() -> void {
         KeyBuilder key;
 
         Action a;
+
 
 
         if (n["Modifiers"].IsDefined() && n["Modifiers"].IsSequence()) {
@@ -316,7 +330,48 @@ auto ConfigReader::readKeys() -> void {
             Log.Warn("No Modifiers for Key set. This might cause problems");
         }
 
-        if (n["Action"].IsDefined() && n["Action"].IsSequence()) {
+        if (n["Key"].IsDefined() && n["Key"].IsScalar()) {
+
+            std::string s = n["Key"].as<std::string>().c_str();
+
+            KeySym sym = XStringToKeysym(s.c_str());
+
+            if(sym != NoSymbol)
+                key.setKeySym(sym);
+            else {
+            Log.Error("Key {} is not valid. Skipping Key", s);
+            continue;
+        }
+        }
+        else {
+            Log.Error("Key without Key found. Not the best idea");
+            continue;
+        }
+
+        if (n["Action"].IsDefined() && n["Action"].IsScalar()) {
+            a = StringtoFunction(n["Action"].as<std::string>());
+
+            if (a.wantArgument()) {
+
+                for (std::string s : {"Cmd", "TargetTopic"}) {
+
+                    if (n[s].IsDefined() && n[s].IsScalar()) {
+                        a.setArgument(n[s].as<std::string>());
+                        goto done;
+                    }
+
+                }
+
+                for (std::string s : {"Int", "Offset"}) {
+                    if (n[s].IsDefined() && n[s].IsScalar()) {
+                        a.setArgument(n[s].as<int>());
+                        goto done;
+                    }
+                }
+
+            }
+
+
 
         }
         else {
@@ -324,9 +379,12 @@ auto ConfigReader::readKeys() -> void {
             continue;
         }
 
+done:
 
 
-        IM.addKey(key.finish(), std::move(a));
+
+        //IM.addKey(key.finish(), std::move(a));
+        localkeys.insert(std::make_pair(key.finish(), a));
     }
 
 

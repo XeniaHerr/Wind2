@@ -1,45 +1,50 @@
-#include <functional>
+#ifndef ACTION_H
+#define ACTION_H
 
+#include <functional>
+#include <variant>
+#include <string>
+
+
+
+namespace Wind {
 class Action {
+
+    public:
+    using Argument = std::variant<std::string, unsigned long, int>;
+
+    private:
+    Argument Arg;
+        std::function<void(decltype(Arg))> _f;
+
+        bool needs_argument;
+
+
+
 
     public:
 
 
-//        void operator()() {
-//        f_();
-//        }
+        Action() : Arg(0), _f(), needs_argument(false) {}
+        Action(decltype(_f) f, decltype(Arg) a, bool n ) : _f(f), Arg(a), needs_argument(n) {}
+        void operator()();
 
-        void call() {
-            f_();
-        }
+        void setAction(decltype(_f));
 
-        template<typename Func, typename...Args> requires std::invocable<Func, Args...>
-            void registerFunc(Func&& F, Args&&... args){
-
-                f_ = [func = std::bind(std::forward<Func>(F), std::forward<Args>(args)...)] mutable {
-                    func();
-                };
-
-            }
-
-        template<typename Func, typename...Args> requires std::invocable<Func, Args...>
-            Action(Func&& F, Args&&... args){
-
-                f_ = [func = std::bind(std::forward<Func>(F), std::forward<Args>(args)...)] mutable {
-                    func();
-                };
-
-            }
+        void setArgument(decltype(Arg));
 
 
-        void registerFunc(std::function<void()> f) {
-            f_ = f;
+        bool wantArgument();
+
+
+        std::size_t index() {
+            return Arg.index();
         }
 
 
-        Action() : Action([](){return false;}){}
 
-    private:
 
-        std::function<void()> f_;
+
 };
+}
+#endif /*ACTION_H*/

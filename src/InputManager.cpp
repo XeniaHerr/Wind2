@@ -18,5 +18,5 @@ auto InputManager::handleKey(Key k) -> void {
 
 
     if (action != keys.end())
-        action->second.call();
+        action->second();
 }

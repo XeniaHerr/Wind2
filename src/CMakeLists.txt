@@ -14,10 +14,12 @@ add_library(WIND2_LIB STATIC client.cpp
                             Rule.cpp
                             ConfigReader.cpp
                             KeyBuilder.cpp
-                            InputManager.cpp)
+                            InputManager.cpp
+                            Action.cpp)
 
 
 target_link_libraries(WIND2_LIB
     PUBLIC
     yaml-cpp::yaml-cpp
+    X11
     )
