@@ -4,9 +4,8 @@
 #include <X11/Xlib.h>
 #include <algorithm>
 #include <cctype>
-#include <concepts>
 #include <filesystem>
-#include <functional>
+#include <memory>
 #include <string>
 #include <sys/types.h>
 #include <yaml-cpp/node/parse.h>
@@ -14,6 +13,7 @@
 #include <Logger.h>
 #include <InputManager.h>
 #include <InputBuilder.h>
+#include <ConcreteActions.h>
 
 #define ARL(X) (sizeof(X) / sizeof(X[0]))
 
@@ -57,29 +57,39 @@ static unsigned int StringtoModifier(std::string s) {
 
 
 
-static Action StringtoFunction(std::string s) {
+//static Action* StringtoFunction(std::string s) {
+//
+//    Action* a;
+//
+//
+//    static const struct {std::string str; Action* val;} functions[] = {
+//        //{"quit", Action([](auto a){ /*do some stuff*/}, 0, false)}
+//    };
+//
+//    for (int i = 0; i < ARL(functions); i++) {
+//        if (s == functions[i].str) {
+//            Logger::GetInstance().Info("Binding Action {}", functions[i].str);
+//            if (i == 0) quit_defined = true; // Saveguard to make shure Wind is quittable
+//            return functions[i].val;
+//        }
+//    }
+//
+//
+//
+//
+//    return a;
+//}
 
-    Action a;
 
 
-    static const struct {std::string str; Action val;} functions[] = {
-        {"quit", Action([](auto a){ /*do some stuff*/}, 0, false)}
-    };
+std::unique_ptr<Action> StringtoAction(std::string s) {
 
-    for (int i = 0; i < ARL(functions); i++) {
-        if (s == functions[i].str) {
-            Logger::GetInstance().Info("Binding Action {}", functions[i].str);
-            if (i == 0) quit_defined = true; // Saveguard to make shure Wind is quittable
-            return functions[i].val;
-        }
-    }
+    static std::vector<std::unique_ptr<Action>> all_actions;
+        all_actions.emplace_back(new quitAction);
 
 
-
-
-    return a;
+    return all_actions[0]->clone();
 }
-
 
 static KeySym StringtoKeysym(std::string s) {
 
@@ -91,8 +101,9 @@ static KeySym StringtoKeysym(std::string s) {
 auto ConfigReader::read(std::string filepath) -> bool {
 
 
+    auto& Log = Logger::GetInstance();
 
-
+    Log.Info("Reading Config");
 
     std::filesystem::path fp = filepath;
 
@@ -126,6 +137,8 @@ auto ConfigReader::read(std::string filepath) -> bool {
         this->_configs.testtype = readTypefromNode(document["testtype"]);
 
     this->empty = false;
+
+    Log.Info("Finished readig Config");
     return true;
 }
 
@@ -298,7 +311,7 @@ auto ConfigReader::readKeys() -> void {
 
     if (!keynode.IsDefined() || !keynode.IsSequence()) {
         Log.Error("No keybindings specified. Will set Mod4 + q to exit Wind");
-        IM.addKey(KeyBuilder().setModMask().setKeySym(100).finish(), Action([](auto a){}, 0, false)); //TODO: Find Key of q and implement exit func;
+        //IM.addKey(KeyBuilder().setModMask().setKeySym(100).finish(), Action([](auto a){}, 0, false)); //TODO: Find Key of q and implement exit func;
         return;
 
     }
@@ -308,7 +321,7 @@ auto ConfigReader::readKeys() -> void {
 
         KeyBuilder key;
 
-        Action a;
+        std::unique_ptr<Action> a;
 
 
 
@@ -355,14 +368,17 @@ auto ConfigReader::readKeys() -> void {
         }
 
         if (n["Action"].IsDefined() && n["Action"].IsScalar()) {
-            a = StringtoFunction(n["Action"].as<std::string>());
+            Log.Info("Setting Action to {}", n["Action"].as<std::string>());
+            a = StringtoAction(n["Action"].as<std::string>());
 
-            if (a.wantArgument()) {
+            Log.Info("Setting done");
+
+            if (a->wantArgument()) {
 
                 for (std::string s : {"Cmd", "TargetTopic"}) {
 
                     if (n[s].IsDefined() && n[s].IsScalar()) {
-                        a.setArgument(n[s].as<std::string>());
+                        a->setArgument(n[s].as<std::string>());
                         goto done;
                     }
 
@@ -370,7 +386,7 @@ auto ConfigReader::readKeys() -> void {
 
                 for (std::string s : {"Int", "Offset"}) {
                     if (n[s].IsDefined() && n[s].IsScalar()) {
-                        a.setArgument(n[s].as<int>());
+                        a->setArgument(n[s].as<int>());
                         goto done;
                     }
                 }
@@ -389,7 +405,7 @@ done:
 
 
 
-        localkeys.insert(std::make_pair(key.finish(), a));
+        localkeys.insert(std::make_pair(key.finish(), std::move(a)));
         IM.addKey(key.finish(), std::move(a));
     }
 
@@ -400,4 +416,5 @@ done:
 
 
 
+    Log.Info("Done reading the keys");
 }

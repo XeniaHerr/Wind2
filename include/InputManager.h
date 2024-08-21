@@ -3,7 +3,9 @@
 
 
 
+#include <algorithm>
 #include <map>
+#include <memory>
 namespace Wind {
 
 class InputManager {
@@ -17,9 +19,9 @@ class InputManager {
             return m;
         }
 
-        void addKey(Key k, Action a);
+        void addKey(Key k, std::unique_ptr<Action> a);
 
-        void addButton(Button b, Action&& a);
+        void addButton(Button b, std::unique_ptr<Action> a);
 
 
         void  handleKey(Key k);
@@ -35,10 +37,10 @@ class InputManager {
 
     private:
 
-        std::map<Key, Action> keys;
+        std::map<Key, std::unique_ptr<Action>> keys;
 
 
-        std::map<Button, Action> buttons;
+        std::map<Button, std::unique_ptr<Action>> buttons;
 
 
         InputManager() {}
