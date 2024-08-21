@@ -10,24 +10,29 @@ enum WMATOMS : short;
 enum NETATOMS : short;
 
 
-class X11_Abstraction {
+class X11Abstraction {
 
 
     public:
 
 
-        X11_Abstraction(X11_Abstraction&) = delete;
+        X11Abstraction(X11Abstraction&) = delete;
+        X11Abstraction(X11Abstraction&&) = delete;
+
+
+        X11Abstraction& operator=(X11Abstraction& other) = delete;
+        X11Abstraction& operator=(X11Abstraction&& other) = delete;
 
 
 
-        ~X11_Abstraction();
+        ~X11Abstraction();
 
 
 
-        static X11_Abstraction& get_instance() {
+        static X11Abstraction& getInstance() {
 
 
-            static X11_Abstraction s;
+            static X11Abstraction s;
             return s;
 
 
@@ -42,10 +47,16 @@ class X11_Abstraction {
         void updateNetAtoms(const std::initializer_list<std::pair<NETATOMS, Atom>>& l);
 
 
+        XEvent getNextEvent();
+
+
+
+
+
 
     private:
 
-        X11_Abstraction() {
+        X11Abstraction() {
 
 
             if (!(dpy = XOpenDisplay(nullptr))) {
