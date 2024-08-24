@@ -1,14 +1,20 @@
+#include "Logger.h"
 #include <ConcreteActions.h>
 #include <memory>
+#include <run.h>
 
 
 using namespace Wind;
 
-
+//quitting WindowManger
 
 auto quitAction::execute() -> void {
 
-    ;
+    auto& r = Run::getInstance();
+    if (r.isrunning())
+	r.stop();
+    else
+	Logger::GetInstance().Info("Trying to quit a non running windowManager");
 }
 
 
@@ -28,4 +34,9 @@ auto quitAction::wantArgument() -> bool {
 }
 
 
-auto quitAction::operator()() -> void {}
+auto quitAction::operator()() -> void {
+    this->execute();
+}
+
+
+// other Actions

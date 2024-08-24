@@ -62,6 +62,7 @@ class X11Abstraction {
 	void setClientProp(Client c, NETATOMS atom, std::vector<std::string>& val);
 	void setClientProp(Client c, NETATOMS atom, std::vector<Window>& windows);
 
+	std::pair<std::string, std::string> getWindowNameClass(Window w);
 
 	void setAtomString(std::string val);
 	void setAtomString(std::vector<std::string>& vals);
