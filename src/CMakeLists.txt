@@ -15,7 +15,8 @@ add_library(WIND2_LIB STATIC client.cpp
                             ConfigReader.cpp
                             KeyBuilder.cpp
                             InputManager.cpp
-                            Action.cpp)
+                            Action.cpp
+                            ConcreteActions.cpp)
 
 
 target_link_libraries(WIND2_LIB

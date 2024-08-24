@@ -2,7 +2,7 @@
 #define ACTION_H
 
 #include <X11/Xlib.h>
-#include <functional>
+#include <memory>
 #include <variant>
 #include <string>
 
@@ -16,7 +16,6 @@ class Action {
 
     private:
     Argument Arg;
-        std::function<void(decltype(Arg))> _f;
 
         bool needs_argument;
 
@@ -26,21 +25,30 @@ class Action {
     public:
 
 
-        Action() : Arg(0), _f(), needs_argument(false) {}
-        Action(decltype(_f) f, decltype(Arg) a, bool n ) : _f(f), Arg(a), needs_argument(n) {}
-        void operator()();
+        virtual void operator()();
 
-        void setAction(decltype(_f));
 
         void setArgument(decltype(Arg));
 
 
-        bool wantArgument();
+        virtual void execute() = 0;
+
+
+        virtual std::unique_ptr<Action> clone() = 0;
+
+
+        virtual bool wantArgument();
 
 
         std::size_t index() {
             return Arg.index();
         }
+
+        virtual std::string name();
+
+        virtual ~Action();
+
+
 
 
 

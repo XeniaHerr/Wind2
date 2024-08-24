@@ -1,14 +1,15 @@
 #include "Inputstructs.h"
 #include <InputManager.h>
+#include <memory>
 #include <utility>
 
 
 using namespace Wind;
 
-auto InputManager::addKey(Key k, Action a) -> void {
+auto InputManager::addKey(Key k, std::unique_ptr<Action> a) -> void {
 
     if(!this->keys.contains(k))
-        this->keys.insert(std::make_pair(k, a));
+        this->keys.insert(std::make_pair(k, std::move(a)));
 }
 
 
@@ -18,5 +19,5 @@ auto InputManager::handleKey(Key k) -> void {
 
 
     if (action != keys.end())
-        action->second();
+        action->second->execute();
 }

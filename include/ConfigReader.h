@@ -63,7 +63,7 @@ namespace Wind {
             u_int16_t getBorderWidth() const;
 
 
-            std::map<Key, Action> localkeys;
+            std::map<Key, std::unique_ptr<Action>> localkeys;
 
 
 

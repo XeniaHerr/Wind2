@@ -88,6 +88,7 @@ TEST(ConfigReader, testRuleReader) {
 
 TEST(ConfigReader, testKeyReader) {
 
+    
 
 
     Logger::GetInstance().setOutputfile("ConfigLog");
@@ -106,7 +107,7 @@ TEST(ConfigReader, testKeyReader) {
 
     EXPECT_EQ(R.localkeys.contains(k), true);
 
-    for (auto a : R.localkeys) {
+    for (auto& a : R.localkeys) {
 
         auto l = a.first;
     Logger::GetInstance().Info("Read the following key {}, {}", l.keysym, l.modifier );
