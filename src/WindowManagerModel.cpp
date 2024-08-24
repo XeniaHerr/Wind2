@@ -2,7 +2,6 @@
 #include <WindowManagerModel.h>
 #include <X11/X.h>
 #include <X11/Xlib.h>
-#include <iostream>
 #include <sys/types.h>
 #include <utility>
 #include <Rules.h>

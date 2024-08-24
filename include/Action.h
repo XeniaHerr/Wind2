@@ -1,6 +1,7 @@
 #ifndef ACTION_H
 #define ACTION_H
 
+#include <X11/Xlib.h>
 #include <functional>
 #include <variant>
 #include <string>
@@ -11,7 +12,7 @@ namespace Wind {
 class Action {
 
     public:
-    using Argument = std::variant<std::string, unsigned long, int>;
+    using Argument = std::variant<std::string, unsigned long, int, XEvent*>;
 
     private:
     Argument Arg;

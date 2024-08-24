@@ -1,10 +1,14 @@
 
+#include "Client.h"
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <cstdlib>
 #include <initializer_list>
 #include <map>
+#include <string>
+#include <vector>
 
+namespace Wind {
 
 enum WMATOMS : short;
 enum NETATOMS : short;
@@ -50,6 +54,20 @@ class X11Abstraction {
         XEvent getNextEvent();
 
 
+	void sendClientAtom(Client c, NETATOMS atom);
+	void sendClientAtom(Client c, WMATOMS atom);
+	void removeClientAtom(Client c, NETATOMS atom);
+
+	void setClientProp(Client c, NETATOMS atom, std::string val);
+	void setClientProp(Client c, NETATOMS atom, std::vector<std::string>& val);
+	void setClientProp(Client c, NETATOMS atom, std::vector<Window>& windows);
+
+
+	void setAtomString(std::string val);
+	void setAtomString(std::vector<std::string>& vals);
+	bool isUsable();
+
+	bool checkotherWM();
 
 
 
@@ -60,9 +78,11 @@ class X11Abstraction {
 
 
             if (!(dpy = XOpenDisplay(nullptr))) {
-                exit(1);
+		_usable = false;
+	    return;
             }
 
+	    _usable = true;
 
             screen = DefaultScreen(dpy);
 
@@ -74,11 +94,21 @@ class X11Abstraction {
         }
 
 
+
+
+
         Display* dpy;
+
+
+	
 
         int screen;
 
+	bool _usable;
+
         size_t screenwidth, screenheight;
+
+	Window _root, _helper;
 
 
         std::map<WMATOMS,Atom> wmatoms;
@@ -86,3 +116,6 @@ class X11Abstraction {
         std::map<NETATOMS, Atom> netatoms;
 
 };
+
+
+}
