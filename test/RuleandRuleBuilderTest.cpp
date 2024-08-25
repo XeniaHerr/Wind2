@@ -4,6 +4,7 @@
 #include "Rules.h"
 #include "structs.h"
 #include <RuleBuilder.h>
+#include <optional>
 #include <unistd.h>
 
 
@@ -20,7 +21,7 @@ TEST(RuleTest, DefaultRule) {
 
 
     EXPECT_EQ(r.content.forceFloat, false);
-    EXPECT_EQ(r.content.targetTopic, "");
+    EXPECT_EQ(r.content.targetTopic, std::nullopt);
 }
 
 

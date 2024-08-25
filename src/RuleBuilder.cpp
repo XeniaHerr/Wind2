@@ -2,6 +2,7 @@
 #include "structs.h"
 #include <RuleBuilder.h>
 #include <cmath>
+#include <optional>
 
 
 using namespace Wind;
@@ -16,7 +17,7 @@ RuleBuilder::RuleBuilder() : _object() {
     _object.content.neverFocus = false;
     _object.content.forceFloat = false;
     _object.content.keepAspectratio = false;
-    _object.content.targetTopic = "";
+    _object.content.targetTopic = std::nullopt;
     _object.windowname = "";
     _object.windowclass = "";
     _object.type = Windowtype::ANYTYPE;

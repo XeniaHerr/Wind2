@@ -4,6 +4,7 @@
 #include <memory>
 #include <run.h>
 #include <InputManager.h>
+#include "Handlers.h"
 
 
 using namespace Wind;
@@ -45,39 +46,3 @@ auto quitAction::operator()() -> void {
 // other Actions
 
 
-// Handle Key Events
-
-auto keyHandlerAction::execute() -> void {
-
-    XKeyEvent e = std::get<XEvent*>(Arg)->xkey;
-
-
-    InputManager& m = InputManager::GetInstance();
-
-
-    Key k;
-    k.keysym = XLookupKeysym(&e, 0);
-    k.modifier = e.state;
-
-
-    m.handleKey(k);
-
-}
-
-
-auto keyHandlerAction::name() -> std::string {
-    return "KeyHandler";
-}
-
-auto keyHandlerAction::clone() -> std::unique_ptr<Action> {
-    return std::unique_ptr<Action>(new keyHandlerAction);
-}
-
-
-auto keyHandlerAction::operator()() -> void {
-    this->execute();
-}
-
-auto keyHandlerAction::wantArgument() -> bool {
-    return true;
-}

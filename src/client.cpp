@@ -4,6 +4,7 @@
 
 #include <Client.h>
 #include <cmath>
+#include <optional>
 #include <sys/types.h>
 #include <vector>
 #include <RuleBuilder.h>
@@ -19,8 +20,8 @@ Client::Client(Window win) : _window(win) {
     this->is_floating = false;
 
 
-    if constexpr (EnableRules)
-        this->attachRule();
+//    if constexpr (EnableRules)
+//       this->attachRule();
 
 }
 
@@ -173,6 +174,8 @@ auto Client::attachRule() -> void {
     }
 
     this->setRule(r->content);
+    //When a new Rule is attached, then the rule should also be used
+    //applyRule();
 }
 
 auto Client::setName(std::string name) -> void {
@@ -208,8 +211,10 @@ auto Client::applyRule() -> void {
     targetDimension.height = std::max(targetDimension.height, rules.minSize.height);
 
 
-    targetDimension.width = std::min(targetDimension.width, rules.maxSize.width);
-    targetDimension.height = std::min(targetDimension.height, rules.maxSize.height);
+    if (rules.maxSize.has_value()) {
+    targetDimension.width = std::min(targetDimension.width, rules.maxSize->width);
+    targetDimension.height = std::min(targetDimension.height, rules.maxSize->height);
+    }
 
 
     if (rules.keepAspectratio) {
@@ -227,5 +232,19 @@ auto Client::applyRule() -> void {
             targetDimension.height = ratio * currentDimension.width;
         }
     }
+
+    Topic *t;
+    if (rules.targetTopic != std::nullopt) {
+
+	 t  = WindowManagerModel::getInstance().getTopic(rules.targetTopic.value());
+
+	if (!t)
+	    t = WindowManagerModel::getInstance().getFocusedMon()->getCurrent();
+
+    }
+	this->_owner = t;
+
+	t->takeOwnership(*this);
+
 
 }

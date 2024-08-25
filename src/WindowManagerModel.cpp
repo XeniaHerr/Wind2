@@ -93,11 +93,14 @@ auto WindowManagerModel::moveTopictoMonitor(Topic& topic, Monitor& monitor) -> v
 
 
 
-auto WindowManagerModel::manageWindow(Window w) -> void {
+auto WindowManagerModel::manageWindow(Window w) -> Client* {
 
     if (!clients.contains(w)) {
         auto it = clients.emplace(w, ClientHolder(Client(w)));
+
+	return it.first->second.getPointer();
     }
+    return nullptr;
 
 }
 
@@ -354,4 +357,13 @@ auto WindowManagerModel::reloadConfig() -> void {
 
 
 
+}
+
+
+auto WindowManagerModel::getTopic(std::string name) -> Topic* {
+
+    for (auto& a: topics)
+	if(a.getPointer()->getName() == name)
+	    return a.getPointer();
+    return nullptr;
 }

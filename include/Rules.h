@@ -3,11 +3,13 @@
 
 
 #include <cmath>
+#include <optional>
 #include <structs.h>
 #include <string>
 #include <sys/types.h>
 
 using std::string;
+using std::optional;
 
 //TODO: Think about how a rule is being created.
 
@@ -24,7 +26,7 @@ namespace Wind {
 
             struct RuleContent {
 
-            string targetTopic;
+            optional<string> targetTopic;
 
             bool forceFloat;
 
@@ -33,7 +35,7 @@ namespace Wind {
 
             Dimensions minSize;
 
-            Dimensions maxSize;
+           optional<Dimensions> maxSize;
 
 
             double_t relation;

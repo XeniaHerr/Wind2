@@ -98,8 +98,10 @@ namespace Wind {
          *
          * @param w X11 Window id
          *
-         * Checks if w is already a Client. If not a new Client is created*/
-        void manageWindow(Window w);
+         * Checks if w is already a Client. If not a new Client is created
+	 *
+	 * @return nullptr if Window already has Client*/
+        Client * manageWindow(Window w);
 
         /**
          * @brief removes Client
@@ -133,6 +135,8 @@ namespace Wind {
 
 
         Topic* getTopic(u_int topicnumber) const;
+
+	Topic* getTopic(std::string);
 
 
         Monitor* getMonitor(u_int monitornumber) const;
@@ -196,6 +200,8 @@ namespace Wind {
         Monitor* focusedmon; /**< Currenlty focused monitor*/
 
         u_int16_t windowgaps; /**< Windowgaps, part of Config*/
+
+
 
 
 

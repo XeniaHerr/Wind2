@@ -5,6 +5,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #include <Inputstructs.h>
+#include <optional>
 
 
 using namespace Wind;
@@ -153,5 +154,20 @@ auto X11Abstraction::listenforKeys(std::vector<Key> keys) -> void {
 
 
     delete syms;
+
+}
+
+
+
+auto X11Abstraction::getWindowAttributes(Window w) -> std::optional<XWindowAttributes> {
+
+
+
+    XWindowAttributes wa;
+
+    if (!XGetWindowAttributes(this->dpy, w, &wa))
+	return std::nullopt;
+
+    return std::make_optional(wa);
 
 }

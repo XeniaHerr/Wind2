@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <initializer_list>
 #include <map>
+#include <optional>
 #include <string>
 #include <vector>
 #include "Inputstructs.h"
@@ -53,6 +54,8 @@ class X11Abstraction {
 
 
         XEvent getNextEvent();
+
+	std::optional<XWindowAttributes> getWindowAttributes(Window w);
 
 	void listenforKeys(std::vector<Key>);
 

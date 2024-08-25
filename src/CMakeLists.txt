@@ -21,7 +21,8 @@ add_library(WIND2_LIB STATIC client.cpp
 			    run.cpp
 			    InputManager.cpp
 			    Inputstructs.cpp
-			    InputBuilder.cpp)
+			    InputBuilder.cpp
+			    Handlers.cpp)
 
 
 target_link_libraries(WIND2_LIB
