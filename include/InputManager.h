@@ -35,6 +35,8 @@ class InputManager {
         InputManager& operator=(InputManager& other) = delete;
         InputManager& operator=(InputManager&& other) = delete;
 
+	std::vector<Key> getKeys();
+
     private:
 
         std::map<Key, std::unique_ptr<Action>> keys;

@@ -4,6 +4,9 @@
 #include <WindowManagerModel.h>
 #include <ConfigReader.h>
 #include <Logger.h>
+#include <ConcreteActions.h>
+#include <tuple>
+#include <InputManager.h>
 
 
 int main() {
@@ -11,6 +14,8 @@ int main() {
     using namespace Wind;
 
     Logger& Log = Logger::GetInstance();
+    Log.setOutputfile("Wind2");
+    Log.Info("Welcome to Wind2");
 
     X11Abstraction& xconnection = X11Abstraction::getInstance();
 
@@ -30,7 +35,7 @@ int main() {
 
     ConfigReader& Config = ConfigReader::getInstance();
     
-    std::string configpath = "";
+    std::string configpath = "/home/xenia/Projects/Wind2/test/Wind.yaml";
     Config.read(configpath);
 
     if (Config.empty) {
@@ -38,15 +43,31 @@ int main() {
     }
 
 
+    //Ensure default Monitor for testing purposes
+    std::vector<std::tuple<Dimensions, Position, unsigned>> monitor;
+    monitor.push_back(std::make_tuple(Dimensions(800,400), Position(0,0), 0));
+    WMM.registerMonitors(monitor);
 
-    WMM.loadConfig();
+    if (!WMM.loadConfig()) {
+	Log.Error("Config is not valid, aborting");
+	exit(2);
+    }
+
+    xconnection.setEventMask(SubstructureRedirectMask);
+
+    xconnection.listenforKeys(InputManager::GetInstance().getKeys());
 
 
     Run& runloop = Run::getInstance();
 
+    runloop.setHandler(KeyPress, new keyHandlerAction);
+
+
     // Set Actions for Events
 
+    Log.Info("Entering Main Loop");
     runloop.startloop();
+    Log.Info("Exited main run loop, prepare to shut down");
 
 
     // Do some cleanup

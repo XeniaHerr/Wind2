@@ -1,5 +1,4 @@
 
-#include "Client.h"
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <cstdlib>
@@ -7,6 +6,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "Inputstructs.h"
 
 namespace Wind {
 
@@ -43,6 +43,7 @@ class X11Abstraction {
 
         }
 
+	void setEventMask(long);
 
         void update_screen();
 
@@ -53,14 +54,16 @@ class X11Abstraction {
 
         XEvent getNextEvent();
 
+	void listenforKeys(std::vector<Key>);
 
-	void sendClientAtom(Client c, NETATOMS atom);
-	void sendClientAtom(Client c, WMATOMS atom);
-	void removeClientAtom(Client c, NETATOMS atom);
 
-	void setClientProp(Client c, NETATOMS atom, std::string val);
-	void setClientProp(Client c, NETATOMS atom, std::vector<std::string>& val);
-	void setClientProp(Client c, NETATOMS atom, std::vector<Window>& windows);
+	void sendClientAtom(Window w, NETATOMS atom);
+	void sendClientAtom(Window w, WMATOMS atom);
+	void removeClientAtom(Window w, NETATOMS atom);
+
+	void setClientProp(Window w, NETATOMS atom, std::string val);
+	void setClientProp(Window w, NETATOMS atom, std::vector<std::string>& val);
+	void setClientProp(Window w, NETATOMS atom, std::vector<Window>& windows);
 
 	std::pair<std::string, std::string> getWindowNameClass(Window w);
 
@@ -75,24 +78,11 @@ class X11Abstraction {
 
     private:
 
-        X11Abstraction() {
+        X11Abstraction();
 
 
-            if (!(dpy = XOpenDisplay(nullptr))) {
-		_usable = false;
-	    return;
-            }
-
-	    _usable = true;
-
-            screen = DefaultScreen(dpy);
-
-            screenwidth = DisplayWidth(dpy, screen);
-
-            screenheight = DisplayHeight(dpy, screen);
 
 
-        }
 
 
 

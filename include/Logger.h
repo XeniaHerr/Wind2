@@ -270,7 +270,7 @@ class Logger {
         std::filesystem::path outputpath;
 
 
-        u_int buffer_line_size = 1;
+        u_int buffer_line_size = 0;
 
         const std::chrono::time_point<std::chrono::steady_clock> _time_origin;
 

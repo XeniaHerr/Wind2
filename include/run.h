@@ -27,6 +27,8 @@ namespace Wind {
 	    
 	    const bool isrunning() {return _is_running;}
 
+	    ~Run();
+
 	private:
 
 	    Run() : _is_running(true) {}

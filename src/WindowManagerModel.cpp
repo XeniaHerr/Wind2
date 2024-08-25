@@ -234,9 +234,13 @@ auto WindowManagerModel::getGap() const -> decltype(windowgaps) {
 
 
 
-auto WindowManagerModel::loadConfig() -> void {
+auto WindowManagerModel::loadConfig() -> bool {
 
     auto& R = ConfigReader::getInstance();
+
+    auto& Log = Logger::GetInstance();
+
+    Log.Info("Applying the Config");
 
     if (R.empty) {
         //TODO: Handle Config not read
@@ -247,23 +251,39 @@ auto WindowManagerModel::loadConfig() -> void {
 
     this->windowgaps = C.windowgap;
 
+    Log.Info("Read Windowgaps");
+
 
     registerTopics(C.topicnames);
 
+    Log.Info("Registered Topics");
+
     registerRules(C.rules);
 
+    Log.Info("Registered Rules");
+
+    //Log.Info("Check if Monitors {} <= {} Topics", getMonitorCount(), getTopicCount());
 
     if (getMonitorCount() > getTopicCount()) {
         //TODO: Errorhandling when not enough topics
-        Logger::GetInstance().Error("Not enough Topics. Need at least {} Topics!", getMonitorCount());
+        Logger::GetInstance().Error("Not enough Topics. Need at least {} Topics!", getTopicCount());
+	return false;
+
     }
 
+    Log.Info("Enough Topics found");
+
+    
+
     int i = 0;
-    for(auto& t : topics) {
-        t.get().setHolder(monitors[i].getPointer());
-        monitors[i].get().setCurrent(t.getPointer());
-        i++;
+
+    for(auto& m : monitors) {
+	m.get().setCurrent(topics[i].getPointer());
+	topics[i].get().setHolder(m.getPointer());
+	i++;
     }
+
+    return true;
 }
 
 

@@ -42,4 +42,3 @@ Keys:
   - Key: t
     Action: quit
     Arg: "Somearg"
-    Modifiers: [ Mod]

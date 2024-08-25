@@ -16,7 +16,12 @@ add_library(WIND2_LIB STATIC client.cpp
                             KeyBuilder.cpp
                             InputManager.cpp
                             Action.cpp
-                            ConcreteActions.cpp)
+                            ConcreteActions.cpp
+			    X11Abstraction.cpp
+			    run.cpp
+			    InputManager.cpp
+			    Inputstructs.cpp
+			    InputBuilder.cpp)
 
 
 target_link_libraries(WIND2_LIB

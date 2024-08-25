@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cctype>
 #include <filesystem>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <sys/types.h>
@@ -14,6 +15,7 @@
 #include <InputManager.h>
 #include <InputBuilder.h>
 #include <ConcreteActions.h>
+#include "cassert"
 
 #define ARL(X) (sizeof(X) / sizeof(X[0]))
 
@@ -86,8 +88,18 @@ std::unique_ptr<Action> StringtoAction(std::string s) {
 
     static std::vector<std::unique_ptr<Action>> all_actions;
         all_actions.emplace_back(new quitAction);
+	assert(all_actions[0]->clone() != nullptr);
 
+	for (int i = 0; i < all_actions.size(); i++) {
+	    if (s == all_actions[i]->name()) {
+		Logger::GetInstance().Info("Setting Key to Action {}", all_actions[i]->name());
+		if (s == "quit")
+		    quit_defined = true;
+		return all_actions[i]->clone();
+	    }
+	}
 
+	Logger::GetInstance().Warn("{} is not a valid action", s);
     return all_actions[0]->clone();
 }
 
@@ -133,9 +145,11 @@ auto ConfigReader::read(std::string filepath) -> bool {
 
         this->_configs.testdim = readDimensionsfromNode(document["test"]);
 
+    Log.Info("read test");
     if (document["testtype"].IsDefined())
         this->_configs.testtype = readTypefromNode(document["testtype"]);
 
+    Log.Info("read testtype");
     this->empty = false;
 
     Log.Info("Finished readig Config");
@@ -311,7 +325,6 @@ auto ConfigReader::readKeys() -> void {
 
     if (!keynode.IsDefined() || !keynode.IsSequence()) {
         Log.Error("No keybindings specified. Will set Mod4 + q to exit Wind");
-        //IM.addKey(KeyBuilder().setModMask().setKeySym(100).finish(), Action([](auto a){}, 0, false)); //TODO: Find Key of q and implement exit func;
         return;
 
     }
@@ -405,7 +418,7 @@ done:
 
 
 
-        localkeys.insert(std::make_pair(key.finish(), std::move(a)));
+        localkeys.insert(std::make_pair(key.finish(), std::move(a->clone()))); // One Testcase will now fail;
         IM.addKey(key.finish(), std::move(a));
     }
 

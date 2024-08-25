@@ -15,7 +15,6 @@ class Action {
     using Argument = std::variant<std::string, unsigned long, int, XEvent*>;
 
     private:
-    Argument Arg;
 
         bool needs_argument;
 
@@ -24,6 +23,7 @@ class Action {
 
     public:
 
+    Argument Arg;
 
         virtual void operator()();
 

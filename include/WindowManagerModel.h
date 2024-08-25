@@ -78,7 +78,7 @@ namespace Wind {
          *
          * Must be called after @see registerMonitors.
          * @callgraph*/
-        void loadConfig();
+        bool loadConfig();
 
         /**
          * @brief reloads Config values
