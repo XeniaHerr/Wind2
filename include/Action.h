@@ -34,7 +34,7 @@ class Action {
         virtual void execute() = 0;
 
 
-        virtual std::unique_ptr<Action> clone() = 0;
+        virtual std::unique_ptr<Action> clone();
 
 
         virtual bool wantArgument();

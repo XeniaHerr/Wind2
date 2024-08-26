@@ -1,5 +1,4 @@
 #include "Action.h"
-#include <algorithm>
 
 
 
@@ -30,17 +29,13 @@ class keyHandlerAction : public Action {
 class ManageRequestAction : public Action {
 
     public:
-	std::string name() override;
 
 	void execute() override;
 
-	std::unique_ptr<Action> clone() override;
 
-	bool wantArgument() override;
 
-	void operator()() override;
 
-	~ManageRequestAction() override;
+	~ManageRequestAction() override {};
 
 
 };
@@ -58,6 +53,6 @@ class UnmanageRequestAction : public Action {
 
 	void operator()() override;
 
-	~UnmanageRequestAction() override;
+	~UnmanageRequestAction() override {};
 };
 }

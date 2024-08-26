@@ -76,15 +76,9 @@ auto ManageRequestAction::execute() -> void {
 
     
     c->attachRule();
-
-
-
-
-
-
-
-
-
+//    c->applyRule();
 }
+
+
 
 

@@ -33,12 +33,16 @@ ModMask: Mod4 # Set Mod Mask
 Keys:
   #  - Key:
   #  Action: 0 # set Action
-  #  Arg: 0 # Set Argument for the function in Action;
+  #  Arg: 0 # Set Argument for the function in Action
   #  Modifiers: [0,0] # Set Modifiers for the action
   - Key: q
     Action: quit
-    Arg: "Somearg"
+    Cmd: "Somearg"
     Modifiers: [Shift, Mod]
   - Key: t
-    Action: quit
-    Arg: "Somearg"
+    Action: spawn
+    Cmd: "/bin/sh -c 'echo \"Hello World\"' "
+  - Key: Return
+    Action: spawn
+    Cmd: "kitty"
+    Modifiers: [Mod, Shift]

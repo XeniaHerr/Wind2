@@ -25,3 +25,8 @@ Action::~Action() {}
 auto Action::operator()() -> void {
 
 }
+
+auto Action::clone() -> std::unique_ptr<Action> {
+
+    return nullptr;
+}

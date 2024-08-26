@@ -54,7 +54,7 @@ int main() {
 	exit(2);
     }
 
-    xconnection.setEventMask(SubstructureRedirectMask);
+    xconnection.setEventMask(SubstructureRedirectMask|EnterWindowMask|SubstructureNotifyMask|StructureNotifyMask|PropertyChangeMask|LeaveWindowMask);
 
     xconnection.listenforKeys(InputManager::GetInstance().getKeys());
 
@@ -62,6 +62,8 @@ int main() {
     Run& runloop = Run::getInstance();
 
     runloop.setHandler(KeyPress, new keyHandlerAction);
+    runloop.setHandler(MapRequest, new ManageRequestAction);
+    //runloop.setHandler(UnMap, Action *act)
 
 
     // Set Actions for Events

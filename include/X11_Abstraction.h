@@ -6,6 +6,7 @@
 #include <map>
 #include <optional>
 #include <string>
+#include <unistd.h>
 #include <vector>
 #include "Inputstructs.h"
 
@@ -75,6 +76,13 @@ class X11Abstraction {
 	bool isUsable();
 
 	bool checkotherWM();
+
+
+	void closeConnection() {
+
+	    if(this->dpy)
+		close(ConnectionNumber(this->dpy));
+	}
 
 
 
