@@ -44,7 +44,7 @@ namespace Wind {
               *
               * Gets an Instance of a ConcreteArranger and uses it to calculate
               * targetPositions and TargetDimensions. Calls @see adjustforGaps.
-              * Doesn't render Clients
+              * Calls render afterwards
               * */
             void arrange();
 

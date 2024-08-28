@@ -131,6 +131,7 @@ namespace Wind {
          *
          * If Client is not on Monitor currently focused, focus monitor*/
         void focusClient(Window w);
+	void focusClient();
 
 
 

@@ -39,10 +39,11 @@ Keys:
     Action: quit
     Cmd: "Somearg"
     Modifiers: [Shift, Mod]
-  - Key: t
-    Action: spawn
-    Cmd: "/bin/sh -c 'echo \"Hello World\"' "
   - Key: Return
     Action: spawn
-    Cmd: "kitty"
+    Cmd: "xterm"
     Modifiers: [Mod, Shift]
+  - Key: d
+    Modifiers: [Mod]
+    Action: spawn
+    Cmd: "dmenu_run"

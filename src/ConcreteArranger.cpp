@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <Monitor.h>
 #include <Topic.h>
+#include <Logger.h>
 
 
 
@@ -11,8 +12,10 @@ using namespace Wind;
 auto Monocle::getDimensions(Monitor& m, u_int16_t position, u_int16_t max) -> Dimensions {
 
 
+
     Dimensions d = m.getDimensions();
 
+    Logger::GetInstance().Info("Setting Dimensions to {},{} (via {})",d.width, d.height, this->name() );
 
     return d;
 
@@ -53,6 +56,7 @@ auto MasterTile::getDimensions(Monitor& m, u_int16_t position, u_int16_t max) ->
 
     ret.height = m.getDimensions().height / (max -1);
 
+    Logger::GetInstance().Info("Setting Dimensions to {},{} (via {})",ret.width, ret.height, this->name() );
 
     return ret;
 }

@@ -1,4 +1,5 @@
-
+#ifndef X11_ABSTRACTION_H
+#define X11_ABSTRACTION_H
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <cstdlib>
@@ -9,6 +10,7 @@
 #include <unistd.h>
 #include <vector>
 #include "Inputstructs.h"
+#include "Monitor.h"
 
 namespace Wind {
 
@@ -75,6 +77,9 @@ class X11Abstraction {
 	void setAtomString(std::vector<std::string>& vals);
 	bool isUsable();
 
+
+	void drawMonitor(Monitor& m);
+
 	bool checkotherWM();
 
 
@@ -92,7 +97,7 @@ class X11Abstraction {
         X11Abstraction();
 
 
-
+	void restack(Monitor& m);
 
 
 
@@ -121,3 +126,4 @@ class X11Abstraction {
 
 
 }
+#endif /*X11_ABSTRACTION_H*/

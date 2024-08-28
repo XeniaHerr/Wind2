@@ -133,6 +133,13 @@ auto WindowManagerModel::focusClient(Window w) -> void {
     t.setFocus(c);
 }
 
+auto WindowManagerModel::focusClient()-> void {
+
+    if (!focusedmon)
+	focusedmon = monitors[0].getPointer();
+
+}
+
 auto WindowManagerModel::getClient(Window w) const -> Client* {
 
     auto it = clients.find(w);

@@ -1,3 +1,4 @@
+#include "Logger.h"
 #include "WindowManagerModel.h"
 #include "structs.h"
 #include <X11/X.h>
@@ -18,6 +19,7 @@ Client::Client(Window win) : _window(win) {
 
     this->is_orphan = true;
     this->is_floating = false;
+    this->is_visible = true; //Default
 
 
 //    if constexpr (EnableRules)
@@ -71,8 +73,10 @@ auto Client::getWindow() const -> decltype(_window) {
 auto Client::setOwner(Topic& t) -> void {
     this->_owner = &t;
 
-    if(isOrphan()) 
+    if(isOrphan()) {
         this->is_orphan = false;
+	Logger::GetInstance().Info("Client {} no longer an orphan", this->name);
+    }
 
 
 }
@@ -206,18 +210,22 @@ auto Client::getType() const -> decltype(type) {
 
 auto Client::applyRule() -> void {
 
+    auto& Log = Logger::GetInstance();
 
     targetDimension.width = std::max(targetDimension.width, rules.minSize.width);
     targetDimension.height = std::max(targetDimension.height, rules.minSize.height);
 
+    Log.Info("setTargetDimensions to {},{}", targetDimension.width, targetDimension.height);
 
     if (rules.maxSize.has_value()) {
     targetDimension.width = std::min(targetDimension.width, rules.maxSize->width);
     targetDimension.height = std::min(targetDimension.height, rules.maxSize->height);
+    Log.Info("setTargetDimensions again to {},{}", targetDimension.width, targetDimension.height);
     }
 
 
     if (rules.keepAspectratio) {
+	Log.Info("Apply getAspectratio");
 
         if (targetDimension.height != currentDimension.height) {
 
@@ -235,16 +243,24 @@ auto Client::applyRule() -> void {
 
     Topic *t;
     if (rules.targetTopic != std::nullopt) {
+	Log.Info("Found a default topic");
 
 	 t  = WindowManagerModel::getInstance().getTopic(rules.targetTopic.value());
-
-	if (!t)
-	    t = WindowManagerModel::getInstance().getFocusedMon()->getCurrent();
-
     }
-	this->_owner = t;
+    else {
+	Log.Info("No default Topic found, using current topic");
+	    t = WindowManagerModel::getInstance().getFocusedMon()->getCurrent();
+    }
 
+	//this->_owner = t;
+
+	Log.Info("Take ownership");
+	if (t != nullptr)
 	t->takeOwnership(*this);
+	else
+	    Log.Error("Nullptr found");
+
+	Log.Info("Ownership set successfully");
 
 
 }

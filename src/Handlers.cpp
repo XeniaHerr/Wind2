@@ -2,8 +2,11 @@
 #include "InputManager.h"
 #include <X11/Xlib.h>
 #include <optional>
+#include "Monitor.h"
 #include "WindowManagerModel.h"
 #include "X11_Abstraction.h"
+#include <DefaultRenderer.h>
+#include <Monitor.h>
 
 
 
@@ -50,6 +53,10 @@ auto keyHandlerAction::wantArgument() -> bool {
 
 auto ManageRequestAction::execute() -> void {
 
+    auto& Log = Logger::GetInstance();
+
+    Log.Info("Inside ManagingRequestAction");
+
     XMapEvent e = std::get<XEvent*>(Arg)->xmap;
 
     auto& xc = X11Abstraction::getInstance();
@@ -60,10 +67,14 @@ auto ManageRequestAction::execute() -> void {
     if (wa == std::nullopt || wa->override_redirect)
 	return;
 
+    Log.Info("Client wants to be managed");
+
 
     auto& WMM = WindowManagerModel::getInstance();
 
     Client * c = WMM.manageWindow(e.window);
+
+    Log.Info("Managed Client {}", c == nullptr ? "Unsucseccfull" : "Successful");
 
 
     if (!c)
@@ -74,9 +85,22 @@ auto ManageRequestAction::execute() -> void {
     c->setName(str.first);
     c->setClass(str.second);
 
+    Log.Info("Got name = {} and class = {}", c->getName(), c->getClass());
+
     
     c->attachRule();
-//    c->applyRule();
+    Log.Info("Searched for Rule");
+    c->applyRule();
+
+    Log.Info("Rules got attached");
+
+    if (Monitor* m = c->getOwner().getHolder()) {
+	m->arrange();
+	xc.drawMonitor(*m);
+    }
+
+
+
 }
 
 

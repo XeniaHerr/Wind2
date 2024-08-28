@@ -1,3 +1,4 @@
+#include "Logger.h"
 #include <Client.h>
 #include <Topic.h>
 #include <mutex>
@@ -37,8 +38,11 @@ auto Topic::takeOwnership(Client& c ) -> void {
     if (containsClient(c))
         return;
 
+    Logger::GetInstance().Info("Client elligble");
     clients.push_front(&c);
     c.setOwner(*this);
+
+    Logger::GetInstance().Info("{} now has {} clients", this->name, clients.size());
 
 }
 

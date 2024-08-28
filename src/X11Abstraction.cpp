@@ -5,7 +5,12 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #include <Inputstructs.h>
+#include <bits/ranges_algo.h>
 #include <optional>
+#include <Monitor.h>
+#include <Topic.h>
+#include <Client.h>
+#include <list>
 
 
 using namespace Wind;
@@ -169,5 +174,81 @@ auto X11Abstraction::getWindowAttributes(Window w) -> std::optional<XWindowAttri
 	return std::nullopt;
 
     return std::make_optional(wa);
+
+}
+
+
+auto X11Abstraction::drawMonitor(Monitor& m) -> void {
+
+    auto& Log = Logger::GetInstance();
+
+    for (auto a : m.getCurrent()->getClients()) {
+
+	//XMoveResizeWindow(this->dpy, a->getWindow() , a->getPosition().x,
+	//	a->getPosition().y, a->getCurrentDimensions().width, a->getCurrentDimensions().height);
+	XWindowChanges wc;
+	wc.x = a->getPosition().x;
+	wc.y = a->getPosition().y;
+	wc.width = a->getCurrentDimensions().width;
+	wc.height = a->getCurrentDimensions().height;
+	XConfigureWindow(this->dpy, a->getWindow(), CWX|CWY|CWWidth|CWHeight, &wc);
+    }
+
+
+    Log.Info("Done calling XMoveResizeWindow");
+    auto c = m.getCurrent()->getClients();
+    for(auto a = c.rbegin(); a != c.rend(); a++){
+
+	XRaiseWindow(this->dpy, (*a)->getWindow());
+	XMapWindow(this->dpy, (*a)->getWindow());
+    }
+
+
+
+    XSync(this->dpy, false);
+
+    Log.Info("Synced display");
+
+    this->restack(m);
+
+}
+
+
+auto X11Abstraction::restack(Monitor&m) -> void {
+
+    auto& Log = Logger::GetInstance();
+    Log.Info("Inside restack");
+
+    XWindowChanges wc;
+
+    auto& clients = m.getCurrent()->getClients();
+    auto c = clients.begin();
+
+    wc.sibling = (*c)->getWindow();
+
+
+    while(c != clients.end()) {
+
+	XConfigureWindow(this->dpy, (*c)->getWindow(), CWSibling, &wc);
+
+	wc.sibling = (*c)->getWindow();
+
+	c++;
+	Log.Info("Iteration done");
+
+
+    }
+
+    XSync(this->dpy, false);
+
+    XEvent e;
+    while(XCheckMaskEvent(this->dpy, EnterWindowMask, &e));
+
+
+    Log.Info("Done restacking");
+
+
+
+
 
 }

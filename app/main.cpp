@@ -48,6 +48,7 @@ int main() {
     std::vector<std::tuple<Dimensions, Position, unsigned>> monitor;
     monitor.push_back(std::make_tuple(Dimensions(800,400), Position(0,0), 0));
     WMM.registerMonitors(monitor);
+    WMM.focusClient();
 
     if (!WMM.loadConfig()) {
 	Log.Error("Config is not valid, aborting");

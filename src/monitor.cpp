@@ -1,3 +1,4 @@
+#include "DefaultRenderer.h"
 #include "Topic.h"
 #include "WindowManagerModel.h"
 #include "structs.h"
@@ -143,6 +144,8 @@ auto Monitor::arrange() -> void {
 
 
 
+    DefaultRenderer r;
+    r.render(*this);
 
 }
 
