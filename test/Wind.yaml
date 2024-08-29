@@ -47,3 +47,6 @@ Keys:
     Modifiers: [Mod]
     Action: spawn
     Cmd: "dmenu_run"
+  - Key: w
+    Modifiers: [Mod]
+    Action: close

@@ -1,4 +1,5 @@
 #include <X11/X.h>
+#include <X11/Xlib.h>
 #include <run.h>
 #include <X11_Abstraction.h>
 #include <WindowManagerModel.h>
@@ -48,22 +49,28 @@ int main() {
     std::vector<std::tuple<Dimensions, Position, unsigned>> monitor;
     monitor.push_back(std::make_tuple(Dimensions(800,400), Position(0,0), 0));
     WMM.registerMonitors(monitor);
-    WMM.focusClient();
 
     if (!WMM.loadConfig()) {
 	Log.Error("Config is not valid, aborting");
 	exit(2);
     }
 
+    WMM.focusClient();
     xconnection.setEventMask(SubstructureRedirectMask|EnterWindowMask|SubstructureNotifyMask|StructureNotifyMask|PropertyChangeMask|LeaveWindowMask);
 
     xconnection.listenforKeys(InputManager::GetInstance().getKeys());
+
+    xconnection.addAtom(ATOMNAME::WMDelete, "WM_DELETE_WINDOW");
+    xconnection.addAtom(ATOMNAME::WMTakeFocus, "WM_TAKE_FOCUS");
+    xconnection.addAtom(ATOMNAME::WMProtocols, "WM_PROTOCOLS");
 
 
     Run& runloop = Run::getInstance();
 
     runloop.setHandler(KeyPress, new keyHandlerAction);
     runloop.setHandler(MapRequest, new ManageRequestAction);
+    runloop.setHandler(UnmapNotify, new UnmanageRequestAction);
+    runloop.setHandler(EnterNotify, new EnterNotifyAction);
     //runloop.setHandler(UnMap, Action *act)
 
 

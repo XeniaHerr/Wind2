@@ -14,115 +14,134 @@
 
 namespace Wind {
 
-enum WMATOMS : short;
-enum NETATOMS : short;
+    enum ATOMNAME : short {
+
+	WMDelete,
+	WMProtocols,
+	WMTakeFocus
+    };
 
 
-class X11Abstraction {
+    class X11Abstraction {
 
 
-    public:
+	public:
 
 
-        X11Abstraction(X11Abstraction&) = delete;
-        X11Abstraction(X11Abstraction&&) = delete;
+	    X11Abstraction(X11Abstraction&) = delete;
+	    X11Abstraction(X11Abstraction&&) = delete;
 
 
-        X11Abstraction& operator=(X11Abstraction& other) = delete;
-        X11Abstraction& operator=(X11Abstraction&& other) = delete;
-
-
-
-        ~X11Abstraction();
-
-
-
-        static X11Abstraction& getInstance() {
-
-
-            static X11Abstraction s;
-            return s;
+	    X11Abstraction& operator=(X11Abstraction& other) = delete;
+	    X11Abstraction& operator=(X11Abstraction&& other) = delete;
 
 
 
-        }
-
-	void setEventMask(long);
-
-        void update_screen();
-
-
-        void updateWMAtoms(const std::initializer_list<std::pair<WMATOMS, Atom>>& l);
-        void updateNetAtoms(const std::initializer_list<std::pair<NETATOMS, Atom>>& l);
-
-
-        XEvent getNextEvent();
-
-	std::optional<XWindowAttributes> getWindowAttributes(Window w);
-
-	void listenforKeys(std::vector<Key>);
-
-
-	void sendClientAtom(Window w, NETATOMS atom);
-	void sendClientAtom(Window w, WMATOMS atom);
-	void removeClientAtom(Window w, NETATOMS atom);
-
-	void setClientProp(Window w, NETATOMS atom, std::string val);
-	void setClientProp(Window w, NETATOMS atom, std::vector<std::string>& val);
-	void setClientProp(Window w, NETATOMS atom, std::vector<Window>& windows);
-
-	std::pair<std::string, std::string> getWindowNameClass(Window w);
-
-	void setAtomString(std::string val);
-	void setAtomString(std::vector<std::string>& vals);
-	bool isUsable();
-
-
-	void drawMonitor(Monitor& m);
-
-	bool checkotherWM();
-
-
-	void closeConnection() {
-
-	    if(this->dpy)
-		close(ConnectionNumber(this->dpy));
-	}
+	    ~X11Abstraction();
 
 
 
-
-    private:
-
-        X11Abstraction();
+	    static X11Abstraction& getInstance() {
 
 
-	void restack(Monitor& m);
+		static X11Abstraction s;
+		return s;
 
 
 
+	    }
+
+	    void setEventMask(long);
+
+	    void update_screen();
+
+
+	    void addAtom(ATOMNAME name, std::string identifier);
+	    void removeAtom(ATOMNAME name);
+
+	    bool sendEvent(Window w, ATOMNAME event);
+
+
+	    XEvent getNextEvent();
+
+	    std::optional<XWindowAttributes> getWindowAttributes(Window w);
+
+	    void listenforKeys(std::vector<Key>);
+
+
+	    void sendClientAtom(Window w, ATOMNAME atom);
+	    void removeClientAtom(Window w, ATOMNAME atom);
+
+	    void setClientProp(Window w, ATOMNAME atom, std::string val);
+	    void setClientProp(Window w, ATOMNAME atom, std::vector<std::string>& val);
+	    void setClientProp(Window w, ATOMNAME atom, std::vector<Window>& windows);
+
+	    std::pair<std::string, std::string> getWindowNameClass(Window w);
+
+	    void setAtomString(std::string val);
+	    void setAtomString(std::vector<std::string>& vals);
+	    bool isUsable();
+
+
+	    void drawMonitor(Monitor& m);
+
+	    void MapWindow(Window w);
+
+	    inline void Unmapwindow(Window w) {
+
+		//this->sendClientAtom(w, this->wmatoms[ATOMNAME::WMDelete]);
+
+		XUnmapWindow(this->dpy, w);
+
+		XFlush(this->dpy);
+
+
+	    }
 
 
 
-        Display* dpy;
+	    void CloseWindow(Window w);
+
+	    bool checkotherWM();
 
 
-	
+	    void closeConnection() {
 
-        int screen;
-
-	bool _usable;
-
-        size_t screenwidth, screenheight;
-
-	Window _root, _helper;
+		if(this->dpy)
+		    close(ConnectionNumber(this->dpy));
+	    }
 
 
-        std::map<WMATOMS,Atom> wmatoms;
 
-        std::map<NETATOMS, Atom> netatoms;
 
-};
+	private:
+
+	    X11Abstraction();
+
+
+	    void restack(Monitor& m);
+
+
+
+
+
+
+	    Display* dpy;
+
+
+
+
+	    int screen;
+
+	    bool _usable;
+
+	    size_t screenwidth, screenheight;
+
+	    Window _root, _helper;
+
+	    std::map<ATOMNAME,Atom> atoms;
+
+    };
 
 
 }

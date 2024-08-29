@@ -67,8 +67,8 @@ struct Dimensions;
 
             std::string getName() const;
 
-            void setFocus(Client *client);
-            void setFocus(Client &client);
+            bool setFocus(Client *client);
+            bool setFocus(Client &client);
 
             void setMasterfact(float f);
 

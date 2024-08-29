@@ -67,6 +67,27 @@ class spawnAction : public Action {
 };
 
 
+class closeAction : public Action {
+
+    public:
+
+    std::string name() override;
+
+
+    void execute() override;
+
+    std::unique_ptr<Action> clone() override;
+
+
+
+    bool wantArgument() override;
+
+
+    void operator()() override;
+
+
+    ~closeAction() override {}
+};
 
 
 

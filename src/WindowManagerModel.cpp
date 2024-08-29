@@ -110,13 +110,13 @@ auto WindowManagerModel::getClientCount() const  -> u_int {
 }
 
 
-auto WindowManagerModel::focusClient(Window w) -> void {
+auto WindowManagerModel::focusClient(Window w) -> bool {
 
     auto client = clients.find(w);
 
 
     if (client == clients.end())
-        return;
+        return false;
 
     Client& c = client->second.get();
 
@@ -130,14 +130,28 @@ auto WindowManagerModel::focusClient(Window w) -> void {
         focusedmon = m;
 
 
-    t.setFocus(c);
+    return t.setFocus(c);
 }
 
-auto WindowManagerModel::focusClient()-> void {
+auto WindowManagerModel::focusClient()-> bool {
+    auto& Log = Logger::GetInstance();
+    Log.Info("Inside focusClient");
 
     if (!focusedmon)
 	focusedmon = monitors[0].getPointer();
 
+    if (focusedmon->getCurrent()->getFocused() == nullptr) {
+	Log.Info("Currently now Client focused, searching for next valid");
+	if (focusedmon->getCurrent()->getClients().size() > 0)  {
+	    Log.Info("Found client to focus");
+	    return focusedmon->getCurrent()->setFocus(focusedmon->getCurrent()->getClients().front());
+
+	}
+	else
+	    return focusedmon->getCurrent()->setFocus(nullptr);
+
+	}
+    return false;
 }
 
 auto WindowManagerModel::getClient(Window w) const -> Client* {

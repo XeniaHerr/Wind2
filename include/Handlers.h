@@ -7,7 +7,6 @@ namespace Wind {
 class keyHandlerAction : public Action {
 
     public: 
-
 	std::string name() override;
 
     void execute() override;
@@ -44,15 +43,18 @@ class ManageRequestAction : public Action {
 class UnmanageRequestAction : public Action {
 
     public:
-	std::string name() override;
 	void execute() override;
 
-	std::unique_ptr<Action> clone() override;
-
-	bool wantArgument() override;
-
-	void operator()() override;
 
 	~UnmanageRequestAction() override {};
+};
+
+
+class EnterNotifyAction : public Action {
+
+    public:
+	void execute() override;
+
+	~EnterNotifyAction() {}
 };
 }

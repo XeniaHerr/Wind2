@@ -130,8 +130,8 @@ namespace Wind {
          * @brief set Focus to client
          *
          * If Client is not on Monitor currently focused, focus monitor*/
-        void focusClient(Window w);
-	void focusClient();
+        bool focusClient(Window w);
+	bool focusClient();
 
 
 

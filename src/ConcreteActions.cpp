@@ -6,6 +6,7 @@
 #include <run.h>
 #include <InputManager.h>
 #include "Handlers.h"
+#include "WindowManagerModel.h"
 #include <unistd.h>
 #include <X11_Abstraction.h>
 
@@ -98,7 +99,6 @@ auto spawnAction::execute() -> void {
 	     Logger::GetInstance().Error("Something happened after spawning {}, Code is {}", str, status);
 	     perror("execvp failed");
 	 }
-
 	exit(0);
     }
 
@@ -127,6 +127,54 @@ auto spawnAction::clone() -> std::unique_ptr<Action> {
 }
 
 
+auto closeAction::name() -> std::string {
+return "close";
+}
+
+
+auto closeAction::wantArgument() -> bool {
+    return false; //Close the focused client;
+}
+
+auto closeAction::clone() -> std::unique_ptr<Action> {
+    return std::unique_ptr<Action>(new closeAction);
+}
+
+
+
+auto closeAction::execute() -> void {
+
+    auto& WMM = WindowManagerModel::getInstance();
+    auto& Log = Logger::GetInstance();
+    Log.Info("Preparing to close Client");
+
+    if (!WMM.getFocusedMon() || !WMM.getFocusedMon()->getCurrent()) {
+
+	Log.Warn("Either no FocusedMon or no Client active Topic (not possible)");
+	return;
+    }
+
+
+    Client* c = WMM.getFocusedMon()->getCurrent()->getFocused();
+
+    if (!c) {
+
+	Logger::GetInstance().Warn("No focued client to close");
+	return;
+    }
+
+
+    X11Abstraction::getInstance().sendEvent(c->getWindow(), ATOMNAME::WMDelete);
+Log.Info("Done with Closing the Client");
+
+
+
+
+}
+
+auto closeAction::operator()() -> void {
+    this->execute();
+}
 
 // other Actions
 

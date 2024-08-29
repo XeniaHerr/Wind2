@@ -62,7 +62,7 @@ auto Topic::getName() const -> decltype(name) {
 }
 
 
-auto Topic::setFocus(Client* c) -> void {
+auto Topic::setFocus(Client* c) -> bool {
 
     if(containsClient(*c) || c == nullptr) { //Alway allow nullptr to signal that no client is focused
         focusedclient = c;
@@ -70,12 +70,14 @@ auto Topic::setFocus(Client* c) -> void {
         if (c) {
             clients.remove(c);
             clients.push_front(c);
+	    return true;
         }
     }
+    return false;
 }
 
-auto Topic::setFocus(Client& c) -> void {
-    setFocus(&c);
+auto Topic::setFocus(Client& c) -> bool {
+    return setFocus(&c);
 }
 
 auto Topic::getFocused() const -> decltype(focusedclient) {

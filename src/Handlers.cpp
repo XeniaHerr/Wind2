@@ -1,5 +1,6 @@
 #include "Handlers.h"
 #include "InputManager.h"
+#include <X11/X.h>
 #include <X11/Xlib.h>
 #include <optional>
 #include "Monitor.h"
@@ -100,9 +101,78 @@ auto ManageRequestAction::execute() -> void {
     }
 
 
+    WMM.focusClient();
 
 }
 
+
+auto UnmanageRequestAction::execute() -> void {
+
+    XUnmapEvent ev = std::get<XEvent*>(this->Arg)->xunmap;
+    auto& xc = X11Abstraction::getInstance();
+    auto& WMM = WindowManagerModel::getInstance();
+    auto& Log = Logger::GetInstance();
+    Log.Info("Inside UnmanageRequestAction");
+
+
+
+
+
+    Client *c = WMM.getClient(ev.window);
+
+    if (!c) {
+	Log.Warn("Windows {} is not managed, cant unmanage", ev.window);
+	return;
+    }
+
+    Log.Info("Client {} want's to be unmanaged", c->getName());
+
+    Topic& t = c->getOwner();
+
+
+   t.releaseOwnership(*c); 
+
+   WMM.unmanageWindow(ev.window);
+   Log.Info("Model has removed the client");
+
+   if (t.getHolder() != nullptr) {
+
+       t.getHolder()->arrange();
+       xc.drawMonitor(*t.getHolder());
+   }
+
+Log.Info("UnmanageRequestAction done");
+}
+
+
+
+auto EnterNotifyAction::execute() -> void {
+
+    XEnterWindowEvent ev = std::get<XEvent*>(this->Arg)->xcrossing;
+    auto& xc = X11Abstraction::getInstance();
+    auto& WMM = WindowManagerModel::getInstance();
+    auto& Log = Logger::GetInstance();
+    Log.Info("Inside EnterNotifyAction");
+
+
+    Client *c = WMM.getClient(ev.window);
+
+
+    if (!c) {
+	Log.Info("Window is not managed");
+	return;
+    }
+
+
+    if (WMM.getFocusedMon()->getCurrent()->getFocused() != c) {
+    WMM.focusClient(ev.window);
+
+    xc.sendClientAtom(ev.window, ATOMNAME::WMTakeFocus);
+    }
+
+    
+    Log.Info("Done with EnterNotifyAction");
+}
 
 
 

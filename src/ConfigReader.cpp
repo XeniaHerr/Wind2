@@ -88,6 +88,7 @@ std::unique_ptr<Action> StringtoAction(std::string s) {
     static std::vector<std::unique_ptr<Action>> all_actions;
         all_actions.emplace_back(new quitAction);
 	all_actions.emplace_back(new spawnAction);
+	all_actions.emplace_back(new closeAction);
 	assert(all_actions[0]->clone() != nullptr);
 
 	for (int i = 0; i < all_actions.size(); i++) {

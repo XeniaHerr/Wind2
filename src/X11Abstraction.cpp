@@ -11,6 +11,7 @@
 #include <Topic.h>
 #include <Client.h>
 #include <list>
+#include <utility>
 
 
 using namespace Wind;
@@ -22,21 +23,51 @@ int _xerrorstart(Display* d, XErrorEvent* er) {
     return -1;}
 
 
+auto X11Abstraction::sendEvent(Window w, ATOMNAME atom) -> bool {
 
-auto X11Abstraction::sendClientAtom(Window w, NETATOMS atom) -> void {
+    XEvent e;
 
-    if (this->netatoms.contains(atom)) {
-	XChangeProperty(this->dpy, w, netatoms[atom], 32, XA_ATOM,PropModeReplace, (unsigned char *)&this->netatoms[atom], 1);
+    Atom* a;
+    int count = 0;
+
+    XGetWMProtocols(this->dpy, w, &a, &count);
+    bool has_atom = false;
+
+    for (int i = 0; i < count; i++) {
+	if (a[i] == atom)
+	    has_atom = true;
+    }
+
+    XFree(a);
+
+    e.type = ClientMessage;
+    e.xclient.window = w;
+    e.xclient.data.l[0] = atom;
+    e.xclient.data.l[1] = CurrentTime;
+    e.xclient.format = 32;
+    e.xclient.message_type = this->atoms[ATOMNAME::WMProtocols];
+
+
+    XSendEvent(this->dpy, w, false, NoEventMask, &e);
+
+
+    return has_atom;
+
+};
+
+auto X11Abstraction::sendClientAtom(Window w, ATOMNAME atom) -> void {
+
+    if (this->atoms.contains(atom)) {
+	XChangeProperty(this->dpy, w, this->atoms[atom] , 32, XA_ATOM,PropModeReplace, (unsigned char *)&this->atoms[atom], 1);
 
     }
 }
 
 
-auto X11Abstraction::removeClientAtom(Window w, NETATOMS atom ) -> void {
+auto X11Abstraction::removeClientAtom(Window w, ATOMNAME atom ) -> void {
 
-    if (this->netatoms.contains(atom)) {
-	XDeleteProperty(this->dpy, w, atom);
-    }
+    if (this->atoms.contains(atom)) {
+	XDeleteProperty(this->dpy, w, atom); }
 }
 
 
@@ -222,6 +253,11 @@ auto X11Abstraction::restack(Monitor&m) -> void {
     XWindowChanges wc;
 
     auto& clients = m.getCurrent()->getClients();
+
+    if (clients.empty()) {
+	Log.Info("No clients to restack");
+	return;
+    }
     auto c = clients.begin();
 
     wc.sibling = (*c)->getWindow();
@@ -251,4 +287,14 @@ auto X11Abstraction::restack(Monitor&m) -> void {
 
 
 
+}
+
+
+
+
+auto X11Abstraction::addAtom(ATOMNAME atom, std::string id) -> void {
+
+    if (!this->atoms.contains(atom))
+	this->atoms.insert(std::make_pair(atom,
+		    XInternAtom(this->dpy, id.c_str(), false)));
 }
