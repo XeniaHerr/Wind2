@@ -276,6 +276,7 @@ auto WindowManagerModel::loadConfig() -> bool {
     auto& C = R._configs;
 
     this->windowgaps = C.windowgap;
+    this->borderwidth = C.borderwidth;
 
     Log.Info("Read Windowgaps");
 
@@ -326,6 +327,7 @@ auto WindowManagerModel::reloadConfig() -> void {
 
 
     this->windowgaps = C.windowgap;
+    this->borderwidth = C.borderwidth;
 
 
     while(!this->rules.empty())
@@ -401,4 +403,16 @@ auto WindowManagerModel::getWindows() -> std::vector<Window> {
 	ret.push_back(a.first);
 
     return ret;
+}
+
+
+auto WindowManagerModel::getBorderwidth() const ->u_int16_t {
+    return this->borderwidth;
+}
+
+
+auto WindowManagerModel::cleanup() -> void {
+
+
+    
 }

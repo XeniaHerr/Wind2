@@ -136,7 +136,7 @@ auto Monitor::arrange() -> void {
          Position p = currentArranger.getPosition(*this, i+1 , size);
 
          if constexpr(Gaps)
-             adjustforGaps(d,p);
+             adjustforGapsandBorder(d,p);
          new_clients[i]->setTargetPositions(p);
          new_clients[i]->setTargetDimensions(d);
          Log.Info("Finished with client {}, New values are : Dim({},{}), Pos({},{})",i, d.width, d.height, p.x, p.y);
@@ -167,10 +167,11 @@ auto Monitor::prevLayout() -> void {
 
 
 
-auto Monitor::adjustforGaps(Dimensions& d, Position& p) -> void {
+auto Monitor::adjustforGapsandBorder(Dimensions& d, Position& p) -> void {
 
 
     u_int16_t gaps = WindowManagerModel::getInstance().getGap();
+    gaps += ( WindowManagerModel::getInstance().getBorderwidth()); // Do also adjust for Borders
 
 
     d.width -= gaps;
@@ -182,3 +183,6 @@ auto Monitor::adjustforGaps(Dimensions& d, Position& p) -> void {
 
 }
 
+auto Monitor::getSelector() -> ArrangerSelector& {
+    return this->layouts;
+}

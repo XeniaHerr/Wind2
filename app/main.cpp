@@ -72,6 +72,9 @@ int main() {
     xconnection.addAtom(ATOMNAME::NetSupported, "_NET_SUPPORTED");
 
     xconnection.initAtoms();
+    xconnection.setactiveColor(Config._configs.activeColor);
+    xconnection.setpassiveColor(Config._configs.passiveColor);
+    xconnection.seturgentColor(Config._configs.urgentColor);
 
     Run& runloop = Run::getInstance();
 
@@ -90,6 +93,11 @@ int main() {
 
 
     // Do some cleanup
+
+    /*
+     * Idee for cleanig up
+     * - Deactivate Errors by setting a dummy handler
+     * = i dont know actually*/
 
 
 

@@ -32,6 +32,11 @@ namespace Wind {
                 std::vector<Rule> rules;
 
 
+		std::string activeColor;
+		std::string passiveColor;
+		std::string urgentColor;
+
+
                 Dimensions testdim;
 
                 Windowtype testtype;
@@ -80,6 +85,7 @@ namespace Wind {
             void readVariables();
 
             void readRules();
+
 
 
             void readKeys();

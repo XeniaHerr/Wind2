@@ -68,6 +68,8 @@ namespace Wind {
 
             void setArranger(AbstractArranger* a);
 
+	    ArrangerSelector& getSelector();
+
 
             void setLayout(u_int16_t index);
 
@@ -110,7 +112,7 @@ namespace Wind {
              *
              * The Arranger returns the Dimensions and Positions of the frame the window can 
              * occupy. the gaps are also part of this frame, which means the real Values must be smaller*/
-            void adjustforGaps( Dimensions& d, Position& p);
+            void adjustforGapsandBorder( Dimensions& d, Position& p);
 
 
 

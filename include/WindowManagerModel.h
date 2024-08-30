@@ -157,6 +157,7 @@ namespace Wind {
 
         size_t getMonitorCount() const;
         u_int16_t getGap() const;
+	u_int16_t getBorderwidth() const;
 
 
     
@@ -171,6 +172,8 @@ namespace Wind {
         Client* getClient(Window w) const ;
 
         Monitor* getFocusedMon() const;
+
+	void cleanup();
 
 
 
@@ -203,7 +206,8 @@ namespace Wind {
 
         Monitor* focusedmon; /**< Currenlty focused monitor*/
 
-        u_int16_t windowgaps; /**< Windowgaps, part of Config*/
+        u_int16_t windowgaps, /**< Windowgaps, part of Config*/
+		  borderwidth; 
 
 
 

@@ -1,7 +1,6 @@
 #include "Logger.h"
 #include <Client.h>
 #include <Topic.h>
-#include <mutex>
 
 
 
@@ -9,9 +8,9 @@
 using namespace Wind;
 
 Topic::Topic(std::string name) : name(name),
-    holder(nullptr), focusedclient(nullptr){ }
+    holder(nullptr), focusedclient(nullptr), master_fact(0.5){ }
 
-Topic::Topic(Topic&& other) : name(std::move(other.name)), holder(other.holder), focusedclient(other.focusedclient) {
+Topic::Topic(Topic&& other) : name(std::move(other.name)), holder(other.holder), focusedclient(other.focusedclient), master_fact(other.master_fact) {
 
 }
 

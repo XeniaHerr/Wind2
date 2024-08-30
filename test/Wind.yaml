@@ -1,4 +1,3 @@
-borderwidth: 10
 
 topicnames:
   - First
@@ -20,11 +19,14 @@ Rules:
     DefaultTopic: Wrong
 
 
+activeColor: blue
 
 
 test: [10, 20]
 
 testtype: dock
+
+borderwidth: 2
 
 
 ModMask: Mod4 # Set Mod Mask 
@@ -50,3 +52,7 @@ Keys:
   - Key: w
     Modifiers: [Mod]
     Action: close
+  - Key: space
+    Action: LayoutSwitch
+    Int: 1
+    Modifiers: [Mod]

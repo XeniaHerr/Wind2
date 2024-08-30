@@ -95,10 +95,16 @@ auto ManageRequestAction::execute() -> void {
 
     Log.Info("Rules got attached");
 
+    xc.subscribetoWindow(e.window, EnterWindowMask|SubstructureNotifyMask|FocusChangeMask|PropertyChangeMask);
+
+    
+
     if (Monitor* m = c->getOwner().getHolder()) {
 	m->arrange();
 	xc.drawMonitor(*m);
     }
+
+    xc.configureClient(c);
 
     xc.prependClientList(e.window);
 

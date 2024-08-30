@@ -2,9 +2,6 @@
 #include <ConfigReader.h>
 #include <X11/X.h>
 #include <X11/Xlib.h>
-#include <algorithm>
-#include <cctype>
-#include <filesystem>
 #include <memory>
 #include <string>
 #include <sys/types.h>
@@ -89,6 +86,7 @@ std::unique_ptr<Action> StringtoAction(std::string s) {
         all_actions.emplace_back(new quitAction);
 	all_actions.emplace_back(new spawnAction);
 	all_actions.emplace_back(new closeAction);
+	all_actions.emplace_back(new LayoutSwitchAction);
 	assert(all_actions[0]->clone() != nullptr);
 
 	for (int i = 0; i < all_actions.size(); i++) {
@@ -210,6 +208,37 @@ auto ConfigReader::readVariables() -> void {
     }
     else {
         Logger::GetInstance().Warn("No default Mod mask defined, using Mod4 (super)");
+    }
+
+    Node activeColor = document["activeColor"];
+
+    if (activeColor.IsDefined() && activeColor.IsScalar()) {
+	this->_configs.activeColor = activeColor.as<std::string>();
+    }
+    else {
+
+	Logger::GetInstance().Warn("No default active Color defined, using white");
+	this->_configs.activeColor = "white";
+    }
+    Node passiveColor = document["passiveColor"];
+
+    if (passiveColor.IsDefined() && passiveColor.IsScalar()) {
+	this->_configs.passiveColor = passiveColor.as<std::string>();
+    }
+    else {
+
+	Logger::GetInstance().Warn("No default passive Color defined, using black");
+	this->_configs.passiveColor = "black";
+    }
+    Node urgentColor = document["urgentColor"];
+
+    if (urgentColor.IsDefined() && urgentColor.IsScalar()) {
+	this->_configs.urgentColor = urgentColor.as<std::string>();
+    }
+    else {
+
+	Logger::GetInstance().Warn("No default urgent Color defined, using red");
+	this->_configs.urgentColor = "red";
     }
 }
 

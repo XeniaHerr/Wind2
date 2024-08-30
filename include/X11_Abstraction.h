@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <map>
 #include <optional>
+#include <X11/Xft/Xft.h>
 #include <string>
 #include <unistd.h>
 #include <vector>
@@ -124,6 +125,16 @@ namespace Wind {
 
 	    void updateClientList(); // Needs O(n)
 	    void prependClientList(Window w); // Prepending works in constant time;
+					      //
+	    void subscribetoWindow(Window w, long flags);
+
+
+
+	    void setactiveColor(std::string);
+	    void setpassiveColor(std::string);
+	    void seturgentColor(std::string);
+
+	    void configureClient(Client* c);
 
 	private:
 
@@ -134,6 +145,7 @@ namespace Wind {
 	    
 
 
+	    XftColor createColor(std::string colocode);
 
 
 
@@ -152,6 +164,8 @@ namespace Wind {
 	    Window _root, _helper, _active;
 
 	    std::map<ATOMNAME,Atom> atoms;
+
+	    XftColor activeColor, passiveColor, urgentColor;
 
     };
 

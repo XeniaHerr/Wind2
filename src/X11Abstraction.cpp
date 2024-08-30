@@ -5,6 +5,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#include <X11/Xft/Xft.h>
 #include <Inputstructs.h>
 #include <bits/ranges_algo.h>
 #include <optional>
@@ -12,6 +13,7 @@
 #include <Topic.h>
 #include <Client.h>
 #include <list>
+#include <string>
 #include <utility>
 #include <cassert>
 
@@ -314,6 +316,7 @@ auto X11Abstraction::setfocus(Client *c) -> void {
 	XSetInputFocus(this->dpy, this->_root, RevertToPointerRoot, CurrentTime);
 
 	this->removeClientAtom(_root, ATOMNAME::NetActiveWindow);
+	XSetWindowBorder(this->dpy, this->_active, this->passiveColor.pixel);
     }
     Window w;
     if (c) {
@@ -324,6 +327,7 @@ auto X11Abstraction::setfocus(Client *c) -> void {
     this->sendEvent(w, ATOMNAME::WMTakeFocus);
     XSetInputFocus(this->dpy, this->_active, RevertToPointerRoot, CurrentTime);
     XChangeProperty(this->dpy, this->_root,atoms[ATOMNAME::NetActiveWindow],XA_ATOM, 32, PropModeReplace, (const unsigned char*)&w, 1);
+	XSetWindowBorder(this->dpy, this->_active, this->activeColor.pixel);
     }
     else {
 	this->_active  = this->_root;
@@ -369,11 +373,66 @@ auto X11Abstraction::prependClientList(Window w) -> void {
 
 auto X11Abstraction::updateClientList() -> void {
 
-
     auto cl = WindowManagerModel::getInstance().getWindows();
 
     XChangeProperty(this->dpy, this->_root, atoms[ATOMNAME::NetClientList], XA_WINDOW, 32, PropModeReplace, (unsigned char*) cl.data(), cl.size());
 
 
 
+}
+
+auto X11Abstraction::subscribetoWindow(Window w, long flags) -> void {
+
+    XSelectInput(this->dpy, w, flags);
+}
+
+
+auto X11Abstraction::createColor(std::string cc) -> XftColor {
+
+
+
+    XftColor c;
+
+    XftColorAllocName(this->dpy, DefaultVisual(this->dpy, this->screen), DefaultColormap(this->dpy, this->screen), cc.c_str(), &c);
+
+    
+    return c;
+}
+
+
+
+void X11Abstraction::setactiveColor(std::string s) {
+
+
+    this->activeColor = this->createColor(s);
+
+}
+void X11Abstraction::setpassiveColor(std::string s) {
+
+    this->passiveColor = this->createColor(s);
+
+}
+void X11Abstraction::seturgentColor(std::string s) {
+
+    this->urgentColor = this->createColor(s);
+
+}
+
+
+auto X11Abstraction::configureClient(Client *c) -> void {
+
+    XConfigureEvent e;
+
+
+    e.type = ClientMessage;
+    e.window = c->getWindow();
+    e.send_event = true;
+    e.x = c->getPosition().x;
+    e.y = c->getPosition().y;
+    e.width = c->getCurrentDimensions().width;
+    e.height = c->getCurrentDimensions().height;
+    e.border_width = WindowManagerModel::getInstance().getBorderwidth();
+    
+
+    XSendEvent(this->dpy, c->getWindow(), False, SubstructureNotifyMask, (XEvent*) &e);
 }

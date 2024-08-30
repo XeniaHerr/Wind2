@@ -29,4 +29,5 @@ target_link_libraries(WIND2_LIB
     PUBLIC
     yaml-cpp::yaml-cpp
     X11
+    Xft
     )

@@ -177,6 +177,59 @@ auto closeAction::operator()() -> void {
     this->execute();
 }
 
+
+
+auto LayoutSwitchAction::name() -> std::string {
+    return "LayoutSwitch";
+
+}
+
+auto LayoutSwitchAction::wantArgument() -> bool {
+    return true;
+}
+
+
+auto LayoutSwitchAction::clone() -> std::unique_ptr<Action> {
+    return std::unique_ptr<Action>(new LayoutSwitchAction);
+}
+
+
+auto LayoutSwitchAction::execute() -> void {
+
+    auto& Log = Logger::GetInstance();
+    Log.Info("Inside {}", __func__);
+
+    int direction = std::get<int>(this->Arg);
+
+
+    Monitor* m = WindowManagerModel::getInstance().getFocusedMon();
+
+    auto& Selector = m->getSelector();
+
+    if ( direction > 0) {
+	Selector.next();
+
+	Log.Info("Setting Arranger to {}", Selector.getArranger().name());
+
+
+    }
+
+    else if (direction < 0) {
+	Selector.previous();
+	Log.Info("Setting Arranger to {}", Selector.getArranger().name());
+    }
+
+    m->arrange();
+    X11Abstraction::getInstance().drawMonitor(*m);
+
+    
+}
+
+
+auto LayoutSwitchAction::operator()() -> void {
+    this->execute();
+}
+
 // other Actions
 
 

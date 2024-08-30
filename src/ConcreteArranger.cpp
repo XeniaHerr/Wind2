@@ -51,6 +51,7 @@ auto MasterTile::getDimensions(Monitor& m, u_int16_t position, u_int16_t max) ->
     }
 
 
+    Logger::GetInstance().Info("{} - {} = {}", m.getDimensions().width, ret.width, m.getDimensions().width - ret.width );
     ret.width = m.getDimensions().width - ret.width;
 
 
