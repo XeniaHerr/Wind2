@@ -115,8 +115,10 @@ auto WindowManagerModel::focusClient(Window w) -> bool {
     auto client = clients.find(w);
 
 
-    if (client == clients.end())
+    if (client == clients.end()) {
+	Logger::GetInstance().Warn("Illegal window to focus {}", w);
         return false;
+    }
 
     Client& c = client->second.get();
 
@@ -140,8 +142,8 @@ auto WindowManagerModel::focusClient()-> bool {
     if (!focusedmon)
 	focusedmon = monitors[0].getPointer();
 
-    if (focusedmon->getCurrent()->getFocused() == nullptr) {
-	Log.Info("Currently now Client focused, searching for next valid");
+    //if (focusedmon->getCurrent()->getFocused() == nullptr) {
+	Log.Info("Currently no Client focused, searching for next valid");
 	if (focusedmon->getCurrent()->getClients().size() > 0)  {
 	    Log.Info("Found client to focus");
 	    return focusedmon->getCurrent()->setFocus(focusedmon->getCurrent()->getClients().front());
@@ -150,7 +152,7 @@ auto WindowManagerModel::focusClient()-> bool {
 	else
 	    return focusedmon->getCurrent()->setFocus(nullptr);
 
-	}
+//	}
     return false;
 }
 
@@ -387,4 +389,16 @@ auto WindowManagerModel::getTopic(std::string name) -> Topic* {
 	if(a.getPointer()->getName() == name)
 	    return a.getPointer();
     return nullptr;
+}
+
+
+auto WindowManagerModel::getWindows() -> std::vector<Window> {
+
+    std::vector<Window> ret;
+
+
+    for (auto& a : clients )
+	ret.push_back(a.first);
+
+    return ret;
 }

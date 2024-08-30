@@ -100,8 +100,11 @@ auto ManageRequestAction::execute() -> void {
 	xc.drawMonitor(*m);
     }
 
+    xc.prependClientList(e.window);
 
     WMM.focusClient();
+
+    xc.setfocus(c);
 
 }
 
@@ -141,6 +144,10 @@ auto UnmanageRequestAction::execute() -> void {
        xc.drawMonitor(*t.getHolder());
    }
 
+   xc.updateClientList();
+
+   WMM.focusClient();
+   xc.setfocus(WMM.getFocusedMon()->getCurrent()->getFocused());
 Log.Info("UnmanageRequestAction done");
 }
 
@@ -168,6 +175,7 @@ auto EnterNotifyAction::execute() -> void {
     WMM.focusClient(ev.window);
 
     xc.sendClientAtom(ev.window, ATOMNAME::WMTakeFocus);
+    xc.setfocus(c);
     }
 
     

@@ -66,12 +66,15 @@ auto Topic::setFocus(Client* c) -> bool {
 
     if(containsClient(*c) || c == nullptr) { //Alway allow nullptr to signal that no client is focused
         focusedclient = c;
+	Logger::GetInstance().Warn("The currently focused client on Model site is {}", c ? c->getWindow() : 0);
 
         if (c) {
             clients.remove(c);
             clients.push_front(c);
 	    return true;
         }
+    } else {
+	Logger::GetInstance().Warn("The currently focused client on Model site is {} (nothing changed)", focusedclient ? focusedclient->getWindow() : 0);
     }
     return false;
 }

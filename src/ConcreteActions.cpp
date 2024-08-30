@@ -164,6 +164,7 @@ auto closeAction::execute() -> void {
     }
 
 
+    Log.Info("Closing window = {}", c->getWindow());
     X11Abstraction::getInstance().sendEvent(c->getWindow(), ATOMNAME::WMDelete);
 Log.Info("Done with Closing the Client");
 

@@ -165,10 +165,13 @@ namespace Wind {
 
         std::vector<RuleHolder>& getRules();
 
+	std::vector<Window> getWindows();
+
 
         Client* getClient(Window w) const ;
 
         Monitor* getFocusedMon() const;
+
 
 
         template<typename P> requires std::predicate<P>

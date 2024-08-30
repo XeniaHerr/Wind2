@@ -3,7 +3,6 @@
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <cstdlib>
-#include <initializer_list>
 #include <map>
 #include <optional>
 #include <string>
@@ -18,7 +17,14 @@ namespace Wind {
 
 	WMDelete,
 	WMProtocols,
-	WMTakeFocus
+	WMTakeFocus,
+	NetActiveWindow,
+	NetWMName,
+	NetDesktopNumber,
+	NetDesktopNames,
+	NetClientList,
+	NetCurrentDesktop,
+	NetSupported
     };
 
 
@@ -112,7 +118,12 @@ namespace Wind {
 	    }
 
 
+	    void setfocus(Client * c);
 
+	    void initAtoms();
+
+	    void updateClientList(); // Needs O(n)
+	    void prependClientList(Window w); // Prepending works in constant time;
 
 	private:
 
@@ -120,6 +131,7 @@ namespace Wind {
 
 
 	    void restack(Monitor& m);
+	    
 
 
 
@@ -137,7 +149,7 @@ namespace Wind {
 
 	    size_t screenwidth, screenheight;
 
-	    Window _root, _helper;
+	    Window _root, _helper, _active;
 
 	    std::map<ATOMNAME,Atom> atoms;
 

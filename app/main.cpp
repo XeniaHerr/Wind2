@@ -63,7 +63,15 @@ int main() {
     xconnection.addAtom(ATOMNAME::WMDelete, "WM_DELETE_WINDOW");
     xconnection.addAtom(ATOMNAME::WMTakeFocus, "WM_TAKE_FOCUS");
     xconnection.addAtom(ATOMNAME::WMProtocols, "WM_PROTOCOLS");
+    xconnection.addAtom(ATOMNAME::NetActiveWindow, "_NET_ACTIVE_WINDOW");
+    xconnection.addAtom(ATOMNAME::NetWMName, "_NET_WM_NAME");
+    xconnection.addAtom(ATOMNAME::NetClientList, "_NET_CLIENT_LIST");
+    xconnection.addAtom(ATOMNAME::NetDesktopNames, "_NET_DESKTOP_NAMES");
+    xconnection.addAtom(ATOMNAME::NetDesktopNumber, "_NET_NUMBER_OF_DESKTOPS");
+    xconnection.addAtom(ATOMNAME::NetCurrentDesktop, "_NET_CURRENT_DESKTOP");
+    xconnection.addAtom(ATOMNAME::NetSupported, "_NET_SUPPORTED");
 
+    xconnection.initAtoms();
 
     Run& runloop = Run::getInstance();
 

@@ -1,4 +1,5 @@
 #include "Logger.h"
+#include "WindowManagerModel.h"
 #include "X11_Abstraction.h"
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -12,6 +13,7 @@
 #include <Client.h>
 #include <list>
 #include <utility>
+#include <cassert>
 
 
 using namespace Wind;
@@ -25,6 +27,7 @@ int _xerrorstart(Display* d, XErrorEvent* er) {
 
 auto X11Abstraction::sendEvent(Window w, ATOMNAME atom) -> bool {
 
+
     XEvent e;
 
     Atom* a;
@@ -34,12 +37,13 @@ auto X11Abstraction::sendEvent(Window w, ATOMNAME atom) -> bool {
     bool has_atom = false;
 
     for (int i = 0; i < count; i++) {
-	if (a[i] == atom)
+	if (a[i] == atoms[atom])
 	    has_atom = true;
     }
 
     XFree(a);
 
+    if (has_atom) {
     e.type = ClientMessage;
     e.xclient.window = w;
     e.xclient.data.l[0] = atom;
@@ -49,7 +53,9 @@ auto X11Abstraction::sendEvent(Window w, ATOMNAME atom) -> bool {
 
 
     XSendEvent(this->dpy, w, false, NoEventMask, &e);
+    }
 
+    Logger::GetInstance().Info("Event send {}", has_atom ? "Sucsessfully" : "Unsucessfully" );
 
     return has_atom;
 
@@ -215,8 +221,6 @@ auto X11Abstraction::drawMonitor(Monitor& m) -> void {
 
     for (auto a : m.getCurrent()->getClients()) {
 
-	//XMoveResizeWindow(this->dpy, a->getWindow() , a->getPosition().x,
-	//	a->getPosition().y, a->getCurrentDimensions().width, a->getCurrentDimensions().height);
 	XWindowChanges wc;
 	wc.x = a->getPosition().x;
 	wc.y = a->getPosition().y;
@@ -297,4 +301,79 @@ auto X11Abstraction::addAtom(ATOMNAME atom, std::string id) -> void {
     if (!this->atoms.contains(atom))
 	this->atoms.insert(std::make_pair(atom,
 		    XInternAtom(this->dpy, id.c_str(), false)));
+}
+
+
+auto X11Abstraction::setfocus(Client *c) -> void {
+
+    auto& Log = Logger::GetInstance();
+    Log.Info("Inside setfocus of the X11Abstraction");
+    if (this->_active != this->_root) {
+	// if focusing another client, unfocus it first;
+	Log.Info("Another Window is currently focused, removing focus first");
+	XSetInputFocus(this->dpy, this->_root, RevertToPointerRoot, CurrentTime);
+
+	this->removeClientAtom(_root, ATOMNAME::NetActiveWindow);
+    }
+    Window w;
+    if (c) {
+	Log.Info("Found Client to set focus to, sending event");
+	w = c->getWindow();	
+
+	this->_active = w;
+    this->sendEvent(w, ATOMNAME::WMTakeFocus);
+    XSetInputFocus(this->dpy, this->_active, RevertToPointerRoot, CurrentTime);
+    XChangeProperty(this->dpy, this->_root,atoms[ATOMNAME::NetActiveWindow],XA_ATOM, 32, PropModeReplace, (const unsigned char*)&w, 1);
+    }
+    else {
+	this->_active  = this->_root;
+
+    XSetInputFocus(this->dpy, this->_root, RevertToPointerRoot, CurrentTime);
+    }
+
+
+    Log.Warn("The currently focused client on X side is {}", this->_active);
+}
+
+
+auto X11Abstraction::initAtoms() -> void {
+
+const Atom supported[] = { atoms[ATOMNAME::NetDesktopNumber],
+			    atoms[ATOMNAME::NetClientList],
+			    atoms[ATOMNAME::NetDesktopNames],
+			    atoms[ATOMNAME::NetCurrentDesktop]};
+
+
+
+    XChangeProperty(this->dpy, this->_root, atoms[ATOMNAME::NetSupported], XA_ATOM, 32, PropModeReplace, (const unsigned char*)supported, sizeof(supported)/ sizeof (supported[0]));
+
+    const unsigned char name[] = "Wind";
+    XChangeProperty(this->dpy, this->_root, atoms[ATOMNAME::NetWMName], XA_STRING,8, PropModeReplace, (const unsigned char*) "Wind", 4);
+
+    unsigned long dcount = WindowManagerModel::getInstance().getTopicCount();
+
+    XChangeProperty(this->dpy, this->_root, atoms[ATOMNAME::NetDesktopNumber], XA_CARDINAL, 32, PropModeReplace, (unsigned char*) &dcount, 1);
+
+
+
+}
+
+
+auto X11Abstraction::prependClientList(Window w) -> void {
+    Logger::GetInstance().Info("Inside {} with w = {}" ,__func__, w);
+
+    assert(this->isUsable());
+    XChangeProperty(this->dpy, this->_root, atoms[ATOMNAME::NetClientList], XA_WINDOW, 32, PropModeAppend, (unsigned char *)&w, 1);
+    Logger::GetInstance().Info("client added to focus list");
+}
+
+auto X11Abstraction::updateClientList() -> void {
+
+
+    auto cl = WindowManagerModel::getInstance().getWindows();
+
+    XChangeProperty(this->dpy, this->_root, atoms[ATOMNAME::NetClientList], XA_WINDOW, 32, PropModeReplace, (unsigned char*) cl.data(), cl.size());
+
+
+
 }
