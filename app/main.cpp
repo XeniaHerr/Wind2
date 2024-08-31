@@ -70,6 +70,11 @@ int main() {
     xconnection.addAtom(ATOMNAME::NetDesktopNumber, "_NET_NUMBER_OF_DESKTOPS");
     xconnection.addAtom(ATOMNAME::NetCurrentDesktop, "_NET_CURRENT_DESKTOP");
     xconnection.addAtom(ATOMNAME::NetSupported, "_NET_SUPPORTED");
+    xconnection.addAtom(ATOMNAME::UTF8String, "UTF8_STRING");
+
+    xconnection.addAtom(ATOMNAME::WindowNormalState, "NormalState");
+    xconnection.addAtom(ATOMNAME::WindowIconicState, "IconicState");
+    xconnection.addAtom(ATOMNAME::WindowState, "WM_CHANGE_STATE");
 
     xconnection.initAtoms();
     xconnection.setactiveColor(Config._configs.activeColor);
@@ -82,6 +87,7 @@ int main() {
     runloop.setHandler(MapRequest, new ManageRequestAction);
     runloop.setHandler(UnmapNotify, new UnmanageRequestAction);
     runloop.setHandler(EnterNotify, new EnterNotifyAction);
+    runloop.setHandler(DestroyNotify, new DestroyNotifyAction);
     //runloop.setHandler(UnMap, Action *act)
 
 
@@ -92,12 +98,17 @@ int main() {
     Log.Info("Exited main run loop, prepare to shut down");
 
 
-    // Do some cleanup
+    {
+    auto a  = WMM.getWindows();
 
-    /*
-     * Idee for cleanig up
-     * - Deactivate Errors by setting a dummy handler
-     * = i dont know actually*/
+    for (auto c : a) {
+
+	xconnection.Unmapwindow(c);
+	xconnection.sendEvent(c, ATOMNAME::WMDelete);
+    }
+    
+
+    }
 
 
 

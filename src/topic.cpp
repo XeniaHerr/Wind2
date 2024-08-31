@@ -8,10 +8,11 @@
 using namespace Wind;
 
 Topic::Topic(std::string name) : name(name),
-    holder(nullptr), focusedclient(nullptr), master_fact(0.5){ }
+    holder(nullptr), focusedclient(nullptr), master_fact(0.5){
+	Logger::GetInstance().Info("Creating topic");}
 
-Topic::Topic(Topic&& other) : name(std::move(other.name)), holder(other.holder), focusedclient(other.focusedclient), master_fact(other.master_fact) {
-
+Topic::Topic(Topic&& other) : name(std::move(other.name)), holder(other.holder), focusedclient(other.focusedclient), master_fact(other.master_fact), clients(other.clients) {
+Logger::GetInstance().Info("Moving topic");
 }
 
 
@@ -47,6 +48,7 @@ auto Topic::takeOwnership(Client& c ) -> void {
 
 
 auto Topic::releaseOwnership(Client& c) ->  const Client& {
+    Logger::GetInstance().Info("Released Ownership of {}, now holding {} clients", c.getWindow(), clients.size());
 
     clients.remove(&c);
 
@@ -56,7 +58,7 @@ auto Topic::releaseOwnership(Client& c) ->  const Client& {
 
 
 
-auto Topic::getName() const -> decltype(name) {
+auto Topic::getName() const -> std::string {
     return name;
 }
 

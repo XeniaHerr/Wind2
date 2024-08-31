@@ -107,6 +107,24 @@ class LayoutSwitchAction : public Action {
 	~LayoutSwitchAction() {}
 };
 
+
+class TopicSwitchAction : public Action {
+
+    public:
+
+	std::string name() override;
+
+	void execute() override;
+
+	std::unique_ptr<Action> clone() override;
+
+	bool wantArgument() override;
+
+	void operator()() override;
+
+	~TopicSwitchAction() {}
+};
+
 }
 
 

@@ -56,3 +56,15 @@ Keys:
     Action: LayoutSwitch
     Int: 1
     Modifiers: [Mod]
+  - Key: 1
+    Action: SwitchTopic
+    Int: 0
+    Modifiers: [Mod]
+  - Key: 2
+    Action: SwitchTopic
+    Int: 1
+    Modifiers: [Mod]
+  - Key: 3
+    Action: SwitchTopic
+    Int: 2
+    Modifiers: [Mod]

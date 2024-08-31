@@ -57,4 +57,13 @@ class EnterNotifyAction : public Action {
 
 	~EnterNotifyAction() {}
 };
+
+
+class DestroyNotifyAction : public Action {
+
+    public:
+	void execute() override;
+
+	~DestroyNotifyAction() {}
+};
 }

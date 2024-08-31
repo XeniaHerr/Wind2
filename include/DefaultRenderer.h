@@ -24,6 +24,8 @@ class DefaultRenderer : public AbstractRenderer {
 
 
 	    Logger::GetInstance().Info("All clients have been updated");
+
+	    X11Abstraction::getInstance().drawMonitor(m);
 	}
 
 

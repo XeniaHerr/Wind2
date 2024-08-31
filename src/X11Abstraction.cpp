@@ -20,11 +20,27 @@
 
 using namespace Wind;
 
+static int (*xdefaulterror)(Display *d, XErrorEvent* ev);
 
 bool _errorvar  = false;
 int _xerrorstart(Display* d, XErrorEvent* er) {
     _errorvar = true;
     return -1;}
+
+
+int _xdummyerror(Display* d, XErrorEvent* er) {
+
+    return 0;
+}
+
+int _xdefaulerror(Display*d , XErrorEvent*er) {
+
+    auto& Log = Logger::GetInstance();
+
+    Log.Warn("X11 Error occured!");
+
+    return xdefaulterror(d,er);
+}
 
 
 auto X11Abstraction::sendEvent(Window w, ATOMNAME atom) -> bool {
@@ -72,6 +88,13 @@ auto X11Abstraction::sendClientAtom(Window w, ATOMNAME atom) -> void {
 }
 
 
+auto X11Abstraction::setClientState(Window w, ATOMNAME state) -> void {
+
+
+	XChangeProperty(this->dpy, w, this->atoms[ATOMNAME::WindowState] , 32, XA_ATOM,PropModeReplace, (unsigned char *)&this->atoms[state], 1);
+}
+
+
 auto X11Abstraction::removeClientAtom(Window w, ATOMNAME atom ) -> void {
 
     if (this->atoms.contains(atom)) {
@@ -113,7 +136,7 @@ auto X11Abstraction::getNextEvent() -> XEvent {
 
 //This is "inspired" by the way dwm handles the other wm check
 auto X11Abstraction::checkotherWM() -> bool {
-    XSetErrorHandler(_xerrorstart);
+     XSetErrorHandler(_xerrorstart);
 
     XSelectInput(this->dpy, DefaultRootWindow(dpy), SubstructureRedirectMask);
 
@@ -144,6 +167,9 @@ X11Abstraction::X11Abstraction() {
             screenheight = DisplayHeight(dpy, screen);
 
 	    _root = RootWindow(this->dpy, screen);
+
+	    xdefaulterror = XSetErrorHandler(nullptr);
+	    XSetErrorHandler(xdefaulterror);
 
 	    }
 
@@ -221,6 +247,8 @@ auto X11Abstraction::drawMonitor(Monitor& m) -> void {
 
     auto& Log = Logger::GetInstance();
 
+    this->hideTopic(m.getCurrent());
+
     for (auto a : m.getCurrent()->getClients()) {
 
 	XWindowChanges wc;
@@ -237,7 +265,8 @@ auto X11Abstraction::drawMonitor(Monitor& m) -> void {
     for(auto a = c.rbegin(); a != c.rend(); a++){
 
 	XRaiseWindow(this->dpy, (*a)->getWindow());
-	XMapWindow(this->dpy, (*a)->getWindow());
+	setClientState((*a)->getWindow(), ATOMNAME::WindowNormalState);
+	Log.Info("Mapped client {}", (*a)->getWindow());
     }
 
 
@@ -334,9 +363,7 @@ auto X11Abstraction::setfocus(Client *c) -> void {
 
     XSetInputFocus(this->dpy, this->_root, RevertToPointerRoot, CurrentTime);
     }
-
-
-    Log.Warn("The currently focused client on X side is {}", this->_active);
+Log.Warn("The currently focused client on X side is {}", this->_active);
 }
 
 
@@ -349,6 +376,7 @@ const Atom supported[] = { atoms[ATOMNAME::NetDesktopNumber],
 
 
 
+XDeleteProperty(this->dpy, this->_root, atoms[ATOMNAME::NetDesktopNames]);
     XChangeProperty(this->dpy, this->_root, atoms[ATOMNAME::NetSupported], XA_ATOM, 32, PropModeReplace, (const unsigned char*)supported, sizeof(supported)/ sizeof (supported[0]));
 
     const unsigned char name[] = "Wind";
@@ -357,6 +385,14 @@ const Atom supported[] = { atoms[ATOMNAME::NetDesktopNumber],
     unsigned long dcount = WindowManagerModel::getInstance().getTopicCount();
 
     XChangeProperty(this->dpy, this->_root, atoms[ATOMNAME::NetDesktopNumber], XA_CARDINAL, 32, PropModeReplace, (unsigned char*) &dcount, 1);
+
+//	topicNames += (WindowManagerModel::getInstance().getTopic(i)->getName() + "\0");
+    std::string topicNames;
+    for (int i = 0; i < WindowManagerModel::getInstance().getTopicCount(); i++ )
+	XChangeProperty(this->dpy, this->_root,atoms[ATOMNAME::NetDesktopNames],atoms[ATOMNAME::UTF8String], 8, PropModeAppend, (unsigned char*)WindowManagerModel::getInstance().getTopic(i)->getName().c_str(), WindowManagerModel::getInstance().getTopic(i)->getName().length()+1);
+
+
+
 
 
 
@@ -436,3 +472,39 @@ auto X11Abstraction::configureClient(Client *c) -> void {
 
     XSendEvent(this->dpy, c->getWindow(), False, SubstructureNotifyMask, (XEvent*) &e);
 }
+
+
+auto X11Abstraction::ignoreErrors() -> void {
+
+
+    XSetErrorHandler(_xdummyerror);
+}
+
+
+
+auto X11Abstraction::acivateErrors() -> void {
+
+    XSetErrorHandler(_xdefaulerror);
+}
+
+
+auto X11Abstraction::hideTopic(Topic* t) -> void {
+
+    for (auto a : t->getClients()) {
+	this->setClientState(a->getWindow(), ATOMNAME::WindowIconicState);
+	Logger::GetInstance().Info("Hidden client {}", a->getWindow());
+	XMoveWindow(this->dpy, a->getWindow(), a->getPosition().x - this->screenwidth, a->getPosition().y - this->screenheight);
+    }
+
+}
+
+
+auto X11Abstraction::showWindow(Window w) -> void {
+    this->setClientState(w, ATOMNAME::WindowNormalState);
+    XMapWindow(this->dpy, w);
+    Logger::GetInstance().Info("Mapped Client {} from showWindow", w);
+} 
+
+
+
+

@@ -97,11 +97,13 @@ auto ManageRequestAction::execute() -> void {
 
     xc.subscribetoWindow(e.window, EnterWindowMask|SubstructureNotifyMask|FocusChangeMask|PropertyChangeMask);
 
+    xc.showWindow(e.window);
+
     
 
     if (Monitor* m = c->getOwner().getHolder()) {
 	m->arrange();
-	xc.drawMonitor(*m);
+	//xc.drawMonitor(*m);
     }
 
     xc.configureClient(c);
@@ -125,6 +127,10 @@ auto UnmanageRequestAction::execute() -> void {
 
 
 
+    if (ev.send_event == true) {
+	Log.Info("Event was send, aborting");
+	return;
+    }
 
 
     Client *c = WMM.getClient(ev.window);
@@ -147,7 +153,7 @@ auto UnmanageRequestAction::execute() -> void {
    if (t.getHolder() != nullptr) {
 
        t.getHolder()->arrange();
-       xc.drawMonitor(*t.getHolder());
+       //xc.drawMonitor(*t.getHolder());
    }
 
    xc.updateClientList();
@@ -188,5 +194,27 @@ auto EnterNotifyAction::execute() -> void {
     Log.Info("Done with EnterNotifyAction");
 }
 
+
+
+auto DestroyNotifyAction::execute() -> void {
+
+    
+    auto& Log = Logger::GetInstance();
+    Log.Info("Inside DestroyNotifyAction");
+
+    XDestroyWindowEvent e = std::get<XEvent*>(this->Arg)->xdestroywindow;
+
+    Client* c = WindowManagerModel::getInstance().getClient(e.window);
+
+
+    if (c) {
+
+	WindowManagerModel::getInstance().unmanageWindow(c->getWindow());
+	Log.Info("Unmanaged Window");
+    }
+
+    ;
+
+}
 
 

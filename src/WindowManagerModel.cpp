@@ -68,7 +68,9 @@ auto WindowManagerModel::moveClienttoTopic(Window w, Topic& t) -> void {
 auto WindowManagerModel::moveTopictoMonitor(Topic& topic, Monitor& monitor) -> void {
 
 
-        if (topic.getHolder() == &monitor) return;
+        if (topic.getHolder() == &monitor) {
+	    Logger::GetInstance().Warn("Topic already displayed on this monitor");
+	    return;}
 
         if (monitor.getCurrent() != nullptr) {
 
@@ -79,8 +81,10 @@ auto WindowManagerModel::moveTopictoMonitor(Topic& topic, Monitor& monitor) -> v
             old->setHolder(orig);
 
 
-            if(orig != nullptr)
+            if(orig != nullptr) {
+		Logger::GetInstance().Info("Topic was displayed, swapping");
                 orig->setCurrent(old);
+	    }
 
             
 
@@ -180,8 +184,10 @@ auto WindowManagerModel::getTopicCount() const -> decltype(topics.size()) {
 auto WindowManagerModel::getTopic(u_int topicnumber) const -> Topic* {
 
 
-    if (topicnumber >= this->getTopicCount())
+    if (topicnumber >= this->getTopicCount()) {
+	Logger::GetInstance().Info("Topicnumber is to large");
         return this->topics[0].getPointer();
+    }
 
     else
         return this->topics[topicnumber].getPointer();

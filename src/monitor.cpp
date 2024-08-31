@@ -116,15 +116,19 @@ auto Monitor::arrange() -> void {
     Log.Info("Inside {}", __func__);
 
 
-    auto clients = this->current->getClients();
+    auto& clients = this->current->getClients();
 
     std::vector<Client*> new_clients;
+
+    Log.Info("clients count = {}, original = {} from Topic = {}  ", clients.size(), this->getCurrent()->getClients().size(), this->current->getName() );
 
 
     Log.Info("Prepare to filter");
 
 
-    auto new_end = std::copy_if(clients.begin(), clients.end(), std::back_inserter(new_clients), [&](Client* c) { return  c->isVisible() == true;});
+    auto new_end = std::copy_if(clients.begin(), clients.end(), std::back_inserter(new_clients), [&](Client* c) {
+	    Logger::GetInstance().Info("Checking Client{}", c->getWindow());
+		    return  c->isVisible() == true;});
 
     u_int size = new_clients.size();
 

@@ -33,6 +33,10 @@ struct Dimensions;
 
             Topic(Topic&& other);
 
+	    Topic(Topic& other)  = delete;
+	    Topic& operator=(Topic& other) = delete;
+	    Topic& operator=(Topic&& other) = delete;
+
 
             /**
              * @brief get Clients belonging to Topic
@@ -113,7 +117,7 @@ struct Dimensions;
              * @brief chek wether client belongs to the topic
              * */
         inline bool containsClient(Client& client) const {
-            for (auto c : clients) {
+            for (auto& c : clients) {
                 if(c == &client)
                     return true;
             }

@@ -25,7 +25,11 @@ namespace Wind {
 	NetDesktopNames,
 	NetClientList,
 	NetCurrentDesktop,
-	NetSupported
+	NetSupported,
+	UTF8String,
+	WindowState,
+	WindowNormalState,
+	WindowIconicState,
     };
 
 
@@ -135,6 +139,17 @@ namespace Wind {
 	    void seturgentColor(std::string);
 
 	    void configureClient(Client* c);
+
+	    void ignoreErrors();
+	    void acivateErrors();
+
+	    void hideTopic(Topic *);
+
+	    void unmapwindow(Window w);
+	    
+	    void showWindow(Window w);
+	    
+	    void setClientState(Window w, ATOMNAME state);
 
 	private:
 

@@ -1,6 +1,8 @@
 #include "Logger.h"
 #include <ConcreteActions.h>
 #include <X11/Xlib.h>
+#include <cassert>
+#include <cstddef>
 #include <cstdio>
 #include <memory>
 #include <run.h>
@@ -220,7 +222,7 @@ auto LayoutSwitchAction::execute() -> void {
     }
 
     m->arrange();
-    X11Abstraction::getInstance().drawMonitor(*m);
+    //X11Abstraction::getInstance().drawMonitor(*m);
 
     
 }
@@ -230,6 +232,88 @@ auto LayoutSwitchAction::operator()() -> void {
     this->execute();
 }
 
+
+
+auto TopicSwitchAction::name() -> std::string {
+    return "SwitchTopic";
+}
+
+auto TopicSwitchAction::wantArgument() -> bool {
+    return true;
+}
+
+
+auto TopicSwitchAction::clone() -> std::unique_ptr<Action> {
+    return std::unique_ptr<Action>(new TopicSwitchAction);
+}
+
+
+auto TopicSwitchAction::operator()() -> void {
+    this->execute();
+}
+
+
+auto TopicSwitchAction::execute() -> void {
+
+
+    unsigned long target = static_cast<unsigned long>(std::get<int>(this->Arg));
+
+
+    auto& Log = Logger::GetInstance();
+    auto& WMM = WindowManagerModel::getInstance();
+    auto& xc = X11Abstraction::getInstance();
+
+    unsigned long orig_count = WMM.getTopic(target)->getClients().size();
+    unsigned long orig_old = WMM.getFocusedMon()->getCurrent()->getClients().size();
+    Log.Info("Inside TopicSwitchAction, target = {}, Topic = {} ", target, WMM.getTopic(target)->getName());
+    Log.Info("Currenlty focused Topic = {}", WMM.getFocusedMon()->getCurrent()->getName());
+    Log.Info("Clientcount of current monitor = {}", WMM.getFocusedMon()->getCurrent()->getClients().size());
+
+    if (target > WMM.getTopicCount()) {
+	Log.Warn("Topicnumber to big");
+	return;
+    }
+
+    Log.Info("Clientcount of current monitor = {}", WMM.getFocusedMon()->getCurrent()->getClients().size());
+    Topic* old = WMM.getFocusedMon()->getCurrent();
+    Topic* targetTopic = WMM.getTopic(target);
+    Log.Info("Clientcount of other topic = {}",old->getClients().size());
+    xc.hideTopic(old);
+    xc.hideTopic(targetTopic);
+
+    Log.Info("Clientcount of current monitor = {}", WMM.getFocusedMon()->getCurrent()->getClients().size());
+    Log.Info("Clientcount of other topic = {}",old->getClients().size());
+    WMM.moveTopictoMonitor(*WMM.getTopic(target), *WMM.getFocusedMon());
+
+    Log.Info("Clientcount of current monitor = {}", WMM.getFocusedMon()->getCurrent()->getClients().size());
+    Log.Info("Clientcount of other topic = {}",old->getClients().size());
+    Log.Info("Now focused Topic = {}", WMM.getFocusedMon()->getCurrent()->getName());
+
+    Log.Info("Old = {}, targetTopic = {}, arranging targetTopic definetly", old->getName(), targetTopic->getName());
+
+    WMM.getFocusedMon()->arrange();
+    if (old->getHolder()) {
+	old->getHolder()->arrange();
+	Logger::GetInstance().Info("Arranging other monitor too");
+    }
+    unsigned int new_count = WMM.getTopic(target)->getClients().size();
+    unsigned int new_old = old->getClients().size();
+
+    Log.Info("orig_count = {}, new_count = {}", orig_count,new_count);
+    Log.Info("orig_old = {}, new_old = {}", orig_old, new_old);
+
+
+    assert(orig_count == new_count);
+
+
+    WMM.focusClient();
+    xc.setfocus(nullptr);
+
+    Log.Info("Done with TopicSwitchAction");
+
+
+
+}
 // other Actions
 
 
