@@ -249,7 +249,7 @@ auto X11Abstraction::drawMonitor(Monitor& m) -> void {
 
     this->hideTopic(m.getCurrent());
 
-    for (auto a : m.getCurrent()->getClients()) {
+    for (auto a : m.getCurrent()->getStack()) {
 
 	XWindowChanges wc;
 	wc.x = a->getPosition().x;
@@ -261,7 +261,7 @@ auto X11Abstraction::drawMonitor(Monitor& m) -> void {
 
 
     Log.Info("Done calling XMoveResizeWindow");
-    auto c = m.getCurrent()->getClients();
+    auto c = m.getCurrent()->getStack();
     for(auto a = c.rbegin(); a != c.rend(); a++){
 
 	XRaiseWindow(this->dpy, (*a)->getWindow());
@@ -287,7 +287,7 @@ auto X11Abstraction::restack(Monitor&m) -> void {
 
     XWindowChanges wc;
 
-    auto& clients = m.getCurrent()->getClients();
+    auto& clients = m.getCurrent()->getStack();
 
     if (clients.empty()) {
 	Log.Info("No clients to restack");

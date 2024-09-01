@@ -8,10 +8,10 @@
 using namespace Wind;
 
 Topic::Topic(std::string name) : name(name),
-    holder(nullptr), focusedclient(nullptr), master_fact(0.5){
+    holder(nullptr), focusedclient(nullptr), fullscreen(nullptr), master_fact(0.5){
 	Logger::GetInstance().Info("Creating topic");}
 
-Topic::Topic(Topic&& other) : name(std::move(other.name)), holder(other.holder), focusedclient(other.focusedclient), master_fact(other.master_fact), clients(other.clients) {
+Topic::Topic(Topic&& other) : name(std::move(other.name)), holder(other.holder), focusedclient(other.focusedclient), master_fact(other.master_fact), clients(other.clients), fullscreen(other.fullscreen) {
 Logger::GetInstance().Info("Moving topic");
 }
 
@@ -40,6 +40,7 @@ auto Topic::takeOwnership(Client& c ) -> void {
 
     Logger::GetInstance().Info("Client elligble");
     clients.push_front(&c);
+    stack.push_front(&c);
     c.setOwner(*this);
 
     Logger::GetInstance().Info("{} now has {} clients", this->name, clients.size());
@@ -52,10 +53,14 @@ auto Topic::releaseOwnership(Client& c) ->  const Client& {
 
     clients.remove(&c);
 
+    stack.remove(&c);
     return c;
 
 }
 
+auto Topic::getStack() -> decltype(stack)& {
+    return stack;
+}
 
 
 auto Topic::getName() const -> std::string {
@@ -70,8 +75,8 @@ auto Topic::setFocus(Client* c) -> bool {
 	Logger::GetInstance().Warn("The currently focused client on Model site is {}", c ? c->getWindow() : 0);
 
         if (c) {
-            clients.remove(c);
-            clients.push_front(c);
+            stack.remove(c);
+            stack.push_front(c);
 	    return true;
         }
     } else {

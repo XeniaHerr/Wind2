@@ -342,6 +342,7 @@ auto FullscreenAction::execute() -> void {
     auto& WMM = WindowManagerModel::getInstance();
 
     Client* c = WMM.getFocusedMon()->getCurrent()->getFocused();
+    Logger::GetInstance().Info("Inside FullscreenAction");
 
 
 
@@ -370,6 +371,12 @@ auto FullscreenAction::execute() -> void {
 // 
 //	     }
 
+    }
+
+    else {
+	if (!c)
+	    return;
+	Logger::GetInstance().Info("This is not met: {}",c->isManaged() ? "Managed" : "Visibility" );
     }
 }
 // other Actions

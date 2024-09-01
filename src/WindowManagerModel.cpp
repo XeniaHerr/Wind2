@@ -147,16 +147,16 @@ auto WindowManagerModel::focusClient()-> bool {
 	focusedmon = monitors[0].getPointer();
 
     //if (focusedmon->getCurrent()->getFocused() == nullptr) {
-	Log.Info("Currently no Client focused, searching for next valid");
-	if (focusedmon->getCurrent()->getClients().size() > 0)  {
-	    Log.Info("Found client to focus");
-	    return focusedmon->getCurrent()->setFocus(focusedmon->getCurrent()->getClients().front());
+    Log.Info("Currently no Client focused, searching for next valid");
+    if (focusedmon->getCurrent()->getStack().size() > 0)  {
+	Log.Info("Found client to focus");
+	return focusedmon->getCurrent()->setFocus(focusedmon->getCurrent()->getClients().front());
 
-	}
-	else
-	    return focusedmon->getCurrent()->setFocus(nullptr);
+    }
+    else
+	return focusedmon->getCurrent()->setFocus(nullptr);
 
-//	}
+    //	}
     return false;
 }
 

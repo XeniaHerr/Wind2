@@ -43,6 +43,7 @@ struct Dimensions;
              * @return clients list reference to Clientpointer*/
             std::list<Client*>& getClients();
 
+            std::list<Client*>& getStack();
 
             /**
              * @deprecated*/
@@ -97,8 +98,8 @@ struct Dimensions;
 
             std::string name; /**< Name of the Topic, muust be unique*/
 
-            Client* focusedclient; /**< Client that has the focus, may be null*/
-
+            Client* focusedclient, /**< Client that has the focus, may be null*/
+		    *fullscreen;
 
             Monitor* holder; /**< Monitor Topic is currenlty displayed, may be null*/
 
@@ -113,6 +114,11 @@ struct Dimensions;
              *
              * List because easier poping and pushing. May also serve as a focus stack. TODO: Implement focus stack*/
             std::list<Client*> clients;
+
+	    /**
+	     * Focusstack cannot be implemented with clients.
+	     * */
+	    std::list<Client*> stack;
 
             /*
              * @brief chek wether client belongs to the topic
