@@ -68,3 +68,6 @@ Keys:
     Action: SwitchTopic
     Int: 2
     Modifiers: [Mod]
+  - Key: f
+    Action: Fullscreen
+    Modifiers: [Mod, Shift]

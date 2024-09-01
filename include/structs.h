@@ -75,7 +75,9 @@ enum Windowtype {
     DOCK,
     DIALOG,
     WIDGET,
-    SPLASH
+    SPLASH,
+    PANEL,
+    NORMAL
 };
 }
 

@@ -6,12 +6,66 @@
 #include "Monitor.h"
 #include "WindowManagerModel.h"
 #include "X11_Abstraction.h"
+#include "structs.h"
 #include <DefaultRenderer.h>
 #include <Monitor.h>
 
 
 
 using namespace Wind;
+
+void handle_client_type(Client*c, Windowtype type) {
+
+auto& xc = X11Abstraction::getInstance();
+auto& WMM = WindowManagerModel::getInstance();
+auto& Log = Logger::GetInstance();
+
+Monitor *m;
+switch(type) {
+
+
+    
+    case Windowtype::SPLASH:
+	c->setManaged(false);
+	c->setFloating();
+	break;
+    case Windowtype::ANYTYPE:
+    case Windowtype::BAR:
+    case Windowtype::DIALOG:
+    case Windowtype::PANEL:
+    case Windowtype::DOCK:
+    case Windowtype::WIDGET:
+	Log.Info("Found type other than normal");
+	c->setFloating();
+
+    case Windowtype::NORMAL:
+
+	Log.Info("Handling normal window");
+    xc.subscribetoWindow(c->getWindow(), EnterWindowMask|SubstructureNotifyMask|FocusChangeMask|PropertyChangeMask);
+
+    xc.showWindow(c->getWindow());
+
+    Log.Info("window shown");
+    
+    if (( m = c->getOwner().getHolder()) != nullptr)
+	m->arrange();
+
+    Log.Info("Configuring Client");
+
+    xc.configureClient(c);
+
+    xc.prependClientList(c->getWindow());
+
+    Log.Info("Focussing client");
+    WMM.focusClient();
+
+    xc.setfocus(c);
+
+	break;
+}
+}
+
+
 
 // Handle Key Events
 
@@ -55,12 +109,13 @@ auto keyHandlerAction::wantArgument() -> bool {
 auto ManageRequestAction::execute() -> void {
 
     auto& Log = Logger::GetInstance();
+    auto& xc = X11Abstraction::getInstance();
+    auto& WMM = WindowManagerModel::getInstance();
 
     Log.Info("Inside ManagingRequestAction");
 
     XMapEvent e = std::get<XEvent*>(Arg)->xmap;
 
-    auto& xc = X11Abstraction::getInstance();
 
     auto wa = xc.getWindowAttributes(e.window);
 
@@ -71,7 +126,6 @@ auto ManageRequestAction::execute() -> void {
     Log.Info("Client wants to be managed");
 
 
-    auto& WMM = WindowManagerModel::getInstance();
 
     Client * c = WMM.manageWindow(e.window);
 
@@ -88,6 +142,14 @@ auto ManageRequestAction::execute() -> void {
 
     Log.Info("Got name = {} and class = {}", c->getName(), c->getClass());
 
+
+    Windowtype windowtype = xc.getWindowType(e.window);
+
+    Log.Info("Got Type");
+
+    c->setType(windowtype);
+
+
     
     c->attachRule();
     Log.Info("Searched for Rule");
@@ -95,24 +157,10 @@ auto ManageRequestAction::execute() -> void {
 
     Log.Info("Rules got attached");
 
-    xc.subscribetoWindow(e.window, EnterWindowMask|SubstructureNotifyMask|FocusChangeMask|PropertyChangeMask);
 
-    xc.showWindow(e.window);
+    //Entrypoint for handle type
 
-    
-
-    if (Monitor* m = c->getOwner().getHolder()) {
-	m->arrange();
-	//xc.drawMonitor(*m);
-    }
-
-    xc.configureClient(c);
-
-    xc.prependClientList(e.window);
-
-    WMM.focusClient();
-
-    xc.setfocus(c);
+    handle_client_type(c, windowtype);
 
 }
 
@@ -215,6 +263,70 @@ auto DestroyNotifyAction::execute() -> void {
 
     ;
 
+}
+
+
+auto MappingNotifyAction::execute() -> void {
+
+
+    XMappingEvent e = std::get<XEvent*>(this->Arg)->xmapping;
+
+
+
+    XRefreshKeyboardMapping(&e);
+
+    if (e.request == MappingKeyboard)
+	X11Abstraction::getInstance().listenforKeys(InputManager::GetInstance().getKeys());
+
+}
+
+
+auto ConfigureRequestAction::execute() -> void {
+
+
+    XConfigureRequestEvent e =  std::get<XEvent*>(this->Arg)->xconfigurerequest;
+
+    auto& WMM = WindowManagerModel::getInstance();
+    auto& xc = X11Abstraction::getInstance();
+    auto& Log = Logger::GetInstance();
+
+    Log.Info("Inside ConfigureRequestAction");
+
+    Client* c = WMM.getClient(e.window);
+
+
+    if(!c)
+	return;
+
+    if (!c->isFloating()) {
+
+	Log.Info("Client is not floating, usinf default configuration");
+	xc.configureClient(c);
+    }
+    else {
+	Position op = c->getPosition();
+	Dimensions od = c->getCurrentDimensions();
+
+	if (e.value_mask & CWWidth)
+	    od.width = e.width;
+	if (e.value_mask & CWHeight)
+	    od.height = e.height;
+	if (e.value_mask & CWX)
+	    op.x = e.x;
+	if (e.value_mask & CWY)
+	    op.y = e.y;
+
+
+	c->setPosition(op);
+	c->setDimensions(od);
+	c->applyRule();
+
+	xc.drawClient(*c);
+
+
+	//Render the client;
+
+    }
 }
 
 

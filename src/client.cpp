@@ -20,10 +20,11 @@ Client::Client(Window win) : _window(win) {
     this->is_orphan = true;
     this->is_floating = false;
     this->is_visible = true; //Default
+    this->_owner  = nullptr;
 
 
-//    if constexpr (EnableRules)
-//       this->attachRule();
+    //    if constexpr (EnableRules)
+    //       this->attachRule();
 
 }
 
@@ -42,13 +43,13 @@ Client::Client(const Client&& other) : name(std::move(other.name)), windowclass(
 auto Client::setDimensions(Dimensions dimensions) -> void {
     this->oldDimension = this->currentDimension;
     this->currentDimension = dimensions;
-    
+
 }
 
 auto Client::setDimensions(u_int32_t width, u_int32_t height) -> void {
     this->oldDimension = this->currentDimension;
     this->currentDimension = Dimensions(width,height);
-    
+
 }
 
 auto Client::getCurrentDimensions() const -> decltype(currentDimension) {
@@ -74,7 +75,7 @@ auto Client::setOwner(Topic& t) -> void {
     this->_owner = &t;
 
     if(isOrphan()) {
-        this->is_orphan = false;
+	this->is_orphan = false;
 	Logger::GetInstance().Info("Client {} no longer an orphan", this->name);
     }
 
@@ -117,9 +118,13 @@ auto Client::isVisible() const -> bool {
 
 auto Client::toggleFloating() -> void {
     if (isFloating()) {
-        this->is_floating = false;
+	this->is_floating = false;
     } else
-        this->is_floating = true;
+	this->is_floating = true;
+}
+
+auto Client::setFloating() -> void {
+this->is_floating = true;
 }
 
 
@@ -172,10 +177,10 @@ auto Client::attachRule() -> void {
 
 
     for (auto & a : all_rules)
-        if ((value = a.get().isApplicable("Name", "Class", Windowtype::ANYTYPE)) > level) {
-            level = value;
-            r = a.getPointer();
-    }
+	if ((value = a.get().isApplicable("Name", "Class", Windowtype::ANYTYPE)) > level) {
+	    level = value;
+	    r = a.getPointer();
+	}
 
     this->setRule(r->content);
     //When a new Rule is attached, then the rule should also be used
@@ -218,49 +223,77 @@ auto Client::applyRule() -> void {
     Log.Info("setTargetDimensions to {},{}", targetDimension.width, targetDimension.height);
 
     if (rules.maxSize.has_value()) {
-    targetDimension.width = std::min(targetDimension.width, rules.maxSize->width);
-    targetDimension.height = std::min(targetDimension.height, rules.maxSize->height);
-    Log.Info("setTargetDimensions again to {},{}", targetDimension.width, targetDimension.height);
+	targetDimension.width = std::min(targetDimension.width, rules.maxSize->width);
+	targetDimension.height = std::min(targetDimension.height, rules.maxSize->height);
+	Log.Info("setTargetDimensions again to {},{}", targetDimension.width, targetDimension.height);
     }
 
 
     if (rules.keepAspectratio) {
 	Log.Info("Apply getAspectratio");
 
-        if (targetDimension.height != currentDimension.height) {
+	if (targetDimension.height != currentDimension.height) {
 
-        double_t ratio = static_cast<double_t>(currentDimension.width) / currentDimension.height;
+	    double_t ratio = static_cast<double_t>(currentDimension.width) / currentDimension.height;
 
-        targetDimension.width = ratio * targetDimension.height;
+	    targetDimension.width = ratio * targetDimension.height;
 
-        } else if (targetDimension.width != currentDimension.width) {
+	} else if (targetDimension.width != currentDimension.width) {
 
-            double_t ratio = static_cast<double_t>(currentDimension.height) / currentDimension.width;
+	    double_t ratio = static_cast<double_t>(currentDimension.height) / currentDimension.width;
 
-            targetDimension.height = ratio * currentDimension.width;
-        }
+	    targetDimension.height = ratio * currentDimension.width;
+	}
     }
+    //If we already have an owner, we do nothing here
+    if (this->is_orphan) {
+	Topic *t;
+	if (rules.targetTopic != std::nullopt) {
+	    Log.Info("Found a default topic");
 
-    Topic *t;
-    if (rules.targetTopic != std::nullopt) {
-	Log.Info("Found a default topic");
-
-	 t  = WindowManagerModel::getInstance().getTopic(rules.targetTopic.value());
-    }
-    else {
-	Log.Info("No default Topic found, using current topic");
+	    t  = WindowManagerModel::getInstance().getTopic(rules.targetTopic.value());
+	}
+	else { 
+	    Log.Info("No default Topic found, using current topic");
 	    t = WindowManagerModel::getInstance().getFocusedMon()->getCurrent();
-    }
+	}
 
 	//this->_owner = t;
 
 	Log.Info("Take ownership");
 	if (t != nullptr)
-	t->takeOwnership(*this);
+	    t->takeOwnership(*this);
 	else
 	    Log.Error("Nullptr found");
 
 	Log.Info("Ownership set successfully");
 
+    } else {
+	Log.Info("Client already owned: This is {}", !this->is_orphan ? "True" : "False");
+    }
 
+}
+
+
+auto Client::setManaged(bool b) -> void {
+    this->is_managed = b;
+} 
+
+
+auto Client::isManaged() const ->  bool {
+    return this->is_managed;
+}
+
+
+auto Client::toggleFullscreen() -> void {
+
+    if (this->is_fullscreen)
+	this->is_fullscreen = false;
+    else
+	this->is_fullscreen = true;
+}
+
+
+auto Client::isFullscreen() const -> bool {
+    return this->is_fullscreen;
 }

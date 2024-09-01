@@ -88,6 +88,7 @@ std::unique_ptr<Action> StringtoAction(std::string s) {
 	all_actions.emplace_back(new closeAction);
 	all_actions.emplace_back(new LayoutSwitchAction);
 	all_actions.emplace_back(new TopicSwitchAction);
+	all_actions.emplace_back(new FullscreenAction);
 	assert(all_actions[0]->clone() != nullptr);
 
 	for (int i = 0; i < all_actions.size(); i++) {

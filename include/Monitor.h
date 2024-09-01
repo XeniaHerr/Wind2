@@ -77,6 +77,11 @@ namespace Wind {
 
             void prevLayout();
 
+
+	    void setFullscreen(bool);
+
+	    bool isFullscreen();
+
         private:
 
             Topic* current;  /**< Currently displayed topic, may not be null*/
@@ -94,6 +99,8 @@ namespace Wind {
 
 
             bool is_active; //Where do i want to use this variable?
+
+	    bool fullscreen_mode;
 
 
             u_int8_t barHeight = 0; /**< Barheight TODO: SHould this belong to config?*/

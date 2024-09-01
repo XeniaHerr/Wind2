@@ -1,4 +1,5 @@
 #include "Action.h"
+#include <X11/X.h>
 
 
 
@@ -65,5 +66,23 @@ class DestroyNotifyAction : public Action {
 	void execute() override;
 
 	~DestroyNotifyAction() {}
+};
+
+
+class MappingNotifyAction : public Action {
+
+    public:
+	void execute() override;
+
+	~MappingNotifyAction() {}
+};
+
+
+class ConfigureRequestAction: public Action {
+
+    public:
+	void execute() override;
+
+	~ConfigureRequestAction() {}
 };
 }

@@ -314,6 +314,64 @@ auto TopicSwitchAction::execute() -> void {
 
 
 }
+
+
+
+auto FullscreenAction::name() -> std::string {
+    return "Fullscreen";
+}
+
+
+auto FullscreenAction::wantArgument() -> bool {
+    return false;
+}
+
+
+auto FullscreenAction::clone() -> std::unique_ptr<Action> {
+    return std::unique_ptr<Action>(new FullscreenAction);
+}
+
+
+
+auto FullscreenAction::operator()() -> void {
+    this->execute();
+}
+
+
+auto FullscreenAction::execute() -> void {
+    auto& WMM = WindowManagerModel::getInstance();
+
+    Client* c = WMM.getFocusedMon()->getCurrent()->getFocused();
+
+
+
+    if (c && c->isManaged() && c->isVisible()) {
+	c->toggleFullscreen();
+	Logger::GetInstance().Info("Client is now {}", c->isFullscreen() ? "Fullscreen" : "Normal");
+
+	WMM.getFocusedMon()->toggleBar();
+	WMM.getFocusedMon()->arrange();
+	if (c->isFullscreen()) {
+	    X11Abstraction::getInstance().sendClientAtom(c->getWindow(), ATOMNAME::WindowFullscreenState);
+	}
+	else {
+	    X11Abstraction::getInstance().removeClientAtom(c->getWindow(), ATOMNAME::WindowFullscreenState);
+	}
+//	if (c->isFullscreen()) {
+//	c->setDimensions(WMM.getFocusedMon()->getDimensions());
+//	c->setPosition(WMM.getFocusedMon()->getPosition());
+//	X11Abstraction::getInstance().drawClient(*c);
+//	}
+//	else {
+//	c->setDimensions(c->getOldDimensions());
+//	c->setPosition(c->getOldPosition());
+//	X11Abstraction::getInstance().drawMonitor(*WMM.getFocusedMon());
+//	WMM.getFocusedMon()->arrange();
+// 
+//	     }
+
+    }
+}
 // other Actions
 
 

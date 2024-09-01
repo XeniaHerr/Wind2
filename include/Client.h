@@ -53,6 +53,11 @@ namespace Wind {
              * @brief Make Client fullscreen*/
             void setFullscreen();
 
+
+	    void toggleFullscreen();
+
+	    bool isFullscreen() const;
+
             /**
              * @brief Set New Dimensions
              * @param dimensions new Dimensions*/
@@ -192,6 +197,13 @@ namespace Wind {
              * Search all ruls and find the rule that fits the best. Defaults to the dummyrule*/
             void attachRule();
 
+	    void setFloating();
+
+	    void setManaged(bool);
+
+	    bool isManaged() const;
+
+
         private:
 
             Window _window; /**< X11 Window ID */
@@ -212,7 +224,8 @@ namespace Wind {
             bool is_floating, /**< Floating Status*/ 
                  is_visible,  /**< Visibility status*/
                  is_fullscreen,  /**Fullscreen Status*/
-                 is_orphan; /**< Has Owner?*/
+                 is_orphan, /**< Has Owner?*/
+		 is_managed; /**< Should be manipuleated?*/
 
             Rule::RuleContent rules;
 
@@ -222,6 +235,8 @@ namespace Wind {
             std::string windowclass; /**< Class the Window belongs to*/
 
             Windowtype type; /**< Type of the Window @see Windowtype*/
+
+
 
 
 

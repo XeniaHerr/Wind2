@@ -30,6 +30,14 @@ namespace Wind {
 	WindowState,
 	WindowNormalState,
 	WindowIconicState,
+	WindowWithdrawnState,
+	WindowFullscreenState,
+	WindowType,
+	WindowTypeNormal,
+	WindowTypePanel,
+	WindowTypeDialog,
+	WindowTypeSplash,
+	WindowTypeDock,
     };
 
 
@@ -87,6 +95,11 @@ namespace Wind {
 	    void setClientProp(Window w, ATOMNAME atom, std::vector<std::string>& val);
 	    void setClientProp(Window w, ATOMNAME atom, std::vector<Window>& windows);
 
+
+	    Windowtype getWindowType(Window w);
+
+	    Atom getAtom(ATOMNAME name);
+
 	    std::pair<std::string, std::string> getWindowNameClass(Window w);
 
 	    void setAtomString(std::string val);
@@ -95,6 +108,7 @@ namespace Wind {
 
 
 	    void drawMonitor(Monitor& m);
+	    void drawClient(Client& c);
 
 	    void MapWindow(Window w);
 
@@ -144,6 +158,7 @@ namespace Wind {
 	    void acivateErrors();
 
 	    void hideTopic(Topic *);
+	    void hideClient(Client& c);
 
 	    void unmapwindow(Window w);
 	    

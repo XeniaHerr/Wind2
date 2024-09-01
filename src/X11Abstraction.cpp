@@ -498,6 +498,14 @@ auto X11Abstraction::hideTopic(Topic* t) -> void {
 
 }
 
+auto X11Abstraction::hideClient(Client& c) -> void {
+
+	this->setClientState(c.getWindow(), ATOMNAME::WindowIconicState);
+	Logger::GetInstance().Info("Hidden client {}", c.getWindow());
+	XMoveWindow(this->dpy, c.getWindow(), c.getPosition().x - this->screenwidth, c.getPosition().y - this->screenheight);
+
+}
+
 
 auto X11Abstraction::showWindow(Window w) -> void {
     this->setClientState(w, ATOMNAME::WindowNormalState);
@@ -506,5 +514,69 @@ auto X11Abstraction::showWindow(Window w) -> void {
 } 
 
 
+auto X11Abstraction::getWindowType(Window w) -> Windowtype {
 
+    auto& Log = Logger::GetInstance();
+    Atom ret, dummy;
+
+    unsigned long u, u2 ;
+    int i;
+    
+
+    unsigned char* ret_p = nullptr;
+
+
+    if (Success != XGetWindowProperty(this->dpy, w, atoms[ATOMNAME::WindowType], 0L, sizeof ret, false, XA_ATOM, &dummy, &i , &u, &u2, &ret_p) || !ret_p)
+	return Windowtype::NORMAL;
+
+    Log.Info("Got a type");
+
+    ret = *(Atom*)ret_p;
+
+
+    if (ret == atoms[ATOMNAME::WindowTypeNormal])
+	return Windowtype::NORMAL;
+    else if (ret == atoms[ATOMNAME::WindowTypeDialog])
+	return Windowtype::DIALOG;
+    else if (ret == atoms[ATOMNAME::WindowTypePanel])
+	return Windowtype::PANEL;
+    else if (ret == atoms[ATOMNAME::WindowTypeDock])
+	return Windowtype::DOCK;
+    else if (ret == atoms[ATOMNAME::WindowTypeSplash])
+	return Windowtype::SPLASH;
+
+
+    Log.Info("Type fell through");
+    return Windowtype::NORMAL;
+
+}
+
+
+auto X11Abstraction::getAtom(ATOMNAME name) -> Atom {
+
+    if (atoms[name])
+	return atoms[name];
+    else
+	return 0;
+
+
+}
+
+
+auto X11Abstraction::drawClient(Client& c) -> void {
+
+
+    this->hideClient(c);
+	XWindowChanges wc;
+	wc.x = c.getPosition().x;
+	wc.y = c.getPosition().y;
+	wc.width = c.getCurrentDimensions().width;
+	wc.height = c.getCurrentDimensions().height;
+	XConfigureWindow(this->dpy, c.getWindow(), CWX|CWY|CWWidth|CWHeight, &wc);
+
+	if (c.isFloating() || c.isFullscreen())
+	    XRaiseWindow(this->dpy, c.getWindow());
+
+	this->showWindow(c.getWindow());
+}
 

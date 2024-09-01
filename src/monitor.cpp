@@ -23,6 +23,7 @@ Monitor::Monitor(u_int32_t x, u_int32_t y) : realDimensions(x,y) {
     usableDimensions.height = y - barHeight; //DO some calculations first;
 
     is_active = false;
+    fullscreen_mode = false;
 
 
     //currentArranger = &m;
@@ -118,6 +119,8 @@ auto Monitor::arrange() -> void {
 
     auto& clients = this->current->getClients();
 
+    DefaultRenderer r;
+
     std::vector<Client*> new_clients;
 
     Log.Info("clients count = {}, original = {} from Topic = {}  ", clients.size(), this->getCurrent()->getClients().size(), this->current->getName() );
@@ -128,7 +131,7 @@ auto Monitor::arrange() -> void {
 
     auto new_end = std::copy_if(clients.begin(), clients.end(), std::back_inserter(new_clients), [&](Client* c) {
 	    Logger::GetInstance().Info("Checking Client{}", c->getWindow());
-		    return  c->isVisible() == true;});
+		    return  (c->isVisible() == true) && (c->isFloating() == false);});
 
     u_int size = new_clients.size();
 
@@ -147,8 +150,14 @@ auto Monitor::arrange() -> void {
     }
 
 
+    Client* c;
+    if ((c = this->current->getFocused()) && (c->isFullscreen())) {
+	c->setTargetDimensions(this->getDimensions());
+	c->setTargetPositions(this->getPosition());
 
-    DefaultRenderer r;
+	Logger::GetInstance().Info("Found a window that wants to be fullscreen");
+	
+    }
     r.render(*this);
 
 }
@@ -190,3 +199,5 @@ auto Monitor::adjustforGapsandBorder(Dimensions& d, Position& p) -> void {
 auto Monitor::getSelector() -> ArrangerSelector& {
     return this->layouts;
 }
+
+

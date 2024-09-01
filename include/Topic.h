@@ -99,6 +99,7 @@ struct Dimensions;
 
             Client* focusedclient; /**< Client that has the focus, may be null*/
 
+
             Monitor* holder; /**< Monitor Topic is currenlty displayed, may be null*/
 
 

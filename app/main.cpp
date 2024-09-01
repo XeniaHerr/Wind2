@@ -76,6 +76,16 @@ int main() {
     xconnection.addAtom(ATOMNAME::WindowIconicState, "IconicState");
     xconnection.addAtom(ATOMNAME::WindowState, "WM_CHANGE_STATE");
 
+    xconnection.addAtom(ATOMNAME::WindowFullscreenState, "_NET_WM_STATE_FULLSCREEN");
+
+
+    xconnection.addAtom(ATOMNAME::WindowType, "_NET_WM_WINDOW_TYPE");
+    xconnection.addAtom(ATOMNAME::WindowTypeNormal, "_NET_WM_WINDOW_TYPE_NORMAL");
+    xconnection.addAtom(ATOMNAME::WindowTypeDock, "_NET_WM_WINDOW_TYPE_DOCK");
+    xconnection.addAtom(ATOMNAME::WindowTypeDialog, "_NET_WM_WINDOW_TYPE_DIALOG");
+    xconnection.addAtom(ATOMNAME::WindowTypeSplash, "_NET_WM_WINDOW_TYPE_SPLASH");
+    xconnection.addAtom(ATOMNAME::WindowTypePanel, "_NET_WM_WINDOW_TYPE_PANEL");
+
     xconnection.initAtoms();
     xconnection.setactiveColor(Config._configs.activeColor);
     xconnection.setpassiveColor(Config._configs.passiveColor);
@@ -88,6 +98,8 @@ int main() {
     runloop.setHandler(UnmapNotify, new UnmanageRequestAction);
     runloop.setHandler(EnterNotify, new EnterNotifyAction);
     runloop.setHandler(DestroyNotify, new DestroyNotifyAction);
+    runloop.setHandler(MappingNotify, new MappingNotifyAction);
+    runloop.setHandler(ConfigureRequest, new ConfigureRequestAction);
     //runloop.setHandler(UnMap, Action *act)
 
 
