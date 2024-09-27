@@ -41,6 +41,6 @@ add_subdirectory(dummy)
 
 add_subdirectory(test)
 
-add_subdirectory(app)
+#add_subdirectory(app)
 
 

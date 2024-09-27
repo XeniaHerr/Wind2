@@ -1,3 +1,4 @@
+#include "DefaultRenderer.h"
 #include "Logger.h"
 #include <ConcreteActions.h>
 #include <X11/Xlib.h>
@@ -11,6 +12,7 @@
 #include "WindowManagerModel.h"
 #include <unistd.h>
 #include <X11_Abstraction.h>
+#include <yaml-cpp/emittermanip.h>
 
 
 using namespace Wind;
@@ -263,7 +265,13 @@ auto TopicSwitchAction::execute() -> void {
     auto& WMM = WindowManagerModel::getInstance();
     auto& xc = X11Abstraction::getInstance();
 
+    Log.Info("Inside TopicSwitchAction, before infos");
+
+    if (WMM.getTopic(target) == nullptr || WMM.getFocusedMon() == nullptr ) {
+	Log.Warn("Nullptr found");
+    }
     unsigned long orig_count = WMM.getTopic(target)->getClients().size();
+    Log.Info("Passed");
     unsigned long orig_old = WMM.getFocusedMon()->getCurrent()->getClients().size();
     Log.Info("Inside TopicSwitchAction, target = {}, Topic = {} ", target, WMM.getTopic(target)->getName());
     Log.Info("Currenlty focused Topic = {}", WMM.getFocusedMon()->getCurrent()->getName());
@@ -379,6 +387,171 @@ auto FullscreenAction::execute() -> void {
 	Logger::GetInstance().Info("This is not met: {}",c->isManaged() ? "Managed" : "Visibility" );
     }
 }
+
+
+auto KeyMoveVertAction::name() -> std::string {
+
+    return "KeyMoveVert";
+}
+
+
+auto KeyMoveVertAction::operator()() -> void {
+    execute();
+}
+
+
+auto KeyMoveVertAction::execute() -> void {
+
+    int offset = std::get<2>(this->Arg);
+
+
+    auto& WMM = WindowManagerModel::getInstance();
+
+    auto *curc = WMM.getFocusedMon()->getCurrent()->getFocused();
+
+    if (!curc)
+	return;
+    if (!curc->isFloating()) {
+	curc->setFloating();
+	curc->getOwner().getHolder()->arrange();
+    }
+
+    Position old = curc->getPosition();
+
+
+    old.y += offset;
+
+
+    curc->setTargetPositions(old);
+    //curc->setPosition(old);
+    curc->applyRule();
+    DefaultRenderer r;
+	r.render(*curc->getOwner().getHolder());
+
+    X11Abstraction::getInstance().drawMonitor(*curc->getOwner().getHolder());
+
+
+
+}
+
+
+auto KeyMoveVertAction::wantArgument() -> bool {
+    return true;
+}
+
+
+auto KeyMoveVertAction::clone() -> std::unique_ptr<Action> {
+    return std::unique_ptr<Action>(new KeyMoveVertAction);
+}
+
+auto KeyMoveHorAction::name() -> std::string {
+
+    return "KeyMoveHor";
+}
+
+
+auto KeyMoveHorAction::operator()() -> void {
+    execute();
+}
+
+
+auto KeyMoveHorAction::execute() -> void {
+
+    
+
+    int offset = std::get<2>(this->Arg);
+
+
+    auto& WMM = WindowManagerModel::getInstance();
+
+    auto *curc = WMM.getFocusedMon()->getCurrent()->getFocused();
+
+    if (!curc)
+	return;
+
+    if (!curc->isFloating()) {
+	curc->setFloating();
+	curc->getOwner().getHolder()->arrange();
+    }
+
+    Position old = curc->getPosition();
+
+
+    old.x += offset;
+
+
+    curc->setTargetPositions(old);
+    //curc->setPosition(old);
+
+    curc->applyRule();
+    DefaultRenderer r;
+	r.render(*curc->getOwner().getHolder());
+
+    X11Abstraction::getInstance().drawMonitor(*curc->getOwner().getHolder());
+
+
+
+}
+
+
+auto KeyMoveHorAction::wantArgument() -> bool {
+    return true;
+}
+
+
+auto KeyMoveHorAction::clone() -> std::unique_ptr<Action> {
+    return std::unique_ptr<Action>(new KeyMoveHorAction);
+}
 // other Actions
+
+
+
+auto ToggleFloatingAction::name() -> std::string {
+    return "ToggleFloating";
+}
+
+
+auto ToggleFloatingAction::wantArgument() -> bool {
+    return false;
+}
+
+
+auto ToggleFloatingAction::clone() -> std::unique_ptr<Action> {
+    return std::unique_ptr<Action>(new ToggleFloatingAction);
+}
+
+
+auto ToggleFloatingAction::operator()() -> void {
+    this->execute();
+}
+
+
+auto ToggleFloatingAction::execute() -> void {
+
+
+    auto& Log = Logger::GetInstance();
+
+
+    Log.Info("Inside ToggleFloatingAction");
+
+    auto &WMM = WindowManagerModel::getInstance();
+
+
+
+    auto* curc = WMM.getFocusedMon()->getCurrent()->getFocused();
+
+
+    if (!curc) {
+	return;
+    }
+
+
+    curc->toggleFloating();
+    if (!curc->isFloating()) 
+	curc->getOwner().getHolder()->arrange();
+
+    X11Abstraction::getInstance().drawMonitor(*curc->getOwner().getHolder());
+}
+
 
 

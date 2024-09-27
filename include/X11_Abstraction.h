@@ -166,6 +166,8 @@ namespace Wind {
 	    
 	    void setClientState(Window w, ATOMNAME state);
 
+	    void initClientBorder(Client& c);
+
 	private:
 
 	    X11Abstraction();

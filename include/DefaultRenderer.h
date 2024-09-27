@@ -19,7 +19,9 @@ class DefaultRenderer : public AbstractRenderer {
 
 		a->setDimensions(a->getTargetDimension());
 		a->setPosition(a->getTargetPosition());
-		Logger::GetInstance().Info("Setting values for a client");
+
+		a->applyRule(); //Experimental
+		Logger::GetInstance().Info("Setting values for a client"); 
 	    }
 
 

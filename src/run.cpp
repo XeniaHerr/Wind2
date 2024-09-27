@@ -54,6 +54,18 @@ std::string MasktoString(long mask) {
 	    return "ClientMessage";
 	case MapRequest:
 	    return "MapRequest";
+	case EnterNotify:
+	    return "EnterNotify";
+	case ConfigureNotify:
+	    return "ConfigureNotify";
+	case ConfigureRequest:
+	    return "ConfigureRequest";
+	case FocusIn:
+	    return "FocusIn";
+	case PropertyNotify:
+	    return "PropertyNotify";
+	case LeaveNotify:
+	    return "LeaveNotify";
     default:
 	    return "Other";
     }

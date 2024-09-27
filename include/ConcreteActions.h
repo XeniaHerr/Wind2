@@ -142,6 +142,65 @@ class FullscreenAction : public Action {
 	~FullscreenAction() {}
 };
 
+
+class KeyMoveVertAction : public Action {
+
+
+    public:
+
+	std::string name() override;
+
+	void execute() override;
+
+	std::unique_ptr<Action> clone() override;
+
+	bool wantArgument() override;
+
+	void operator()() override;
+
+	~KeyMoveVertAction() {}
+
+};
+
+class KeyMoveHorAction : public Action {
+
+
+    public:
+
+	std::string name() override;
+
+	void execute() override;
+
+	std::unique_ptr<Action> clone() override;
+
+	bool wantArgument() override;
+
+	void operator()() override;
+
+	~KeyMoveHorAction() {}
+
+};
+
+
+class ToggleFloatingAction : public Action {
+
+
+    public:
+
+
+	std::string name() override;
+
+	void execute() override;
+
+	std::unique_ptr<Action> clone() override;
+
+	bool wantArgument() override;
+
+	void operator()() override;
+
+	~ToggleFloatingAction() {}
+
+};
 }
 
 

@@ -9,7 +9,6 @@ xorg.libXft
 xorg.libXinerama
 xorg.libxcb
 yaml-cpp
-
 cmake
 ];
 }

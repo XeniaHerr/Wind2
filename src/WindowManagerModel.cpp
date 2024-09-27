@@ -131,8 +131,11 @@ auto WindowManagerModel::focusClient(Window w) -> bool {
 
     Monitor* m = t.getHolder();
 
+    if (!m) {
+	return false;
+    }
 
-    if (m != this->focusedmon)
+    if (m != this->focusedmon) //TODO: This line is accidentially setting focusedmon to nullptr
         focusedmon = m;
 
 

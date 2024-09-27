@@ -64,7 +64,7 @@ auto X11Abstraction::sendEvent(Window w, ATOMNAME atom) -> bool {
     if (has_atom) {
     e.type = ClientMessage;
     e.xclient.window = w;
-    e.xclient.data.l[0] = atom;
+    e.xclient.data.l[0] = this->atoms[atom];
     e.xclient.data.l[1] = CurrentTime;
     e.xclient.format = 32;
     e.xclient.message_type = this->atoms[ATOMNAME::WMProtocols];
@@ -247,7 +247,7 @@ auto X11Abstraction::drawMonitor(Monitor& m) -> void {
 
     auto& Log = Logger::GetInstance();
 
-    this->hideTopic(m.getCurrent());
+    //this->hideTopic(m.getCurrent()); // Is this function nececcary here? I can't see a benefit and it only makes the screen flicker
 
     for (auto a : m.getCurrent()->getStack()) {
 
@@ -267,11 +267,13 @@ auto X11Abstraction::drawMonitor(Monitor& m) -> void {
 	XRaiseWindow(this->dpy, (*a)->getWindow());
 	setClientState((*a)->getWindow(), ATOMNAME::WindowNormalState);
 	Log.Info("Mapped client {}", (*a)->getWindow());
+
+	XSync(this->dpy, false);
     }
 
 
 
-    XSync(this->dpy, false);
+    //Moving sync out into the loop XSync(this->dpy, false);
 
     Log.Info("Synced display");
 
@@ -345,7 +347,9 @@ auto X11Abstraction::setfocus(Client *c) -> void {
 	XSetInputFocus(this->dpy, this->_root, RevertToPointerRoot, CurrentTime);
 
 	this->removeClientAtom(_root, ATOMNAME::NetActiveWindow);
-	XSetWindowBorder(this->dpy, this->_active, this->passiveColor.pixel);
+    Log.Info("Setting window Border to {}", this->passiveColor.pixel);
+	if (XSetWindowBorder(this->dpy, this->_active, this->passiveColor.pixel))
+	    Log.Warn("Something went wrong setting the window Border to passive");
     }
     Window w;
     if (c) {
@@ -356,7 +360,10 @@ auto X11Abstraction::setfocus(Client *c) -> void {
     this->sendEvent(w, ATOMNAME::WMTakeFocus);
     XSetInputFocus(this->dpy, this->_active, RevertToPointerRoot, CurrentTime);
     XChangeProperty(this->dpy, this->_root,atoms[ATOMNAME::NetActiveWindow],XA_ATOM, 32, PropModeReplace, (const unsigned char*)&w, 1);
-	XSetWindowBorder(this->dpy, this->_active, this->activeColor.pixel);
+    Log.Info("Setting window Border to {}", this->activeColor.pixel);
+	if (XSetWindowBorder(this->dpy, this->_active, this->activeColor.pixel))
+	    Log.Warn("Something Went wrong setting the Window Border to active");
+
     }
     else {
 	this->_active  = this->_root;
@@ -431,6 +438,7 @@ auto X11Abstraction::createColor(std::string cc) -> XftColor {
 
     XftColorAllocName(this->dpy, DefaultVisual(this->dpy, this->screen), DefaultColormap(this->dpy, this->screen), cc.c_str(), &c);
 
+
     
     return c;
 }
@@ -441,6 +449,7 @@ void X11Abstraction::setactiveColor(std::string s) {
 
 
     this->activeColor = this->createColor(s);
+    Logger::GetInstance().Info("Active color is {}", this->activeColor.pixel);
 
 }
 void X11Abstraction::setpassiveColor(std::string s) {
@@ -471,6 +480,7 @@ auto X11Abstraction::configureClient(Client *c) -> void {
     
 
     XSendEvent(this->dpy, c->getWindow(), False, SubstructureNotifyMask, (XEvent*) &e);
+
 }
 
 
@@ -490,10 +500,13 @@ auto X11Abstraction::acivateErrors() -> void {
 
 auto X11Abstraction::hideTopic(Topic* t) -> void {
 
-    for (auto a : t->getClients()) {
+    //Only hide Clients that need to be hidden
+    for (auto it = t->getStack().rbegin(); it != t->getStack().rend(); it++)
+     {
+	 auto a = *it;
 	this->setClientState(a->getWindow(), ATOMNAME::WindowIconicState);
 	Logger::GetInstance().Info("Hidden client {}", a->getWindow());
-	XMoveWindow(this->dpy, a->getWindow(), a->getPosition().x - this->screenwidth, a->getPosition().y - this->screenheight);
+	XMoveWindow(this->dpy, a->getWindow(), a->getPosition().x - (this->screenwidth *2), a->getPosition().y - (this->screenheight *2));
     }
 
 }
@@ -566,7 +579,7 @@ auto X11Abstraction::getAtom(ATOMNAME name) -> Atom {
 auto X11Abstraction::drawClient(Client& c) -> void {
 
 
-    this->hideClient(c);
+    //this->hideClient(c);
 	XWindowChanges wc;
 	wc.x = c.getPosition().x;
 	wc.y = c.getPosition().y;
@@ -580,3 +593,14 @@ auto X11Abstraction::drawClient(Client& c) -> void {
 	this->showWindow(c.getWindow());
 }
 
+
+auto X11Abstraction::initClientBorder(Client& c) -> void {
+
+XWindowChanges wc;
+
+wc.border_width = WindowManagerModel::getInstance().getBorderwidth();
+
+XConfigureWindow(this->dpy, c.getWindow(), CWBorderWidth, &wc);
+
+
+}

@@ -26,13 +26,14 @@ switch(type) {
 
     
     case Windowtype::SPLASH:
-	c->setManaged(false);
 	c->setFloating();
-	break;
-    case Windowtype::ANYTYPE:
     case Windowtype::BAR:
-    case Windowtype::DIALOG:
     case Windowtype::PANEL:
+	c->setManaged(false);
+	break;
+    case Windowtype::DIALOG:
+	c->setFloating();
+    case Windowtype::ANYTYPE:
     case Windowtype::DOCK:
     case Windowtype::WIDGET:
 	Log.Info("Found type other than normal");
@@ -43,6 +44,7 @@ switch(type) {
 	Log.Info("Handling normal window");
     xc.subscribetoWindow(c->getWindow(), EnterWindowMask|SubstructureNotifyMask|FocusChangeMask|PropertyChangeMask);
 
+    xc.initClientBorder(*c);
     xc.showWindow(c->getWindow());
 
     Log.Info("window shown");
@@ -55,6 +57,7 @@ switch(type) {
     xc.configureClient(c);
 
     xc.prependClientList(c->getWindow());
+
 
     Log.Info("Focussing client");
     WMM.focusClient();

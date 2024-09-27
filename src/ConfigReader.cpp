@@ -89,6 +89,9 @@ std::unique_ptr<Action> StringtoAction(std::string s) {
 	all_actions.emplace_back(new LayoutSwitchAction);
 	all_actions.emplace_back(new TopicSwitchAction);
 	all_actions.emplace_back(new FullscreenAction);
+	all_actions.emplace_back(new KeyMoveVertAction);
+	all_actions.emplace_back(new KeyMoveHorAction);
+	all_actions.emplace_back(new ToggleFloatingAction);
 	assert(all_actions[0]->clone() != nullptr);
 
 	for (int i = 0; i < all_actions.size(); i++) {
@@ -216,6 +219,7 @@ auto ConfigReader::readVariables() -> void {
 
     if (activeColor.IsDefined() && activeColor.IsScalar()) {
 	this->_configs.activeColor = activeColor.as<std::string>();
+	Logger::GetInstance().Info("Setting active color to {}", this->_configs.activeColor);
     }
     else {
 

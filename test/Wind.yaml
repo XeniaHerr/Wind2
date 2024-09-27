@@ -28,6 +28,8 @@ testtype: dock
 
 borderwidth: 2
 
+windowgap: 5
+
 
 ModMask: Mod4 # Set Mod Mask 
 
@@ -51,7 +53,7 @@ Keys:
     Cmd: "dmenu_run"
   - Key: w
     Modifiers: [Mod]
-    Action: close
+    Action: close # is not working somehow
   - Key: space
     Action: LayoutSwitch
     Int: 1
@@ -68,6 +70,25 @@ Keys:
     Action: SwitchTopic
     Int: 2
     Modifiers: [Mod]
-  - Key: f
+  - Key: m
     Action: Fullscreen
+    Modifiers: [Mod, Shift]
+  - Key: Up
+    Action: KeyMoveVert
+    Int: -5
+    Modifiers: [Mod]
+  - Key: Down
+    Action: KeyMoveVert
+    Int: 5
+    Modifiers: [Mod]
+  - Key: Left
+    Action: KeyMoveHor
+    Int: -5
+    Modifiers: [Mod]
+  - Key: Right
+    Action: KeyMoveHor
+    Int: 5
+    Modifiers: [Mod]
+  - Key: f
+    Action: ToggleFloating
     Modifiers: [Mod, Shift]
