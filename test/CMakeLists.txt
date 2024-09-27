@@ -81,42 +81,42 @@ GTest::gtest_main)
 target_link_libraries(Client_Topic_Integration
 
     WIND2_LIB
-GTest::gtest_main)
+gtest)
 
 target_link_libraries(Topic_Mon_Integration
 
     WIND2_LIB
-GTest::gtest_main)
+gtest)
 
 
 
 target_link_libraries(WindowManagerModelTest
        WIND2_LIB
-    GTest::gtest_main)
+    gtest)
 
 
 
 target_link_libraries(ArrangeTest
     WIND2_LIB
-GTest::gtest_main)
+gtest)
 target_link_libraries(RuleTest
     WIND2_LIB
 
-    GTest::gtest_main)
+    gtest)
 
 target_link_libraries(ConfigTest
     WIND2_LIB
-    GTest::gtest_main)
+    gtest)
 
 
 
 target_link_libraries(ApplyConfig
     WIND2_LIB
-    GTest::gtest_main)
+    gtest)
 
 target_link_libraries(InputManager
     WIND2_LIB
-    GTest::gtest_main)
+    gtest)
 
 include(GoogleTest)
 

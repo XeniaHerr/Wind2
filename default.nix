@@ -12,13 +12,18 @@ in
   stdenv.mkDerivation {
 
     name = "Wind2";
-    src = fetchgit {
+    src = fetchGit {
       url = "https://github.com/XeniaHerr/Wind2";
-      sha256 = "sha256-ip70pqE7PYkZCxZH2h7FVuv3UMeGe9145WCeSRFoZlU=";
+#      sha256 = "sha256-bvFHWjTAO7u8uzj8UCqjskLUwavQQw967Bbagx+L1E8=";
+#      rev = "14d975d915c6da1caadf081ec5bb0a34c7fb1ab2";
+
+    ref = "X11";
       
     };
 
     CFLAGS = [ "-I{$./../include/}" ];
+
+    dontUseCmakeConfigure = true;
 
     installPhase = ''
     mkdir -p $out/bin
@@ -30,12 +35,15 @@ in
     xorg.libX11.dev
     xorg.libXft
     xorg.libXinerama
+    gtest
+    pkg-config
   ];
 
   buildPhase = ''
 #  cd .build/src/build
-  ls ..
-  ls ../..
+  ls
+  mkdir -p build
+  cd ./build
   cmake ..
   make
   '';
