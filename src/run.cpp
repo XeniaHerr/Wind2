@@ -71,10 +71,11 @@ std::string MasktoString(long mask) {
     }
 }
 
-auto Run::getInstance() -> Run& {
+/*auto Run::getInstance() -> Run& {
     static Run r;
     return r;
 }
+*/
 
 
 auto Run::stop() -> void {
@@ -84,7 +85,7 @@ auto Run::stop() -> void {
 
 auto Run::startloop() -> void {
 
-    while(_is_running) {
+    while(RunningIndicator::getInstance()._var) {
 
 	XEvent e = X11Abstraction::getInstance().getNextEvent();
 
@@ -93,6 +94,7 @@ auto Run::startloop() -> void {
 	Log.Info("Got next event is of type {}", MasktoString(e.type));
 
 	if (_handlers[e.type]) {
+	    Log.Info("Found handler");
 
 	    _handlers[e.type]->setArgument(&e);
 

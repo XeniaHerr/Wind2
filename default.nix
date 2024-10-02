@@ -15,7 +15,7 @@ in
     src = fetchGit {
       url = "https://github.com/XeniaHerr/Wind2";
 #      sha256 = "sha256-bvFHWjTAO7u8uzj8UCqjskLUwavQQw967Bbagx+L1E8=";
-#      rev = "14d975d915c6da1caadf081ec5bb0a34c7fb1ab2";
+#      rev = "3b247ac6bf6fb10291f4847a4711b2b4f280fa92";
 
     ref = "X11";
       
@@ -27,8 +27,9 @@ in
 
     installPhase = ''
     mkdir -p $out/bin
-    cp app/Wind2 $out/bin
-    '';
+    cp src/Wind2 $out/bin/Wind2
+    echo "Hello World"
+   '';
 
 
     buildInputs = [__script cmake python311 yaml-cpp

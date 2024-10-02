@@ -7,6 +7,7 @@
 #include <optional>
 #include <X11/Xft/Xft.h>
 #include <string>
+#include <sys/types.h>
 #include <unistd.h>
 #include <vector>
 #include "Inputstructs.h"
@@ -167,6 +168,8 @@ namespace Wind {
 	    void setClientState(Window w, ATOMNAME state);
 
 	    void initClientBorder(Client& c);
+
+	    void updateDesktopHint(u_int number);
 
 	private:
 

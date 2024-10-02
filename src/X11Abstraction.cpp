@@ -295,12 +295,12 @@ auto X11Abstraction::restack(Monitor&m) -> void {
 	Log.Info("No clients to restack");
 	return;
     }
-    auto c = clients.begin();
+    auto c = clients.rbegin();
 
     wc.sibling = (*c)->getWindow();
 
 
-    while(c != clients.end()) {
+    while(c != clients.rend()) {
 
 	XConfigureWindow(this->dpy, (*c)->getWindow(), CWSibling, &wc);
 
@@ -352,6 +352,9 @@ auto X11Abstraction::setfocus(Client *c) -> void {
 	    Log.Warn("Something went wrong setting the window Border to passive");
     }
     Window w;
+
+
+
     if (c) {
 	Log.Info("Found Client to set focus to, sending event");
 	w = c->getWindow();	
@@ -419,9 +422,14 @@ auto X11Abstraction::updateClientList() -> void {
     auto cl = WindowManagerModel::getInstance().getWindows();
 
     XChangeProperty(this->dpy, this->_root, atoms[ATOMNAME::NetClientList], XA_WINDOW, 32, PropModeReplace, (unsigned char*) cl.data(), cl.size());
+}
 
 
+auto X11Abstraction::updateDesktopHint(u_int number) -> void{
 
+    std::string name = WindowManagerModel::getInstance().getTopic(number)->getName();
+
+    XChangeProperty(this->dpy, this->_root, atoms[ATOMNAME::NetCurrentDesktop], XA_CARDINAL, 32, PropModeReplace, (unsigned char*)&number,1);
 }
 
 auto X11Abstraction::subscribetoWindow(Window w, long flags) -> void {
@@ -604,3 +612,5 @@ XConfigureWindow(this->dpy, c.getWindow(), CWBorderWidth, &wc);
 
 
 }
+
+

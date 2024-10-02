@@ -55,32 +55,12 @@ static unsigned int StringtoModifier(std::string s) {
 
 
 
-//static Action* StringtoFunction(std::string s) {
-//
-//    Action* a;
-//
-//
-//    static const struct {std::string str; Action* val;} functions[] = {
-//        //{"quit", Action([](auto a){ /*do some stuff*/}, 0, false)}
-//    };
-//
-//    for (int i = 0; i < ARL(functions); i++) {
-//        if (s == functions[i].str) {
-//            Logger::GetInstance().Info("Binding Action {}", functions[i].str);
-//            if (i == 0) quit_defined = true; // Saveguard to make shure Wind is quittable
-//            return functions[i].val;
-//        }
-//    }
-//
-//
-//
-//
-//    return a;
-//}
 
 
 
 std::unique_ptr<Action> StringtoAction(std::string s) {
+
+
 
     static std::vector<std::unique_ptr<Action>> all_actions;
         all_actions.emplace_back(new quitAction);
@@ -91,6 +71,8 @@ std::unique_ptr<Action> StringtoAction(std::string s) {
 	all_actions.emplace_back(new FullscreenAction);
 	all_actions.emplace_back(new KeyMoveVertAction);
 	all_actions.emplace_back(new KeyMoveHorAction);
+	all_actions.emplace_back(new KeyResizeHorAction);
+	all_actions.emplace_back(new KeyResizeVertAction);
 	all_actions.emplace_back(new ToggleFloatingAction);
 	assert(all_actions[0]->clone() != nullptr);
 

@@ -10,5 +10,6 @@ xorg.libXinerama
 xorg.libxcb
 yaml-cpp
 cmake
+gtest
 ];
 }

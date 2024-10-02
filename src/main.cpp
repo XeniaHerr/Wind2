@@ -1,5 +1,6 @@
 #include <X11/X.h>
 #include <X11/Xlib.h>
+#include <cstdlib>
 #include <run.h>
 #include <X11_Abstraction.h>
 #include <WindowManagerModel.h>
@@ -9,8 +10,10 @@
 #include <tuple>
 #include <InputManager.h>
 #include "Handlers.h"
+#include <unistd.h>
 
 
+bool WM_running = true;
 int main() {
 
     using namespace Wind;
@@ -36,8 +39,28 @@ int main() {
     WindowManagerModel& WMM = WindowManagerModel::getInstance();
 
     ConfigReader& Config = ConfigReader::getInstance();
+
+    char* home_path;
+
+    //std::string configpath = "/home/xenia/Projects/Wind2/test/Wind.yaml";
     
-    std::string configpath = "/home/xenia/Projects/Wind2/test/Wind.yaml";
+//    home_path = getenv("XDG_CONFIG_HOME");
+
+ //   if (!home_path) // XDG_CONFIG_HOME is not set, defaulting to HOME
+    home_path = getenv("HOME");
+
+    if (!home_path) {
+	Log.Error("Couldn't get path for config file, $HOME is not set");
+	return 1;
+    }
+
+    std::string configpath = home_path;
+
+    configpath.append("/.config/Wind2/Wind.yaml");
+
+
+
+    
     Config.read(configpath);
 
     if (Config.empty) {
@@ -91,8 +114,10 @@ int main() {
     xconnection.setpassiveColor(Config._configs.passiveColor);
     xconnection.seturgentColor(Config._configs.urgentColor);
 
+    xconnection.updateDesktopHint(0);
+
     
-    Run& runloop = Run::getInstance();
+    Run runloop; 
 
     runloop.setHandler(KeyPress, new keyHandlerAction);
     runloop.setHandler(MapRequest, new ManageRequestAction);

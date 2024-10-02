@@ -2,6 +2,7 @@
 #define CONCRETE_ACTIONS_H
 #include <Action.h>
 #include <memory>
+#include <run.h>
 
 
 
@@ -14,8 +15,10 @@ namespace Wind {
 
 class quitAction : public Action {
 
+
     public:
 
+    Run* loop;
     std::string name() override;
 
 
@@ -181,6 +184,42 @@ class KeyMoveHorAction : public Action {
 
 };
 
+
+class KeyResizeVertAction : public Action {
+
+    public:
+
+	std::string name() override;
+
+	void execute() override;
+
+	std::unique_ptr<Action> clone() override;
+
+	bool wantArgument() override;
+
+	void operator()() override;
+
+	~KeyResizeVertAction() {}
+
+};
+
+class KeyResizeHorAction : public Action {
+
+    public:
+
+	std::string name() override;
+
+	void execute() override;
+
+	std::unique_ptr<Action> clone() override;
+
+	bool wantArgument() override;
+
+	void operator()() override;
+
+	~KeyResizeHorAction() {}
+
+};
 
 class ToggleFloatingAction : public Action {
 

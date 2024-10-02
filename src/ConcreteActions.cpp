@@ -22,11 +22,12 @@ using namespace Wind;
 auto quitAction::execute() -> void {
     Logger::GetInstance().Info("Inside quitAction");
 
-    auto& r = Run::getInstance();
-    if (r.isrunning())
-	r.stop();
-    else
+   if (RunningIndicator::getInstance()._var == true)
+	RunningIndicator::getInstance()._var = false;
+
+   else
 	Logger::GetInstance().Info("Trying to quit a non running windowManager");
+
 }
 
 
@@ -311,11 +312,17 @@ auto TopicSwitchAction::execute() -> void {
     Log.Info("orig_old = {}, new_old = {}", orig_old, new_old);
 
 
-    assert(orig_count == new_count);
+    //assert(orig_count == new_count);
 
 
     WMM.focusClient();
-    xc.setfocus(nullptr);
+
+    Client *c = WMM.getFocusedMon()->getCurrent()->getFocused();
+
+
+    //TODO: Change the current Workspace Desktop
+    xc.updateDesktopHint(target);
+    xc.setfocus(c); //nullptr
 
     Log.Info("Done with TopicSwitchAction");
 
@@ -554,4 +561,115 @@ auto ToggleFloatingAction::execute() -> void {
 }
 
 
+auto KeyResizeHorAction::operator()() -> void {
+    this->execute();
+}
 
+auto KeyResizeHorAction::name() -> std::string {
+    return "ResizeHor";
+}
+
+auto KeyResizeHorAction::wantArgument() -> bool {
+    return true;
+}
+
+auto KeyResizeHorAction::clone() -> std::unique_ptr<Action> {
+
+    return std::unique_ptr<Action>(new KeyResizeHorAction);
+}
+auto KeyResizeHorAction::execute() -> void {
+
+
+    int offset = std::get<2>(this->Arg);
+
+
+    auto& WMM = WindowManagerModel::getInstance();
+
+    auto *curc = WMM.getFocusedMon()->getCurrent()->getFocused();
+
+    if (!curc)
+	return;
+
+    if (!curc->isFloating()) {
+	curc->setFloating();
+	curc->getOwner().getHolder()->arrange();
+    }
+
+    Dimensions old = curc->getCurrentDimensions();
+
+
+    old.width += offset;
+
+
+    curc->setTargetDimensions(old);
+    //curc->setPosition(old);
+
+    curc->applyRule();
+    DefaultRenderer r;
+	r.render(*curc->getOwner().getHolder());
+
+    X11Abstraction::getInstance().drawMonitor(*curc->getOwner().getHolder());
+
+
+
+
+
+
+}
+
+
+auto KeyResizeVertAction::operator()() -> void {
+    this->execute();
+}
+
+auto KeyResizeVertAction::name() -> std::string {
+    return "ResizeVert";
+}
+
+auto KeyResizeVertAction::wantArgument() -> bool {
+    return true;
+}
+
+auto KeyResizeVertAction::clone() -> std::unique_ptr<Action> {
+
+    return std::unique_ptr<Action>(new KeyResizeVertAction);
+}
+auto KeyResizeVertAction::execute() -> void {
+
+
+    int offset = std::get<2>(this->Arg);
+
+
+    auto& WMM = WindowManagerModel::getInstance();
+
+    auto *curc = WMM.getFocusedMon()->getCurrent()->getFocused();
+
+    if (!curc)
+	return;
+
+    if (!curc->isFloating()) {
+	curc->setFloating();
+	curc->getOwner().getHolder()->arrange();
+    }
+
+    Dimensions old = curc->getCurrentDimensions();
+
+
+    old.height+= offset;
+
+
+    curc->setTargetDimensions(old);
+    //curc->setPosition(old);
+
+    curc->applyRule();
+    DefaultRenderer r;
+	r.render(*curc->getOwner().getHolder());
+
+    X11Abstraction::getInstance().drawMonitor(*curc->getOwner().getHolder());
+
+
+
+
+
+
+}
