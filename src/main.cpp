@@ -13,7 +13,6 @@
 #include <unistd.h>
 
 
-bool WM_running = true;
 int main() {
 
     using namespace Wind;

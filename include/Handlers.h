@@ -4,7 +4,6 @@
 
 
 namespace Wind {
-
 class keyHandlerAction : public Action {
 
     public: 
@@ -85,4 +84,18 @@ class ConfigureRequestAction: public Action {
 
 	~ConfigureRequestAction() {}
 };
+
+
+class ClientMessageAction : public Action {
+
+    public:
+
+	void execute() override;
+
+
+	~ClientMessageAction() {}
+};
+
+
+
 }

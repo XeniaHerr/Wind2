@@ -17,7 +17,7 @@ in
 #      sha256 = "sha256-bvFHWjTAO7u8uzj8UCqjskLUwavQQw967Bbagx+L1E8=";
 #      rev = "3b247ac6bf6fb10291f4847a4711b2b4f280fa92";
 
-    ref = "X11";
+    ref = "master";
       
     };
 

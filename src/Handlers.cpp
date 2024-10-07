@@ -9,6 +9,7 @@
 #include "structs.h"
 #include <DefaultRenderer.h>
 #include <Monitor.h>
+#include <ConcreteActions.h>
 
 
 
@@ -333,3 +334,33 @@ auto ConfigureRequestAction::execute() -> void {
 }
 
 
+auto ClientMessageAction::execute() -> void {
+
+    XClientMessageEvent message = std::get<XEvent*>(this->Arg)->xclient;
+
+
+    auto& xc = X11Abstraction::getInstance();
+
+
+    Atom messageAtom;
+
+    messageAtom = (Atom)message.data.l;
+
+
+    if (message.message_type == xc.getAtom(ATOMNAME::WindowFullscreenState)) {
+
+
+
+	FullscreenAction a;
+
+
+
+	a.execute();
+
+
+    }
+
+
+
+
+}
