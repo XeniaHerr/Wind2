@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Wind
+NoDisplay=true
+GenericName=My custom Window Manager
+Comment=improved dynamic tiling window manager
+Exec=Wind
+X-GNOME-WMName=Wind
+X-GNOME-Autostart-Phase=WindowManager
+X-GNOME-Provides=windowmanager
+X-GNOME-Autostart-Notify=false
