@@ -37,6 +37,7 @@ add_subdirectory(src)
 
 add_subdirectory(dummy)
 
+add_subdirectory(install)
 
 #add_subdirectory(test)
 
