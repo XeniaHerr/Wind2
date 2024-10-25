@@ -69,7 +69,7 @@ int main() {
 
     //Ensure default Monitor for testing purposes
     std::vector<std::tuple<Dimensions, Position, unsigned>> monitor;
-    monitor.push_back(std::make_tuple(Dimensions(800,400), Position(0,0), 0));
+    monitor.push_back(std::make_tuple(xconnection.getScreenDimensions(), Position(0,0), 0));
     WMM.registerMonitors(monitor);
 
     if (!WMM.loadConfig()) {
