@@ -14,6 +14,7 @@
 #include <Client.h>
 #include <list>
 #include <string>
+#include <sys/types.h>
 #include <utility>
 #include <cassert>
 
@@ -611,6 +612,12 @@ wc.border_width = WindowManagerModel::getInstance().getBorderwidth();
 XConfigureWindow(this->dpy, c.getWindow(), CWBorderWidth, &wc);
 
 
+}
+
+
+auto X11Abstraction::getScreenDimensions() const -> Dimensions {
+
+	return Dimensions{static_cast<u_int32_t>(this->screenwidth), static_cast<u_int32_t>(this->screenheight)};
 }
 
 

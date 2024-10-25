@@ -12,6 +12,7 @@
 #include <vector>
 #include "Inputstructs.h"
 #include "Monitor.h"
+#include "structs.h"
 
 namespace Wind {
 
@@ -81,6 +82,7 @@ namespace Wind {
 
 	    bool sendEvent(Window w, ATOMNAME event);
 
+	    Dimensions getScreenDimensions() const;
 
 	    XEvent getNextEvent();
 
