@@ -28,6 +28,8 @@ namespace Wind {
 
                 u_int16_t borderwidth;
 
+		u_int16_t barheight;
+
 
                 std::vector<Rule> rules;
 

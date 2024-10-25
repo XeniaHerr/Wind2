@@ -228,6 +228,17 @@ auto ConfigReader::readVariables() -> void {
 	Logger::GetInstance().Warn("No default urgent Color defined, using red");
 	this->_configs.urgentColor = "red";
     }
+
+    Node barheight = document["barheight"];
+
+    if (barheight.IsDefined() && barheight.IsScalar()) {
+	this->_configs.barheight = barheight.as<u_int16_t>();
+    }
+    else {
+	Logger::GetInstance().Warn("No default barheight defined, using 0");
+	this->_configs.barheight = 0;
+    }
+
 }
 
 
