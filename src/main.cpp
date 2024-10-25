@@ -18,7 +18,7 @@ int main() {
     using namespace Wind;
 
     Logger& Log = Logger::GetInstance();
-    Log.setOutputfile("Wind2");
+    Log.setOutputfile("/home/xenia/Projects/Wind2/Wind2");
     Log.Info("Welcome to Wind2");
 
     X11Abstraction& xconnection = X11Abstraction::getInstance();
