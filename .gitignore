@@ -1,3 +1,9 @@
 build/*
 .cache/*
 doc/*
+*.log
+*.old
+.envrc
+*.vim
+*.nix
+result
