@@ -109,7 +109,11 @@ auto X11Abstraction::getWindowNameClass(Window w) -> std::pair<std::string, std:
 
     XClassHint h;
 
-    XGetClassHint(this->dpy, w, &h);
+    if (!XGetClassHint(this->dpy, w, &h) ){
+	    Logger::GetInstance().Warn("Could not get class hint");
+	    return std::make_pair("","");
+	    }
+
 
     std::pair<std::string, std::string> ret;
 
