@@ -173,6 +173,12 @@ namespace Wind {
 
 	    void updateDesktopHint(u_int number);
 
+
+	    Atom getWindowProperty(Window w, ATOMNAME atom);
+
+
+	    void scanForExistingWindows();
+
 	private:
 
 	    X11Abstraction();

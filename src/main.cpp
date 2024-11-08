@@ -11,6 +11,7 @@
 #include <InputManager.h>
 #include "Handlers.h"
 #include <unistd.h>
+#include <sys/wait.h>
 
 
 int main() {
@@ -34,6 +35,9 @@ int main() {
 	exit(2);
     }
 
+
+    //Clean up Zombies
+    while(waitpid(-1, NULL, WNOHANG) > 0);
 
     WindowManagerModel& WMM = WindowManagerModel::getInstance();
 

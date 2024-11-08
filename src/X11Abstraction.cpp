@@ -1,6 +1,7 @@
 #include "Logger.h"
 #include "WindowManagerModel.h"
 #include "X11_Abstraction.h"
+#include "Handlers.h"
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -95,6 +96,32 @@ auto X11Abstraction::setClientState(Window w, ATOMNAME state) -> void {
 	XChangeProperty(this->dpy, w, this->atoms[ATOMNAME::WindowState] , 32, XA_ATOM,PropModeReplace, (unsigned char *)&this->atoms[state], 1);
 }
 
+
+//TODO: Implement get Window Type
+
+
+auto X11Abstraction::getWindowProperty(Window w, ATOMNAME atom) -> Atom {
+
+
+    auto& Log = Logger::GetInstance();
+    Atom ret, dummy;
+
+    unsigned long u, u2 ;
+    int i;
+    
+
+    unsigned char* ret_p = nullptr;
+
+
+    if (Success != XGetWindowProperty(this->dpy, w, atoms[atom], 0L, sizeof ret, false, XA_ATOM, &dummy, &i , &u, &u2, &ret_p) || !ret_p)
+	return -1;
+
+    Log.Info("Got a type");
+
+    ret = *(Atom*)ret_p;
+
+    return ret;
+}
 
 auto X11Abstraction::removeClientAtom(Window w, ATOMNAME atom ) -> void {
 
@@ -622,6 +649,55 @@ XConfigureWindow(this->dpy, c.getWindow(), CWBorderWidth, &wc);
 auto X11Abstraction::getScreenDimensions() const -> Dimensions {
 
 	return Dimensions{static_cast<u_int32_t>(this->screenwidth), static_cast<u_int32_t>(this->screenheight)};
+}
+
+
+
+/**
+ * THis function is mostly taked from the scan() function from dwm.*/
+auto X11Abstraction::scanForExistingWindows() -> void {
+
+    auto& Log = Logger::GetInstance();
+
+    unsigned int  num;
+
+    Window d1, d2, *wins = nullptr;
+
+    XWindowAttributes wa;
+
+    ManageRequestAction manager;
+
+    if(!XQueryTree(this->dpy, this->_root, &d1, &d2, &wins, &num)) {
+	Log.Info("Couldn't query tree");
+	return;
+    }
+
+
+    for (int i = 0; i < num; i++) {
+
+	auto attrs = getWindowAttributes(wins[i]);
+
+	if(attrs || (attrs->override_redirect || XGetTransientForHint(this->dpy, wins[i], &d1)    ))
+		continue;
+    
+	if (attrs->map_state == IsViewable || getWindowProperty(wins[i],ATOMNAME::WindowState)) {
+	    manager.setArgument(wins[i]);
+	    manager.execute();
+	}
+    }
+
+    for (int i = 0; i < num; i++) {
+
+	auto attrs = getWindowAttributes(wins[i]);
+
+	if(attrs || attrs->override_redirect)
+		continue;
+    
+	if (XGetTransientForHint(this->dpy, wins[i], &d1) && (attrs->map_state == IsViewable || getWindowProperty(wins[i], ATOMNAME::WindowState))) {
+	    manager.setArgument(wins[i]);
+	    manager.execute();
+	}
+    }
 }
 
 
