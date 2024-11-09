@@ -86,6 +86,7 @@ int main() {
 
     xconnection.listenforKeys(InputManager::GetInstance().getKeys());
 
+    //Create the Atoms needed
     xconnection.addAtom(ATOMNAME::WMDelete, "WM_DELETE_WINDOW");
     xconnection.addAtom(ATOMNAME::WMTakeFocus, "WM_TAKE_FOCUS");
     xconnection.addAtom(ATOMNAME::WMProtocols, "WM_PROTOCOLS");
@@ -113,12 +114,16 @@ int main() {
     xconnection.addAtom(ATOMNAME::WindowTypePanel, "_NET_WM_WINDOW_TYPE_PANEL");
 
     xconnection.initAtoms();
+
+
     xconnection.setactiveColor(Config._configs.activeColor);
     xconnection.setpassiveColor(Config._configs.passiveColor);
     xconnection.seturgentColor(Config._configs.urgentColor);
 
     xconnection.updateDesktopHint(0);
 
+    xconnection.scanForExistingWindows();
+    //Finish Setting up on the X11 side
     
     Run runloop; 
 

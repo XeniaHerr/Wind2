@@ -698,6 +698,12 @@ auto X11Abstraction::scanForExistingWindows() -> void {
 	    manager.execute();
 	}
     }
+
+
+
+    if (wins)
+	XFree(wins);
+
 }
 
 

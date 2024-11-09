@@ -1,11 +1,11 @@
 #include "DefaultRenderer.h"
 #include "Topic.h"
 #include "WindowManagerModel.h"
+#include "Logger.h"
 #include "structs.h"
 #include <Monitor.h>
 #include <Client.h>
 #include <algorithm>
-#include <iostream>
 #include <iterator>
 #include <sys/types.h>
 #include <vector>
@@ -75,6 +75,7 @@ auto Monitor::setCurrent(Topic* topic) -> void {
 
 auto Monitor::toggleBar() -> void {
 
+    Logger::GetInstance().Info("Barheight is {}", barHeight);
     if (barHeight != 0) {
         if (this->realPosition != this->usablePosition || this->realDimensions != this->usableDimensions) {
             this->usableDimensions = this->realDimensions;
@@ -83,6 +84,7 @@ auto Monitor::toggleBar() -> void {
             adjustforBarHeight();
         }
     }
+	    Logger::GetInstance().Info("Usable dimensions = ({},{}), realDimensions= ({},{})", usableDimensions.width, usableDimensions.height, realDimensions.width, realDimensions.height);
 }
 
 

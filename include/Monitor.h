@@ -103,7 +103,8 @@ namespace Wind {
 	    bool fullscreen_mode;
 
 
-            u_int8_t barHeight = 0; /**< Barheight TODO: SHould this belong to config?*/
+            u_int8_t barHeight; /**< Barheight TODO: SHould this belong to config?*/
+	    //This was set to 0 here, which made errors... why?
 
 
 
@@ -126,6 +127,7 @@ namespace Wind {
 
     };
 }
+
 
 
 #endif /*MONITOR_H*/

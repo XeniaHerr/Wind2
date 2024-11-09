@@ -364,7 +364,6 @@ auto FullscreenAction::execute() -> void {
     if (c && c->isManaged() && c->isVisible()) {
 	c->toggleFullscreen();
 	Logger::GetInstance().Info("Client is now {}", c->isFullscreen() ? "Fullscreen" : "Normal");
-
 	WMM.getFocusedMon()->toggleBar();
 	WMM.getFocusedMon()->arrange();
 	if (c->isFullscreen()) {
